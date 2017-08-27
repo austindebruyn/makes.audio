@@ -1,0 +1,8 @@
+{
+  "sessionSecret": "m(l&fFk2;K10kdDfsdf",
+  "cookieSecret": "Pq)jaNg3*[QssiU7}4]",
+  "protocol": "http",
+  "host": "dev-makes.audio",
+  "port": 3000,
+  "listen-port": 3000
+}

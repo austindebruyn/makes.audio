@@ -1,0 +1,81 @@
+input[type='text'],
+input[type='password'],
+input[type='search'],
+input[type='email'] {
+  &.form-control {
+    border: 1px solid $pink;
+    border-radius: 0;
+    color: $pink;
+    font-size: 0.8rem;
+    padding: 0.75rem;
+    margin-bottom: 10px;
+
+    &:focus {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    &.round {
+      border-radius: 42px;
+    }
+
+    &.transparent {
+      border: none;
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 40px;
+}
+
+.input-group {
+  input[type='text'],
+  input[type='password'],
+  input[type='search'],
+  input[type='email'] {
+    margin-bottom: 0;
+  }
+
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+@mixin optional-at-root($sel) {
+  @at-root #{if(not &, $sel, selector-append(&, $sel))} { @content; }
+}
+@mixin placeholder {
+  @include optional-at-root('::-webkit-input-placeholder') { @content; }
+  @include optional-at-root(':-moz-placeholder') { @content; }
+  @include optional-at-root('::-moz-placeholder') { @content; }
+  @include optional-at-root(':-ms-input-placeholder') { @content; }
+}
+
+input.form-control {
+  @include placeholder {
+    color: $pink;
+    opacity: 1;
+  }
+  &.transparent {
+    @include placeholder {
+      color: white;
+    }
+  }
+}
+
+.input-group-addon + input.form-control {
+  padding-left: 36px;
+}
+
+.input-group-addon {
+  color: white;
+  background: none;
+  position: absolute;
+  padding: 14px 6px;
+
+  i {
+    font-size: 0.7em;
+    width: 20px;
+  }
+}

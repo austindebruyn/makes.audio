@@ -1,0 +1,5 @@
+node_modules
+makes.audio.csr
+makes.audio.key
+public/dist
+sessions

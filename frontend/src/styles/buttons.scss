@@ -1,0 +1,37 @@
+.btn {
+  border: 0;
+  border-radius: 0;
+  font-size: 0.75rem;
+  transition: none;
+  cursor: pointer;
+
+  &:hover {
+    transition: 200ms background-color;
+  }
+
+  &:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+
+  &.btn-lg {
+    font-size: 1rem;
+  }
+
+  &.btn-primary {
+    background-color: $pink;
+
+    &:hover {
+      background-color: $pink-light;
+    }
+  }
+  &.btn-link {
+    color: $pink;
+    text-decoration: underline;
+    outline: 0;
+
+    &:hover {
+      color: $pink-light;
+    }
+  }
+}
