@@ -10,7 +10,7 @@ const User = db.define('user', {
     validate: {
       len: [3, 64],
       is: {
-        args: /^[\w\-]*$/i,
+        args: /^[\w-]*$/i,
         msg: 'Only use letters and numbers!'
       }
     }

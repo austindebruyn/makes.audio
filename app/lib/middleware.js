@@ -39,8 +39,7 @@ module.exports = function (app) {
         if (!req.user) {
           req.flash('err', 'You need to sign in for that.')
           return res.redirect('/')
-        }
-        else {
+        } else {
           req.flash('err', "You aren't authorized to be doing that.")
           return res.redirect('/dashboard')
         }

@@ -13,6 +13,12 @@
     "commander": "^2.10.0",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.4",
+    "eslint": "^4.5.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
     "express": "^4.15.3",
     "express-flash": "^0.0.2",
     "express-session": "^1.15.3",
@@ -52,6 +58,7 @@
   "scripts": {
     "build": "cd frontend; webpack",
     "watch": "cd frontend; webpack --watch",
-    "nodemon": "nodemon --config .nodemonrc"
+    "nodemon": "nodemon --config .nodemonrc",
+    "lint": "eslint app --fix"
   }
 }

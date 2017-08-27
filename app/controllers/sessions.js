@@ -25,5 +25,5 @@ module.exports.create = function (req, res, next) {
 
 module.exports.destroy = function (req, res) {
   req.logout()
-  return res.json({ ok: true }) //.redirect('/')
+  return res.json({ ok: true }) // .redirect('/')
 }

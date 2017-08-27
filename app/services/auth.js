@@ -15,24 +15,24 @@ passport.use(new LocalStrategy(
       }
       return bcrypt.compare(password, user.password)
     })
-    .then(function (success) {
-      return done(null, success ? user : false)
-    })
-    .catch(function (err) {
-      return done(err)
-    })
+      .then(function (success) {
+        return done(null, success ? user : false)
+      })
+      .catch(function (err) {
+        return done(err)
+      })
   }
 ))
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   return done(null, user.get('id'))
 })
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function (id, done) {
   User.findOne({ where: { id: id } }).then(function (user) {
     return done(null, user)
   })
-  .catch(done)
+    .catch(done)
 })
 
 module.exports.authenticate = function (callback) {

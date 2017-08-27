@@ -5,18 +5,16 @@ const fs = require('fs')
 const path = require('path')
 const serve = require('../services/serve')
 const compact = require('lodash.compact')
-const config = require('../config')
-const pick = require('lodash.pick')
 
 module.exports.index = function (req, res, next) {
-  Audio.findAll({ where: { userId: req.user.id }})
-  .then(function (records) {
-    return Promise.all(records.map(r => r.toJSON()))
-  })
-  .then(function (records) {
-    return res.status(200).json(records)
-  })
-  .catch(next)
+  Audio.findAll({ where: { userId: req.user.id } })
+    .then(function (records) {
+      return Promise.all(records.map(r => r.toJSON()))
+    })
+    .then(function (records) {
+      return res.status(200).json(records)
+    })
+    .catch(next)
 }
 
 module.exports.get = function (req, res, next) {
@@ -31,28 +29,26 @@ module.exports.get = function (req, res, next) {
     const username = req.subdomains[0]
     let audio = null
 
-    Audio.findOne({ where: { url: url, visible: true }, includes: [ User ]})
-    .then(function (model) {
-      audio = model
-      if (!audio) throw new Error('none')
-      return audio.getUser()
-    })
-    .then(function (user) {
-      if (username === user.username) {
-        serve(audio, res, isDownload)
-      }
-      else {
-        throw new Error('none')
-      }
-    })
-    .catch(function (err) {
-      if (err.message !== 'none') {
-        throw err
-      }
-      return next()
-    })
-  }
-  else {
+    Audio.findOne({ where: { url: url, visible: true }, includes: [ User ] })
+      .then(function (model) {
+        audio = model
+        if (!audio) throw new Error('none')
+        return audio.getUser()
+      })
+      .then(function (user) {
+        if (username === user.username) {
+          serve(audio, res, isDownload)
+        } else {
+          throw new Error('none')
+        }
+      })
+      .catch(function (err) {
+        if (err.message !== 'none') {
+          throw err
+        }
+        return next()
+      })
+  } else {
     return next()
   }
 }
@@ -86,16 +82,15 @@ module.exports.create = function (req, res, next) {
   const MAXIMUM_FILE_SIZE = 1024 * 1024 * 20
 
   if (!req.file) {
-    return res.status(422).json({ errors: ['Looks like you didnt upload anything.'] })
+    return res.status(422).json({
+      errors: [ 'Looks like you didnt upload anything.' ]
+    })
+  } else if (req.file.size > MAXIMUM_FILE_SIZE) {
+    errors.push('File is too large! 1MB max please!')
   }
-  else {
-    if (req.file.size > MAXIMUM_FILE_SIZE) {
-      errors.push('File is too large! 1MB max please!')
-    }
-    // if (!['audio/mpeg', 'audio/mp3'].includes(req.file.mimetype)) {
-    //   errors.push('File is not an mp3!')
-    // }
-  }
+  // if (!['audio/mpeg', 'audio/mp3'].includes(req.file.mimetype)) {
+  //   errors.push('File is not an mp3!')
+  // }
 
   const filename = req.file.path
 
@@ -107,45 +102,44 @@ module.exports.create = function (req, res, next) {
         errors: errors
       })
     })
-  }
-  else {
+  } else {
     hashFiles({ files: [filename], noGlob: true, algorithm: 'sha256' }, function (err, hash) {
       if (err) throw err
 
       fs.rename(filename, path.resolve(__dirname, '..', 'store', hash), function (err) {
         if (err) throw err
 
-        url = req.file.originalname.replace(/[^\w\.\-]/g, '')
+        var url = req.file.originalname.replace(/[^.-]/g, '')
         url = url.slice(0, 128)
         url = url.toLowerCase()
 
         Audio.count({ where: { userId: req.user.id, url: url } })
-        .then(function (count) {
-          if (count !== 0) {
-            throw new Error('url not unique')
-          }
+          .then(function (count) {
+            if (count !== 0) {
+              throw new Error('url not unique')
+            }
 
-          return Audio.create({
-            userId: req.user.id,
-            hash: hash,
-            originalName: req.file.originalname,
-            url: url,
-            size: req.file.size,
-            mimetype: req.file.mimetype
-          }, { include: [ Audio.User ] })
-        })
-        .then(function (audio) {
-          return audio.toJSON()
-        })
-        .then(function (json) {
-          return res.status(201).json(json)
-        })
-        .catch(function (err) {
-          if (err.message === 'url not unique') {
-            return res.status(422).json({ errors: [`You already have an upload named '${url}'!`] })
-          }
-          return next(err)
-        })
+            return Audio.create({
+              userId: req.user.id,
+              hash: hash,
+              originalName: req.file.originalname,
+              url: url,
+              size: req.file.size,
+              mimetype: req.file.mimetype
+            }, { include: [ Audio.User ] })
+          })
+          .then(function (audio) {
+            return audio.toJSON()
+          })
+          .then(function (json) {
+            return res.status(201).json(json)
+          })
+          .catch(function (err) {
+            if (err.message === 'url not unique') {
+              return res.status(422).json({ errors: [`You already have an upload named '${url}'!`] })
+            }
+            return next(err)
+          })
       })
     })
   }
@@ -164,13 +158,12 @@ module.exports.update = function (req, res, next) {
       if (req.user.id !== audio.userId) {
         throw new Error('unauthorized')
       }
-      return
     })
     .then(function () {
       if (req.body.url) {
         audio.url = req.body.url.toLowerCase()
       }
-      if ('undefined' !== typeof req.body.visible) {
+      if (typeof req.body.visible !== 'undefined') {
         audio.visible = req.body.visible
       }
       return audio.validate()
@@ -193,11 +186,9 @@ module.exports.update = function (req, res, next) {
         const validationErrors = compact(err.errors.map(function (propertyError) {
           if (propertyError.path === 'url' && propertyError.message === 'Validation len failed') {
             return 'Please keep url less than 128 characters.'
-          }
-          else if (propertyError.path === 'url' && propertyError.message === 'Validation is failed') {
+          } else if (propertyError.path === 'url' && propertyError.message === 'Validation is failed') {
             return "Only URL safe characters allowed - letters, numbers, and any of `-', `_', `.'"
-          }
-          else {
+          } else {
             return null
           }
         }))
@@ -207,14 +198,11 @@ module.exports.update = function (req, res, next) {
         }
 
         errors = validationErrors
-      }
-      else if (err.name === 'SequelizeUniqueConstraintError') {
-        errors.push(`You already have a upload with the url "${err.errors[0].value}"`);
-      }
-      else if (err.message === 'unauthorized') {
+      } else if (err.name === 'SequelizeUniqueConstraintError') {
+        errors.push(`You already have a upload with the url "${err.errors[0].value}"`)
+      } else if (err.message === 'unauthorized') {
         return res.status(403).json({ errors: ["That isn't your upload!"] })
-      }
-      else if (err.message === 'required param `url`') {
+      } else if (err.message === 'required param `url`') {
         errors.push('Missing required param `url`.')
       }
       console.log(err)

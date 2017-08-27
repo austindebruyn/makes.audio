@@ -15,49 +15,49 @@ const Audio = db.define('audio', {
     allowNull: false,
     validate: {
       isLowercase: true,
-      is: /^[\w\.\-]*$/i,
+      is: /^[\w.-]*$/i,
       len: [1, 128]
     }
-  }}, {
-    indexes: [{
-      unique: true,
-      fields: [ 'userId', 'url' ]
-    }],
-    instanceMethods: {
-      ensureUserLoaded: function () {
-        if (this.user) {
-          return new Promise(resolve => resolve(this.user))
-        }
-        return User.findOne({ where: { id: this.userId } }).then(user => {
-          this.user = user
-        })
-      },
-      toJSON: function () {
-        return this.ensureUserLoaded().then(() => {
-          const portWithColon = config.app.port ? `:${config.app.port}` : ''
-          const url = `${config.app.protocol}://${this.user.username}.${config.app.host}${portWithColon}/${this.url}`
-          const formattedSize = (this.size / 1024 / 1024).toLocaleString('en-US', { maximumFractionDigits: 2 }) + 'MB'
+  } }, {
+  indexes: [{
+    unique: true,
+    fields: [ 'userId', 'url' ]
+  } ],
+  instanceMethods: {
+    ensureUserLoaded: function () {
+      if (this.user) {
+        return new Promise(resolve => resolve(this.user))
+      }
+      return User.findOne({ where: { id: this.userId } }).then(user => {
+        this.user = user
+      })
+    },
+    toJSON: function () {
+      return this.ensureUserLoaded().then(() => {
+        const portWithColon = config.app.port ? `:${config.app.port}` : ''
+        const url = `${config.app.protocol}://${this.user.username}.${config.app.host}${portWithColon}/${this.url}`
+        const formattedSize = (this.size / 1024 / 1024).toLocaleString('en-US', { maximumFractionDigits: 2 }) + 'MB'
 
-          return new Promise((resolve, reject) => {
-            return resolve({
-              id:            this.id,
-              url:           this.url,
-              publicUrl:     url,
-              downloadUrl:   `${url}/download`,
-              editUrl:       `/audios/${this.id}/edit`,
-              updateUrl:     `/api/audios/${this.id}`,
-              formattedSize: formattedSize,
-              size:          this.size,
-              originalName:  this.originalName,
-              mimetype:      this.mimetype,
-              createdAt:     this.createdAt,
-              visible:       this.visible
-            })
+        return new Promise((resolve, reject) => {
+          return resolve({
+            id: this.id,
+            url: this.url,
+            publicUrl: url,
+            downloadUrl: `${url}/download`,
+            editUrl: `/audios/${this.id}/edit`,
+            updateUrl: `/api/audios/${this.id}`,
+            formattedSize: formattedSize,
+            size: this.size,
+            originalName: this.originalName,
+            mimetype: this.mimetype,
+            createdAt: this.createdAt,
+            visible: this.visible
           })
         })
-      }
+      })
     }
   }
+}
 )
 
 Audio.User = Audio.belongsTo(User, { as: 'user' })
