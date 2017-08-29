@@ -10,6 +10,8 @@ input[type='email'] {
     padding: 0.75rem;
     margin-bottom: 10px;
 
+    max-width: 300px;
+
     &:focus {
       background: rgba(255, 255, 255, 0.4);
     }
@@ -22,6 +24,12 @@ input[type='email'] {
       border: none;
       color: white;
       background: rgba(255, 255, 255, 0.2);
+    }
+
+    &.inverted {
+      border-color: white;
+      color: white;
+      background: transparent;
     }
   }
 }

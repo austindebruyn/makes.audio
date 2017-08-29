@@ -4,5 +4,5 @@
   "protocol": "http",
   "host": "dev-makes.audio",
   "port": 3000,
-  "listen-port": 3000
+  "listenPort": 3000
 }

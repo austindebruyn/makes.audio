@@ -8,11 +8,11 @@
         .collapse.navbar-collapse(:class='{ show: nav_open }')
           ul.navbar-nav
             li.nav-item.active
-              a.nav-link(href='#') Dashboard
+              router-link.nav-link(to='/dashboard') Dashboard
             li.nav-item
               a.nav-link(href='#') Desktop App
             li.nav-item
-              router-link.nav-link(to='/account') Account
+              router-link.nav-link(to='/settings') Account
             li.nav-item
               a.nav-link(@click='handle_logout_click', href='javascript:;') Logout
     .container

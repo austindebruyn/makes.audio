@@ -1,6 +1,6 @@
-const db = require('../services/db')
-const User = require('./User')
-const config = require('../config')
+const db = require('../../services/db')
+const User = require('../users/User')
+const config = require('../../config')
 const Promise = require('bluebird')
 
 const Audio = db.define('audio', {

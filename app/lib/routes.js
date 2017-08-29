@@ -1,4 +1,8 @@
 const upload = require('multer')({ dest: 'uploads/' })
+const usersController = require('../domain/users/usersController')
+const audiosController = require('../domain/audios/audiosController')
+const sessionsController = require('../domain/sessions/sessionsController')
+const homeController = require('../domain/home/homeController')
 
 function ensureAuthenticated(req, res, next) {
   if (!req.user) return res.redirect('/')
@@ -7,17 +11,18 @@ function ensureAuthenticated(req, res, next) {
 
 module.exports = function (app) {
   return new Promise(function (resolve, reject) {
-    app.get('/', app.controllers.home.index)
+    app.get('/', homeController.index)
 
-    app.use(app.controllers.audios.get)
+    app.use(audiosController.get)
 
-    app.post('/login', app.controllers.sessions.create)
-    app.post('/logout', app.controllers.sessions.destroy)
-    app.post('/api/users', app.controllers.users.create)
-    app.get('/api/audios', ensureAuthenticated, app.controllers.audios.index)
-    app.post('/api/audios', ensureAuthenticated, upload.single('file'), app.controllers.audios.create)
-    app.put('/api/audios/:id', ensureAuthenticated, app.controllers.audios.update)
-    app.get('*', app.controllers.home.index)
+    app.post('/login', sessionsController.create)
+    app.post('/logout', sessionsController.destroy)
+    app.post('/api/users', usersController.create)
+    app.put('/api/users/me', usersController.update)
+    app.get('/api/audios', ensureAuthenticated, audiosController.index)
+    app.post('/api/audios', ensureAuthenticated, upload.single('file'), audiosController.create)
+    app.put('/api/audios/:id', ensureAuthenticated, audiosController.update)
+    app.get('*', homeController.index)
 
     resolve(app)
   })

@@ -1,9 +1,9 @@
-const Audio = require('../models').Audio
-const User = require('../models').User
+const Audio = require('./Audio')
+const User = require('../users/User')
 const hashFiles = require('hash-files')
 const fs = require('fs')
 const path = require('path')
-const serve = require('../services/serve')
+const serve = require('../../services/serve')
 const compact = require('lodash.compact')
 
 module.exports.index = function (req, res, next) {

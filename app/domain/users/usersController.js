@@ -1,5 +1,5 @@
-const User = require('../models').User
-const InviteCode = require('../models').InviteCode
+const User = require('./User')
+const InviteCode = require('../inviteCodes/InviteCode')
 const bcrypt = require('bcrypt')
 
 module.exports.create = function (req, res) {
@@ -82,4 +82,10 @@ module.exports.create = function (req, res) {
       }
       return res.status(422).json({ errors: errors })
     })
+}
+
+module.exports.update = function (req, res) {
+  console.log('hey')
+
+  return res.json('fuck u')
 }

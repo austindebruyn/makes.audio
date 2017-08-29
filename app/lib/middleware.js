@@ -3,7 +3,6 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const expressFlash = require('express-flash')
 const config = require('../config')
-const controllers = require('../controllers')
 const db = require('../services/db')
 const path = require('path')
 const passport = require('passport')
@@ -13,7 +12,6 @@ const FileStore = require('session-file-store')(session)
 module.exports = function (app) {
   return new Promise(function (resolve, reject) {
     app.root = path.resolve(__dirname, '..', '..')
-    app.controllers = controllers
     app.db = db
 
     app.set('views', path.resolve(app.root, 'app', 'views'))

@@ -1,4 +1,4 @@
-const auth = require('../services/auth')
+const auth = require('../../services/auth')
 
 module.exports.create = function (req, res, next) {
   auth.authenticate(function (err, user, info) {

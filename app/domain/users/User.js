@@ -1,4 +1,4 @@
-const db = require('../services/db')
+const db = require('../../services/db')
 
 const User = db.define('user', {
   createdAt: { type: db.Sequelize.DATE, defaultValue: db.Sequelize.NOW },

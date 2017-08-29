@@ -62,6 +62,6 @@
     "watch": "cd frontend; webpack --watch",
     "nodemon": "nodemon --config .nodemonrc",
     "lint": "eslint app --fix",
-    "test": "mocha test"
+    "test": "mocha --recursive app/**/*.test.js"
   }
 }

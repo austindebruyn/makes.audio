@@ -1,5 +1,5 @@
-const db = require('../services/db')
-const User = require('./User')
+const db = require('../../services/db')
+const User = require('../users/User')
 
 const InviteCode = db.define('inviteCodes', {
   createdAt: { type: db.Sequelize.DATE, defaultValue: db.Sequelize.NOW },
