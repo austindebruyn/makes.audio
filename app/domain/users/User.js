@@ -20,7 +20,7 @@ const User = db.define('user', {
 }, {
   instanceMethods: {
     toJSON: function () {
-      return _.pick(this.get(), 'id', 'username', 'createdAt', 'updatedAt');
+      return _.pick(this.get(), 'id', 'username', 'createdAt', 'updatedAt')
     }
   }
 })

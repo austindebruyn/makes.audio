@@ -1,7 +1,9 @@
+/* eslint-disable */
+
 const express = require('express')
 
 module.exports = function startServer() {
-  var server;
+  var server
 
   beforeEach(function (done) {
     app = express()

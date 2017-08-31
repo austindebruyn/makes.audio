@@ -1,4 +1,3 @@
-const User = require('./User')
 const createUser = require('./createUser')
 
 module.exports.create = function (req, res) {
@@ -6,7 +5,7 @@ module.exports.create = function (req, res) {
     inviteCode,
     username,
     password,
-    password2,
+    password2
   } = req.body
 
   createUser.createUser({
@@ -29,12 +28,9 @@ module.exports.create = function (req, res) {
 }
 
 module.exports.get = function (req, res) {
-  console.log('hey')
   return res.json(req.user.toJSON())
 }
 
 module.exports.update = function (req, res) {
-  console.log('hey')
-
-  return res.json('fuck u')
+  return res.json({})
 }
