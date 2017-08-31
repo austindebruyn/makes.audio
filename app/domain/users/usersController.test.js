@@ -48,7 +48,7 @@ describe('usersController', function () {
         })
     })
 
-    it.only('should create a user and sign me in', function (done) {
+    it('should create a user and sign me in', function (done) {
       InviteCode.create({ code: 'polarbear' }).then(() => {
         request.post('http://localhost:14141/api/users')
           .send({ username: 'robin', password: 'egg', password2: 'egg', inviteCode: 'polarbear' })
