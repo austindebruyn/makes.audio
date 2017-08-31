@@ -3,7 +3,7 @@ const config  = require('../config')
 
 module.exports = new Sequelize(config.db.database, config.db.username, config.db.password, {
   host: config.db.host,
-  dialect: 'mysql',
+  dialect: config.db.dialect,
   logging: false,
 
   pool: {

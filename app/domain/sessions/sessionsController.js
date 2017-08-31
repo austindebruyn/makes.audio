@@ -25,5 +25,8 @@ module.exports.create = function (req, res, next) {
 
 module.exports.destroy = function (req, res) {
   req.logout()
-  return res.json({ ok: true }) // .redirect('/')
+  if (req.accepts('json')) {
+    return res.json({ ok: true })
+  }
+  return res.redirect('/')
 }

@@ -33,6 +33,7 @@
   import store from 'state/store'
   import actions from 'state/actions'
   import FlashEngine from 'lib/flash_engine'
+  import errors from 'i18n/errors'
 
   export default Vue.component 'create-account',
     data: ->
@@ -59,7 +60,10 @@
             store.dispatch actions.login json.user
             FlashEngine.create 'info', "Welcome #{json.user.username}!"
             return @$router.push '/dashboard'
-          FlashEngine.create 'danger', error for error in json.errors
+          else if json.errors and json.errors.length
+            FlashEngine.create 'danger', errors[error.code] for error in json.errors
+          else
+            FlashEngine.create 'danger', 'Something went wrong!'
 </script>
 
 <style lang="scss">

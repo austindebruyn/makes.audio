@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const db = require('../../services/db')
 
 const User = db.define('user', {
@@ -16,6 +17,12 @@ const User = db.define('user', {
     }
   },
   password: { type: db.Sequelize.STRING }
+}, {
+  instanceMethods: {
+    toJSON: function () {
+      return _.pick(this.get(), 'id', 'username', 'createdAt', 'updatedAt');
+    }
+  }
 })
 
 module.exports = User

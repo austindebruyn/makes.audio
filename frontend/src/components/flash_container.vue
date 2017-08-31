@@ -59,7 +59,7 @@
 
   #flash-container {
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     width: 100%;
 
     @include media-breakpoint-up(md) {

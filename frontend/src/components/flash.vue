@@ -1,10 +1,13 @@
 <template>
+
   <div :class="classes" role="alert" :style="styles">
     <div class="container">
       <div class="alert-icon">
         <i class="fa fa-info"></i>
       </div>
-      <strong v-if="title">{{ title }}</strong> {{ message }}
+      <div class="alert-message">
+        <strong v-if="title">{{ title }}</strong> {{ message }}
+      </div>
       <button v-if="dismissable" type="button" class="close" aria-label="Close" @click="handle_click">
         <span aria-hidden="true">
           <i class="fa fa-times"></i>
@@ -35,7 +38,7 @@
       styles: ->
         left: 0
         right: 0
-        top: "#{@idx*60}px"
+        top: "#{@idx*90}px"
         position: 'absolute'
     methods:
       handle_click: -> @$emit 'click'
@@ -104,5 +107,13 @@
   }
   .alert.dead {
     opacity: 0;
+  }
+  .alert-message {
+    padding-right: 40px;
+  }
+  button.close {
+    position: absolute;
+    right: 10px;
+    top: 0;
   }
 </style>

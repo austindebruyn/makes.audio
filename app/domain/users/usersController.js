@@ -1,87 +1,36 @@
 const User = require('./User')
-const InviteCode = require('../inviteCodes/InviteCode')
-const bcrypt = require('bcrypt')
+const createUser = require('./createUser')
 
 module.exports.create = function (req, res) {
-  var username = req.body.username
-  var password = req.body.password
-  var password2 = req.body.password2
-  var inviteCode = req.body.inviteCode
+  const {
+    inviteCode,
+    username,
+    password,
+    password2,
+  } = req.body
 
-  var inviteCodeModel = null
-  var userModel = null
-
-  new Promise(function (resolve, reject) {
-    if (password !== password2) {
-      return reject(new Error('match'))
-    }
-    return resolve()
-  })
-    .then(function () {
-      return InviteCode.findOne({ where: { code: inviteCode } })
-    })
-    .then(function (invite) {
-      if (invite == null) {
-        throw new Error('bad invite')
-      }
-      if (invite.userId !== null) {
-        throw new Error('invite taken')
-      }
-      inviteCodeModel = invite
-    })
-    .then(function () {
-      return User.count({ where: { username: username } })
-    })
-    .then(function (ct) {
-      if (ct > 0) {
-        throw new Error('dupe')
-      }
-      return bcrypt.genSalt(10)
-    })
-    .then(function (salt) {
-      return bcrypt.hash(password, salt)
-    })
-    .then(function (hash) {
-      return User.create({ username: username, password: hash })
-    })
-    .then(function (user) {
-      userModel = user
-      return inviteCodeModel.update({ userId: userModel.id })
-    })
-    .then(function () {
-      req.login(userModel, function (err) {
-        if (err) throw err
-        return res.json({
-          ok: true,
-          user: {
-            id: userModel.id,
-            username: userModel.username
-          }
-        })
+  createUser.createUser({
+    username, password, password2, inviteCode
+  }).then(function (user) {
+    req.login(user, function (err) {
+      if (err) throw err
+      return res.json({
+        ok: true,
+        user: user.toJSON()
       })
     })
-    .catch(function (err) {
-      const errors = []
+  }).catch(function (err) {
+    if (err.name === 'UserCreationError') {
+      return res.status(422).json({ ok: false, errors: [err.toJSON()] })
+    }
+    // throw to bug tracker
+    return res.status(500).json({ ok: false })
+  })
+}
 
-      if (err.name === 'SequelizeValidationError') {
-        err.errors.forEach(function (e) {
-          errors.push(`Something was wrong with the ${e.path} you entered.`)
-        })
-      }
-      if (err.message === 'dupe') {
-        errors.push(`The username ${username} is taken!`)
-      }
-      if (err.message === 'match') {
-        errors.push("Those passwords don't seem to match.")
-      }
-      if (err.message === 'bad invite') {
-        errors.push(`Invite code ${inviteCode} isn't valid!`)
-      }
-      if (err.message === 'invite taken') {
-        errors.push(`The invite code ${inviteCode} already taken!`)
-      }
-      return res.status(422).json({ errors: errors })
-    })
+module.exports.get = function (req, res) {
+  console.log('hey')
+  return res.json(req.user.toJSON())
 }
 
 module.exports.update = function (req, res) {

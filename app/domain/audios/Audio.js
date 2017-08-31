@@ -1,7 +1,6 @@
 const db = require('../../services/db')
 const User = require('../users/User')
 const config = require('../../config')
-const Promise = require('bluebird')
 
 const Audio = db.define('audio', {
   createdAt: { type: db.Sequelize.DATE, defaultValue: db.Sequelize.NOW },

@@ -1,4 +1,4 @@
-const InviteCode = require('../app/models/InviteCode')
+const InviteCode = require('../app/domain/inviteCodes/InviteCode')
 const db = require('../app/services/db')
 
 let string = ''

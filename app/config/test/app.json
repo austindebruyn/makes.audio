@@ -1,4 +1,7 @@
 {
   "sessionSecret": "session secret",
-  "cookieSecret": "cookie secret"
+  "cookieSecret": "cookie secret",
+  "port": 14141,
+  "listenPort": 14141,
+  "logging": false
 }

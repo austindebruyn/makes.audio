@@ -7,5 +7,6 @@ const InviteCode = db.define('inviteCodes', {
 })
 
 InviteCode.belongsTo(User)
+User.hasOne(InviteCode)
 
 module.exports = InviteCode

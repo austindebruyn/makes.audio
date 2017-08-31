@@ -5,7 +5,12 @@ const sessionsController = require('../domain/sessions/sessionsController')
 const homeController = require('../domain/home/homeController')
 
 function ensureAuthenticated(req, res, next) {
-  if (!req.user) return res.redirect('/')
+  if (!req.user) {
+    if (req.accepts('json')) {
+      return res.status(403).json({ ok: false })
+    }
+    return res.redirect('/')
+  }
   return next()
 }
 
@@ -18,7 +23,8 @@ module.exports = function (app) {
     app.post('/login', sessionsController.create)
     app.post('/logout', sessionsController.destroy)
     app.post('/api/users', usersController.create)
-    app.put('/api/users/me', usersController.update)
+    app.get('/api/users/me', ensureAuthenticated, usersController.get)
+    app.put('/api/users/me', ensureAuthenticated, usersController.update)
     app.get('/api/audios', ensureAuthenticated, audiosController.index)
     app.post('/api/audios', ensureAuthenticated, upload.single('file'), audiosController.create)
     app.put('/api/audios/:id', ensureAuthenticated, audiosController.update)
