@@ -7,6 +7,7 @@ api.fetch = ->
   fetch("/api/audios", credentials: 'same-origin')
     .then (data) -> data.json()
     .then (json) ->
-      store.dispatch audio_actions.set_audios json
+      if json.ok
+        store.dispatch audio_actions.set_audios json.records
 
 export default api

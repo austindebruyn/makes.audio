@@ -12,7 +12,7 @@ module.exports.index = function (req, res, next) {
       return Promise.all(records.map(r => r.toJSON()))
     })
     .then(function (records) {
-      return res.status(200).json(records)
+      return res.status(200).json({ ok: true , records })
     })
     .catch(next)
 }

@@ -18,11 +18,18 @@ function buildOrGetUser(user = {}) {
   })
 }
 
-module.exports = function (userAttributes) {
+signIn.currentUser
+
+afterEach(function () {
+  signIn.currentUser = null
+})
+
+function signIn(userAttributes) {
   var userId
 
   return buildOrGetUser(userAttributes)
     .then(function (user) {
+      signIn.currentUser = user
       userId = user.id
       return uid(24)
     })
@@ -34,7 +41,7 @@ module.exports = function (userAttributes) {
           if (err) return reject(err)
 
           cookiejar.add('connect.sid', signed)
-          return resolve(signed)
+          return resolve()
         })
       })
     })
@@ -42,3 +49,5 @@ module.exports = function (userAttributes) {
       console.error(err)
     })
 }
+
+module.exports = signIn
