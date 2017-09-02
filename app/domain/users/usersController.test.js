@@ -1,15 +1,15 @@
 const usersController = require('./usersController')
 const createUser = require('./createUser')
 const InviteCode = require('../inviteCodes/InviteCode')
-const startServer = require('../../tests/startServer')
+const agent = require('../../tests/agent')
 const clock = require('../../tests/clock')
-const request = require('superagent')
+const signIn = require('../../tests/signIn')
+const request = require('supertest')
 const expect = require('chai').expect
 const sinon = require('sinon')
 
 describe('usersController', function () {
   clock()
-  startServer()
 
   beforeEach(function () {
     sinon.spy(createUser, 'createUser')
@@ -20,75 +20,90 @@ describe('usersController', function () {
   })
 
   describe('POST /api/users', function () {
-    it('should invoke createUser', function (done) {
+    it('should invoke createUser', function () {
       const postBody = {
         username: 'turkish',
         password: 'allegory',
         password2: 'fighter',
         inviteCode: 'cashmere'
       }
-      request.post('http://localhost:14141/api/users')
+      return agent()
+        .post('/api/users')
         .send(postBody)
-        .end(function (err, res) {
+        .then(function () {
           expect(createUser.createUser).to.have.been.calledWith(postBody)
-          return done()
         })
     })
 
-    it('should return errors', function (done) {
-      request.post('http://localhost:14141/api/users')
-        .send({ username: 'hey', password: 'austin', password2: 'austin' })
-        .end(function (err, res) {
-          expect(res.status).to.eql(422)
-          expect(res.body).to.eql({
-            ok: false,
-            errors: [{ code: 'NONEXISTANT_INVITE' }]
-          })
-          done()
-        })
-    })
-
-    it('should create a user and sign me in', function (done) {
-      InviteCode.create({ code: 'polarbear' }).then(() => {
-        request.post('http://localhost:14141/api/users')
-          .send({ username: 'robin', password: 'egg', password2: 'egg', inviteCode: 'polarbear' })
-          .end(function (err, res) {
-            expect(res.status).to.eql(200)
-            expect(res.body).to.eql({
+    it('should return user and sign me in', function () {
+      return InviteCode.create({ code: 'cashmere' })
+        .then(function () {
+          const postBody = {
+            username: 'turkish',
+            password: 'allegory',
+            password2: 'allegory',
+            inviteCode: 'cashmere'
+          }
+          return agent()
+            .post('/api/users')
+            .send(postBody)
+            .expect(200, {
               ok: true,
               user: {
                 id: 1,
+                username:  'turkish',
                 createdAt: '2017-08-31T00:00:00.000Z',
                 updatedAt: '2017-08-31T00:00:00.001Z',
-                username: 'robin'
               }
             })
-            expect(res.headers['set-cookie']).to.match(/^connect\.sid=/)
-            done()
-          })
+            .expect(function (res) {
+              expect(res.headers).to.have.property('set-cookie')
+            })
+        })
+    })
+
+    it('should return errors', function () {
+      return agent()
+        .post('/api/users')
+        .send({ username: 'hey', password: 'austin', password2: 'austin' })
+        .expect(422, {
+          ok: false,
+          errors: [{ code: 'NONEXISTANT_INVITE' }]
         })
     })
   })
 
   describe('GET /api/users/me', function () {
-    it('should 403 on signed out', function (done) {
-      request.get('http://localhost:14141/api/users/me')
+    it('when signed out should 403', function () {
+      return agent()
+        .get('/api/users/me')
         .accept('application/json')
         .redirects(0)
-        .end(function (err, res) {
-          expect(res.status).to.eql(403)
-          return done()
-        })
+        .expect(403)
     })
 
-    // it('should return my user on sign in', function (done) {
-    //   request.get('http://localhost:14141/api/users/me')
-    //     .accept('application/json')
-    //     .redirects(0)
-    //     .end(function (err, res) {
-    //       expect(res.status).to.eql(403)
-    //       return done()
-    //     })
-    // })
+    describe('when signed in', function () {
+      beforeEach(function () {
+        return signIn({
+          username: 'sasquatch',
+          password: 'oogie',
+          password2: 'oogie'
+        })
+      })
+
+      it('should return my user on sign in', function () {
+        return agent()
+          .get('/api/users/me')
+          .accept('application/json')
+          .cookiejar()
+          .redirects(0)
+          .expect(200, {
+              id: 1,
+              createdAt: '2017-08-31T00:00:00.000Z',
+              updatedAt: '2017-08-31T00:00:00.001Z',
+              username: 'sasquatch'
+            })
+      })
+    })
   })
 })

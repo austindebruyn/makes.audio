@@ -8,11 +8,16 @@ const path = require('path')
 const passport = require('passport')
 const session = require('express-session')
 const FileStore = require('session-file-store')(session)
+const sessionStore = require('./sessionStore')
+const winston = require('winston')
 
 module.exports = function (app) {
   return new Promise(function (resolve, reject) {
     app.root = path.resolve(__dirname, '..', '..')
     app.db = db
+
+    const transports = config.app.logging ? [new winston.transports.Console()] : []
+    winston.configure({ transports })
 
     app.set('views', path.resolve(app.root, 'app', 'views'))
     app.set('view engine', 'pug')
@@ -22,7 +27,7 @@ module.exports = function (app) {
     app.use(cookieParser(config.app.cookieSecret))
     app.use(express.static(path.resolve(app.root, 'public')))
 
-    app.use(session({ secret: config.app.sessionSecret, resave: true, saveUninitialized: true, store: new FileStore({}) }))
+    app.use(session({ secret: config.app.sessionSecret, resave: true, saveUninitialized: true, store: sessionStore }))
     app.use(expressFlash())
     app.use(passport.initialize())
     app.use(passport.session())
