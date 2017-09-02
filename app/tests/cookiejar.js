@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const _ = require('lodash')
 const supertest = require('supertest')
 
@@ -25,5 +27,5 @@ function clear() {
 
 module.exports = {
   add,
-  clear,
+  clear
 }

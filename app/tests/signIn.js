@@ -1,6 +1,5 @@
 const Cookie = require('express-session/session/cookie')
 const sessionStore = require('../lib/sessionStore')
-const querystring = require('querystring')
 const signature = require('cookie-signature')
 const config = require('../config')
 const User = require('../domain/users/User')
@@ -8,7 +7,7 @@ const cookiejar = require('./cookiejar')
 const factory = require('./factory')
 const uid = require('uid-safe')
 
-function buildOrGetUser(user={}) {
+function buildOrGetUser(user = {}) {
   return new Promise(function (resolve, reject) {
     if (user instanceof User.Instance) {
       return resolve(user)
@@ -28,10 +27,12 @@ module.exports = function (userAttributes) {
       return uid(24)
     })
     .then(function (sessionId) {
-      return new Promise(function (resolve) {
+      return new Promise(function (resolve, reject) {
         const signed = 's:' + signature.sign(sessionId, config.app.sessionSecret)
 
         sessionStore.set(sessionId, { passport: { user: userId }, cookie: new Cookie() }, function (err) {
+          if (err) return reject(err)
+
           cookiejar.add('connect.sid', signed)
           return resolve(signed)
         })

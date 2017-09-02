@@ -7,7 +7,6 @@ const db = require('../services/db')
 const path = require('path')
 const passport = require('passport')
 const session = require('express-session')
-const FileStore = require('session-file-store')(session)
 const sessionStore = require('./sessionStore')
 const winston = require('winston')
 
