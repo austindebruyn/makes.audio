@@ -280,7 +280,7 @@ babel-code-frame@^6.11.0, babel-code-frame@^6.22.0:
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-runtime@^6.23.0:
+babel-runtime@^6.11.6, babel-runtime@^6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
   dependencies:
@@ -572,6 +572,10 @@ chalk@^2.1.0:
     ansi-styles "^3.1.0"
     escape-string-regexp "^1.0.5"
     supports-color "^4.0.0"
+
+chance@^1.0.4:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/chance/-/chance-1.0.11.tgz#48e82f7583df356053e0ad122d4654c5066c570d"
 
 character-parser@^2.1.1:
   version "2.2.0"
@@ -1579,6 +1583,13 @@ extsprintf@1.0.2:
 eyes@0.1.x:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/eyes/-/eyes-0.1.8.tgz#62cf120234c683785d902348a800ef3e0cc20bc0"
+
+factory-girl@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/factory-girl/-/factory-girl-4.3.0.tgz#99b220cf40e3ee6c8c86dd8ab37d70a952a81bc6"
+  dependencies:
+    babel-runtime "^6.11.6"
+    chance "^1.0.4"
 
 fast-deep-equal@^1.0.0:
   version "1.0.0"
@@ -4796,6 +4807,12 @@ uglifyjs-webpack-plugin@^0.4.6:
 uid-number@^0.0.6, uid-number@~0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
+
+uid-safe@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/uid-safe/-/uid-safe-2.1.5.tgz#2b3d5c7240e8fc2e58f8aa269e5ee49c0857bd3a"
+  dependencies:
+    random-bytes "~1.0.0"
 
 uid-safe@~2.1.4:
   version "2.1.4"

@@ -4,7 +4,6 @@ const InviteCode = require('../inviteCodes/InviteCode')
 const agent = require('../../tests/agent')
 const clock = require('../../tests/clock')
 const signIn = require('../../tests/signIn')
-const request = require('supertest')
 const expect = require('chai').expect
 const sinon = require('sinon')
 
@@ -38,15 +37,14 @@ describe('usersController', function () {
     it('should return user and sign me in', function () {
       return InviteCode.create({ code: 'cashmere' })
         .then(function () {
-          const postBody = {
-            username: 'turkish',
-            password: 'allegory',
-            password2: 'allegory',
-            inviteCode: 'cashmere'
-          }
           return agent()
             .post('/api/users')
-            .send(postBody)
+            .send({
+              username: 'turkish',
+              password: 'allegory',
+              password2: 'allegory',
+              inviteCode: 'cashmere'
+            })
             .expect(200, {
               ok: true,
               user: {
@@ -84,11 +82,7 @@ describe('usersController', function () {
 
     describe('when signed in', function () {
       beforeEach(function () {
-        return signIn({
-          username: 'sasquatch',
-          password: 'oogie',
-          password2: 'oogie'
-        })
+        return signIn({ username: 'sasquatch' })
       })
 
       it('should return my user on sign in', function () {
@@ -98,11 +92,11 @@ describe('usersController', function () {
           .cookiejar()
           .redirects(0)
           .expect(200, {
-              id: 1,
-              createdAt: '2017-08-31T00:00:00.000Z',
-              updatedAt: '2017-08-31T00:00:00.001Z',
-              username: 'sasquatch'
-            })
+            id: 1,
+            username: 'sasquatch',
+            createdAt: '2017-08-31T00:00:00.000Z',
+            updatedAt: '2017-08-31T00:00:00.001Z',
+          })
       })
     })
   })
