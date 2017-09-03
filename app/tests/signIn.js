@@ -1,3 +1,5 @@
+/* global afterEach */
+
 const Cookie = require('express-session/session/cookie')
 const sessionStore = require('../lib/sessionStore')
 const signature = require('cookie-signature')
@@ -18,7 +20,7 @@ function buildOrGetUser(user = {}) {
   })
 }
 
-signIn.user
+signIn.user = null
 
 afterEach(function () {
   signIn.user = null

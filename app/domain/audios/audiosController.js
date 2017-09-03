@@ -1,6 +1,5 @@
 const Audio = require('./Audio')
 const User = require('../users/User')
-const path = require('path')
 const serve = require('../../services/serve')
 const compact = require('lodash.compact')
 const createAudio = require('./createAudio')
@@ -11,7 +10,7 @@ module.exports.index = function (req, res, next) {
       return Promise.all(records.map(r => r.toJSON()))
     })
     .then(function (records) {
-      return res.status(200).json({ ok: true , records })
+      return res.status(200).json({ ok: true, records })
     })
     .catch(next)
 }

@@ -1,3 +1,5 @@
+/* global afterEach */
+
 const FactoryGirl = require('factory-girl')
 const User    = require('../domain/users/User')
 const Audio   = require('../domain/audios/Audio')
@@ -19,7 +21,7 @@ factory.define('audio', Audio, {
   originalName: () => `${factory.chance('word')()}.mp3`,
   size: 10000,
   mimetype: 'audio/mpeg',
-  url: factory.seq('Audio.url', n => `${factory.chance('word')()}${n}`),
+  url: factory.seq('Audio.url', n => `${factory.chance('word')()}${n}`)
 })
 
 afterEach(function () {

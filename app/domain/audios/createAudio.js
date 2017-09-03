@@ -20,9 +20,9 @@ class AudioCreationError extends Error {
   }
 }
 
-module.exports.removeTemporaryFile = function removeTemporaryFile(filename) {
+function removeTemporaryFile(filename) {
   return new Promise(function (resolve, reject) {
-    fs.unlink(temporaryFilename, function (err) {
+    fs.unlink(filename, function (err) {
       if (err) return reject(err)
       return resolve()
     })
@@ -112,7 +112,15 @@ module.exports.createAudio = function createAudio({ file, user }) {
           mimetype: file.mimetype
         }, { include: [ Audio.User ] })
       })
-      .then(resolve)
+      .then(function (audio) {
+        state.audio = audio
+      })
       .catch(reject)
+      .then(function () {
+        return removeTemporaryFile(temporaryFilename)
+      })
+      .then(function () {
+        return resolve(state.audio)
+      })
   })
 }
