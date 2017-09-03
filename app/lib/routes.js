@@ -1,8 +1,9 @@
-const upload = require('multer')({ dest: 'uploads/' })
+const upload = require('multer')({ dest: 'tmp/uploads/' })
 const usersController = require('../domain/users/usersController')
 const audiosController = require('../domain/audios/audiosController')
 const sessionsController = require('../domain/sessions/sessionsController')
 const homeController = require('../domain/home/homeController')
+const errorHandler = require('./errorHandler')
 
 function ensureAuthenticated(req, res, next) {
   if (!req.user) {
@@ -29,6 +30,8 @@ module.exports = function (app) {
     app.post('/api/audios', ensureAuthenticated, upload.single('file'), audiosController.create)
     app.put('/api/audios/:id', ensureAuthenticated, audiosController.update)
     app.get('*', homeController.index)
+
+    app.use(errorHandler)
 
     resolve(app)
   })

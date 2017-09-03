@@ -18,10 +18,10 @@ function buildOrGetUser(user = {}) {
   })
 }
 
-signIn.currentUser
+signIn.user
 
 afterEach(function () {
-  signIn.currentUser = null
+  signIn.user = null
 })
 
 function signIn(userAttributes) {
@@ -29,7 +29,7 @@ function signIn(userAttributes) {
 
   return buildOrGetUser(userAttributes)
     .then(function (user) {
-      signIn.currentUser = user
+      signIn.user = user
       userId = user.id
       return uid(24)
     })

@@ -1,10 +1,9 @@
 const Audio = require('./Audio')
 const User = require('../users/User')
-const hashFiles = require('hash-files')
-const fs = require('fs')
 const path = require('path')
 const serve = require('../../services/serve')
 const compact = require('lodash.compact')
+const createAudio = require('./createAudio')
 
 module.exports.index = function (req, res, next) {
   Audio.findAll({ where: { userId: req.user.id } })
@@ -68,81 +67,21 @@ module.exports.delete = function (req, res, next) {
 }
 
 module.exports.create = function (req, res, next) {
-  /*
-  { fieldname: 'file',
-  originalname: '1f1fa-1f1f8.png',
-  encoding: '7bit',
-  mimetype: 'image/png',
-  destination: 'uploads/',
-  filename: '27c831699f35a2033fc089029c2ae783',
-  path: 'uploads/27c831699f35a2033fc089029c2ae783',
-  size: 903 }
-  */
-  const errors = []
-  const MAXIMUM_FILE_SIZE = 1024 * 1024 * 20
-
-  if (!req.file) {
-    return res.status(422).json({
-      errors: [ 'Looks like you didnt upload anything.' ]
-    })
-  } else if (req.file.size > MAXIMUM_FILE_SIZE) {
-    errors.push('File is too large! 1MB max please!')
-  }
-  // if (!['audio/mpeg', 'audio/mp3'].includes(req.file.mimetype)) {
-  //   errors.push('File is not an mp3!')
-  // }
-
-  const filename = req.file.path
-
-  if (errors.length > 0) {
-    fs.unlink(filename, function (err) {
-      if (err) throw err
-
-      return res.status(422).json({
-        errors: errors
+  createAudio
+    .createAudio({ file: req.file, user: req.user })
+    .then(audio => audio.toJSON())
+    .then(function (audio) {
+      return res.status(201).json({
+        ok: true,
+        audio
       })
     })
-  } else {
-    hashFiles({ files: [filename], noGlob: true, algorithm: 'sha256' }, function (err, hash) {
-      if (err) throw err
-
-      fs.rename(filename, path.resolve(__dirname, '..', 'store', hash), function (err) {
-        if (err) throw err
-
-        var url = req.file.originalname.replace(/[^.-]/g, '')
-        url = url.slice(0, 128)
-        url = url.toLowerCase()
-
-        Audio.count({ where: { userId: req.user.id, url: url } })
-          .then(function (count) {
-            if (count !== 0) {
-              throw new Error('url not unique')
-            }
-
-            return Audio.create({
-              userId: req.user.id,
-              hash: hash,
-              originalName: req.file.originalname,
-              url: url,
-              size: req.file.size,
-              mimetype: req.file.mimetype
-            }, { include: [ Audio.User ] })
-          })
-          .then(function (audio) {
-            return audio.toJSON()
-          })
-          .then(function (json) {
-            return res.status(201).json(json)
-          })
-          .catch(function (err) {
-            if (err.message === 'url not unique') {
-              return res.status(422).json({ errors: [`You already have an upload named '${url}'!`] })
-            }
-            return next(err)
-          })
-      })
+    .catch(function (err) {
+      if (err.name === 'AudioCreationError') {
+        return res.status(422).json({ ok: false, errors: [err.toJSON()] })
+      } console.log(err)
+      return next(err)
     })
-  }
 }
 
 module.exports.update = function (req, res, next) {

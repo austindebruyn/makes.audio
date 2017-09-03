@@ -36,19 +36,6 @@ module.exports = function (app) {
       next()
     })
 
-    app.use(function (err, req, res, next) {
-      if (err.message === 'unauthorized') {
-        if (!req.user) {
-          req.flash('err', 'You need to sign in for that.')
-          return res.redirect('/')
-        } else {
-          req.flash('err', "You aren't authorized to be doing that.")
-          return res.redirect('/dashboard')
-        }
-      }
-      return next(err)
-    })
-
     resolve(app)
   })
 }

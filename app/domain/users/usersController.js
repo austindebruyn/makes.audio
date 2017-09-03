@@ -1,6 +1,6 @@
 const createUser = require('./createUser')
 
-module.exports.create = function (req, res) {
+module.exports.create = function (req, res, next) {
   const {
     inviteCode,
     username,
@@ -22,8 +22,7 @@ module.exports.create = function (req, res) {
     if (err.name === 'UserCreationError') {
       return res.status(422).json({ ok: false, errors: [err.toJSON()] })
     }
-    // throw to bug tracker
-    return res.status(500).json({ ok: false })
+    return next(err)
   })
 }
 

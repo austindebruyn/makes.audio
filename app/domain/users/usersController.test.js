@@ -8,65 +8,84 @@ const expect = require('chai').expect
 const sinon = require('sinon')
 
 describe('usersController', function () {
-  clock()
+  var sandbox
 
   beforeEach(function () {
-    sinon.spy(createUser, 'createUser')
+    sandbox = sinon.sandbox.create()
   })
 
   afterEach(function () {
-    createUser.createUser.restore()
+    sandbox.restore()
   })
 
+  clock()
+
   describe('POST /api/users', function () {
-    it('should invoke createUser', function () {
-      const postBody = {
-        username: 'turkish',
-        password: 'allegory',
-        password2: 'fighter',
-        inviteCode: 'cashmere'
-      }
-      return agent()
-        .post('/api/users')
-        .send(postBody)
-        .then(function () {
-          expect(createUser.createUser).to.have.been.calledWith(postBody)
-        })
+    describe('when createUser succeeds', function () {
+      beforeEach(function () {
+        sandbox.spy(createUser, 'createUser')
+      })
+
+      it('should invoke createUser', function () {
+        const postBody = {
+          username: 'turkish',
+          password: 'allegory',
+          password2: 'fighter',
+          inviteCode: 'cashmere'
+        }
+        return agent()
+          .post('/api/users')
+          .send(postBody)
+          .then(function () {
+            expect(createUser.createUser).to.have.been.calledWith(postBody)
+          })
+      })
+
+      it('should return user and sign me in', function () {
+        return InviteCode.create({ code: 'cashmere' })
+          .then(function () {
+            return agent()
+              .post('/api/users')
+              .send({
+                username: 'turkish',
+                password: 'allegory',
+                password2: 'allegory',
+                inviteCode: 'cashmere'
+              })
+              .expect(200, {
+                ok: true,
+                user: {
+                  id: 1,
+                  username:  'turkish',
+                  createdAt: '2017-08-31T00:00:00.000Z',
+                  updatedAt: '2017-08-31T00:00:00.001Z',
+                }
+              })
+              .expect(function (res) {
+                expect(res.headers).to.have.property('set-cookie')
+              })
+          })
+      })
+
+      it('should return errors', function () {
+        return agent()
+          .post('/api/users')
+          .send({ username: 'hey', password: 'austin', password2: 'austin' })
+          .expect(422, {
+            ok: false,
+            errors: [{ code: 'NONEXISTANT_INVITE' }]
+          })
+      })
     })
 
-    it('should return user and sign me in', function () {
-      return InviteCode.create({ code: 'cashmere' })
-        .then(function () {
-          return agent()
-            .post('/api/users')
-            .send({
-              username: 'turkish',
-              password: 'allegory',
-              password2: 'allegory',
-              inviteCode: 'cashmere'
-            })
-            .expect(200, {
-              ok: true,
-              user: {
-                id: 1,
-                username:  'turkish',
-                createdAt: '2017-08-31T00:00:00.000Z',
-                updatedAt: '2017-08-31T00:00:00.001Z',
-              }
-            })
-            .expect(function (res) {
-              expect(res.headers).to.have.property('set-cookie')
-            })
-        })
-    })
+    it('when createUser rejects should return 500', function () {
+      sandbox.stub(createUser, 'createUser').rejects()
 
-    it('should return errors', function () {
       return agent()
         .post('/api/users')
         .send({ username: 'hey', password: 'austin', password2: 'austin' })
-        .expect(422, {
-          ok: false,
-          errors: [{ code: 'NONEXISTANT_INVITE' }]
+        .expect(500, {
+          ok: false
         })
     })
   })

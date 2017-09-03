@@ -1,0 +1,7 @@
+{
+  "maxSizeInMB": 20,
+  "allowedMimetypes": [
+    "audio/mpeg",
+    "audio/mp3"
+  ]
+}

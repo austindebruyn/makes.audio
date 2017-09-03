@@ -2,3 +2,4 @@ node_modules
 public/dist
 /sessions
 /memory
+tmp/uploads/*
