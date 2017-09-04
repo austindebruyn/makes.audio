@@ -2,7 +2,7 @@ const auth = require('../../services/auth')
 
 module.exports.create = function (req, res, next) {
   auth.authenticate(function (err, user, info) {
-    if (err) { console.log(err)
+    if (err) {
       throw err
     }
 

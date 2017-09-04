@@ -8,6 +8,7 @@
     "body-parser": "^1.17.2",
     "bootstrap": "4.0.0.alpha6",
     "chai": "^4.1.1",
+    "chai-as-promised": "^7.1.1",
     "coffee-loader": "^0.7.3",
     "coffee-script": "^1.12.6",
     "commander": "^2.10.0",

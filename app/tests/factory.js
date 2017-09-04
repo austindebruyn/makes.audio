@@ -1,8 +1,9 @@
 /* global afterEach */
 
 const FactoryGirl = require('factory-girl')
-const User    = require('../domain/users/User')
-const Audio   = require('../domain/audios/Audio')
+const hashPassword = require('../domain/users/passwords').hash
+const User = require('../domain/users/User')
+const Audio = require('../domain/audios/Audio')
 const adapter = new FactoryGirl.SequelizeAdapter()
 const uid = require('uid-safe')
 
@@ -12,7 +13,14 @@ factory.setAdapter(adapter)
 
 factory.define('user', User, {
   username: () => uid(10),
-  password: '$2a$10$11Y7AU9HoyKiRjpiqy/Hve9nhfqmedjjzMOwOMdaX82TYZ.4cntX2'
+  password: () => uid(24)
+}, {
+  afterBuild: function (model, attrs) {
+    return hashPassword(attrs.password || model.password).then(function (hash) {
+      model.password = hash
+      return model
+    })
+  }
 })
 
 factory.define('audio', Audio, {

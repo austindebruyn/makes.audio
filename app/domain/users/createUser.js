@@ -1,7 +1,7 @@
 const _ = require('lodash')
-const bcrypt = require('bcrypt')
 const User = require('./User')
 const InviteCode = require('../inviteCodes/InviteCode')
+const hashPasswords = require('./passwords').hash
 
 class UserCreationError extends Error {
   constructor(code, data = {}) {
@@ -31,7 +31,7 @@ module.exports.createUser = function createUser(data) {
     var inviteCodeModel = null
     var userModel = null
 
-    new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
       if (password !== password2) {
         return reject(new UserCreationError('PASSWORDS_DONT_MATCH'))
       }
@@ -59,13 +59,10 @@ module.exports.createUser = function createUser(data) {
         if (ct > 0) {
           throw new UserCreationError('USERNAME_NOT_UNIQUE')
         }
-        return bcrypt.genSalt(10)
+        return hashPasswords(password)
       })
-      .then(function (salt) {
-        return bcrypt.hash(password, salt)
-      })
-      .then(function (hash) {
-        return User.create({ username: username, password: hash })
+      .then(function (password) {
+        return User.create({ username, password })
       })
       .then(function (user) {
         userModel = user

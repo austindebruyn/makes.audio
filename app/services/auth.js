@@ -1,26 +1,26 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
+const passwordUtils = require('../domain/users/passwords')
 const User = require('../domain/users/User')
-const bcrypt = require('bcrypt')
 
 passport.use(new LocalStrategy(
   function (username, password, done) {
     let user
 
-    User.findOne({ where: { username: username } }).then(function (record) {
+    User.findOne({ where: { username } }).then(function (record) {
       user = record
 
       if (!user) {
         return null
       }
-      return bcrypt.compare(password, user.password)
+      return passwordUtils.verify(password, user.password)
     })
-    .then(function (success) {
-      return done(null, success ? user : false)
-    })
-    .catch(function (err) {
-      return done(err)
-    })
+      .then(function (success) {
+        return done(null, success ? user : false)
+      })
+      .catch(function (err) {
+        return done(err)
+      })
   }
 ))
 

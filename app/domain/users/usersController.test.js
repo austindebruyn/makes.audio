@@ -119,4 +119,26 @@ describe('usersController', function () {
       })
     })
   })
+
+  describe('PUT /api/users/me', function () {
+    beforeEach(function () {
+      return signIn()
+    })
+
+    it('should change username', function () {
+      return agent()
+        .put('/api/users/me')
+        .cookiejar()
+        .send({ username: 'asshole' })
+        .expect(200, {
+          ok: true,
+          user: {
+            id: 1,
+            createdAt: '2017-08-31T00:00:00.000Z',
+            updatedAt: '2017-08-31T00:00:00.001Z',
+            username: 'asshole'
+          }
+        })
+    })
+  })
 })

@@ -95,7 +95,7 @@ exports.createAudio = function createAudio({ file, user }) {
         if (!file) return reject(err)
         return fs.exists(file.path)
           .then(exists => exists && fs.unlink(file.path))
-          .then (() => reject(err))
+          .then(() => reject(err))
       })
   })
 }
