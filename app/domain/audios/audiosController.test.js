@@ -27,6 +27,7 @@ describe('audiosController', function () {
     it('when signed out should 403', function () {
       return agent()
         .get('/api/audios')
+        .accept('application/json')
         .expect(403)
     })
 
@@ -38,6 +39,7 @@ describe('audiosController', function () {
       it('should return empty array', function () {
         return agent()
           .get('/api/audios')
+          .accept('application/json')
           .cookiejar()
           .expect(200, {
             ok: true,
@@ -54,6 +56,7 @@ describe('audiosController', function () {
           .then(function (records) {
             return agent()
               .get('/api/audios')
+              .accept('application/json')
               .cookiejar()
               .expect(200)
               .then(function (res) {
@@ -69,6 +72,7 @@ describe('audiosController', function () {
     it('when signed out should 403', function () {
       return agent()
         .post('/api/audios')
+        .accept('application/json')
         .expect(403)
     })
 
@@ -84,6 +88,7 @@ describe('audiosController', function () {
 
         return agent()
           .post('/api/audios')
+          .accept('application/json')
           .cookiejar()
           .attach('file', filename)
           .then(function () {
@@ -106,6 +111,7 @@ describe('audiosController', function () {
       it('should return errors', function () {
         return agent()
           .post('/api/audios')
+          .accept('application/json')
           .cookiejar()
           .expect(422, {
             ok: false,
@@ -123,6 +129,7 @@ describe('audiosController', function () {
 
           return agent()
             .post('/api/audios')
+            .accept('application/json')
             .cookiejar()
             .attach('file', filename)
             .expect(201)
@@ -157,6 +164,7 @@ describe('audiosController', function () {
 
           return agent()
             .post('/api/audios')
+            .accept('application/json')
             .cookiejar()
             .attach('file', filename)
             .expect(201)
@@ -193,6 +201,7 @@ describe('audiosController', function () {
         it('should remove temporary file', function () {
           return agent()
             .post('/api/audios')
+            .accept('application/json')
             .cookiejar()
             .attach('file', filename)
             .expect(500)

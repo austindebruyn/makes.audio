@@ -9,16 +9,19 @@ module.exports.create = function (req, res, next) {
     password2
   } = req.body
 
-  createUser.createUser({
+  return createUser.createUser({
     username, password, password2, inviteCode
   })
     .then(function (user) {
       req.login(user, function (err) {
         if (err) throw err
-        return res.json({
-          ok: true,
-          user: user.toJSON()
-        })
+
+        return user
+          .toJSON()
+          .then(json => res.json({ ok: true, user: json }))
+          .catch(function (err) {
+            throw err;
+          })
       })
     })
     .catch(function (err) {
@@ -29,8 +32,10 @@ module.exports.create = function (req, res, next) {
     })
 }
 
-module.exports.get = function (req, res) {
-  return res.json(req.user.toJSON())
+module.exports.get = function (req, res, next) {
+  return req.user.toJSON()
+    .then(user => res.json(user))
+    .catch(next)
 }
 
 module.exports.update = function (req, res, next) {

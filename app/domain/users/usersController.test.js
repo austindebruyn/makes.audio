@@ -35,6 +35,7 @@ describe('usersController', function () {
         }
         return agent()
           .post('/api/users')
+          .accept('application/json')
           .send(postBody)
           .then(function () {
             expect(createUser.createUser).to.have.been.calledWith(postBody)
@@ -46,6 +47,7 @@ describe('usersController', function () {
           .then(function () {
             return agent()
               .post('/api/users')
+              .accept('application/json')
               .send({
                 username: 'turkish',
                 password: 'allegory',
@@ -70,6 +72,7 @@ describe('usersController', function () {
       it('should return errors', function () {
         return agent()
           .post('/api/users')
+          .accept('application/json')
           .send({ username: 'hey', password: 'austin', password2: 'austin' })
           .expect(422, {
             ok: false,
@@ -83,6 +86,7 @@ describe('usersController', function () {
 
       return agent()
         .post('/api/users')
+        .accept('application/json')
         .send({ username: 'hey', password: 'austin', password2: 'austin' })
         .expect(500, {
           ok: false
@@ -128,15 +132,16 @@ describe('usersController', function () {
     it('should change username', function () {
       return agent()
         .put('/api/users/me')
+        .accept('application/json')
         .cookiejar()
-        .send({ username: 'asshole' })
+        .send({ username: 'elizabeth' })
         .expect(200, {
           ok: true,
           user: {
             id: 1,
             createdAt: '2017-08-31T00:00:00.000Z',
             updatedAt: '2017-08-31T00:00:00.001Z',
-            username: 'asshole'
+            username: 'elizabeth'
           }
         })
     })
