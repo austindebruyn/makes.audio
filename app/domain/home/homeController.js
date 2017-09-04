@@ -1,8 +1,7 @@
 module.exports.index = function (req, res) {
-  const user = req.user ? { id: req.user.id, username: req.user.username } : null
+  const promise = req.user ? req.user.toJSON : () => Promise.resolve(null)
 
-  return res.render('index', {
-    flash: req.session.flash || {},
-    user: user
+  return promise().then(function (user) {
+    return res.render('index', { user })
   })
 }

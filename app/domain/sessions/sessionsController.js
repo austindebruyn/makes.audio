@@ -2,13 +2,17 @@ const auth = require('../../services/auth')
 
 module.exports.create = function (req, res, next) {
   auth.authenticate(function (err, user, info) {
-    if (err) throw err
+    if (err) { console.log(err)
+      throw err
+    }
+
     if (!user) {
       return res.status(400).json({
         ok: false,
-        errors: ['Wrong username or password']
+        errors: [{ code: 'WRONG_USERNAME_OR_PASSWORD' }]
       })
     }
+
     req.login(user, function (err) {
       if (err) throw err
 

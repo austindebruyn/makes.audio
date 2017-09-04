@@ -1,5 +1,5 @@
 const hashFiles = require('hash-files')
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const config = require('../../config')
 const Audio = require('./Audio')
@@ -20,16 +20,7 @@ class AudioCreationError extends Error {
   }
 }
 
-function removeTemporaryFile(filename) {
-  return new Promise(function (resolve, reject) {
-    fs.unlink(filename, function (err) {
-      if (err) return reject(err)
-      return resolve()
-    })
-  })
-}
-
-function hashTemporaryFile(filename) {
+exports.hashTemporaryFile = function hashTemporaryFile(filename) {
   return new Promise(function (resolve, reject) {
     hashFiles({
       files: [filename],
@@ -42,29 +33,10 @@ function hashTemporaryFile(filename) {
   })
 }
 
-function renameFiles(source, destination) {
-  return new Promise(function (resolve, reject) {
-    fs.rename(source, destination, function (err) {
-      if (err) return reject(err)
-      return resolve()
-    })
-  })
-}
+exports.verifyAudioFile = function verifyAudioFile(file) {
+  const MAXIMUM_FILE_SIZE = config.audio.maxSizeInMB * 1024 * 1024
 
-module.exports.createAudio = function createAudio({ file, user }) {
   return new Promise(function (resolve, reject) {
-    /*
-    { fieldname: 'file',
-    originalname: '1f1fa-1f1f8.png',
-    encoding: '7bit',
-    mimetype: 'image/png',
-    destination: 'uploads/',
-    filename: '27c831699f35a2033fc089029c2ae783',
-    path: 'uploads/27c831699f35a2033fc089029c2ae783',
-    size: 903 }
-    */
-    const MAXIMUM_FILE_SIZE = config.audio.maxSizeInMB * 1024 * 1024
-
     if (!file) {
       return reject(new AudioCreationError('NO_FILE'))
     }
@@ -81,14 +53,20 @@ module.exports.createAudio = function createAudio({ file, user }) {
       }))
     }
 
-    const temporaryFilename = file.path
+    return resolve()
+  })
+}
+
+exports.createAudio = function createAudio({ file, user }) {
+  return new Promise(function (resolve, reject) {
     var state = {}
 
-    hashTemporaryFile(temporaryFilename)
+    return exports.verifyAudioFile(file)
+      .then(() => exports.hashTemporaryFile(file.path))
       .then(function (hash) {
         state.hash = hash
         const permanentFilename = path.resolve(__dirname, '../..', 'store', hash)
-        return renameFiles(temporaryFilename, permanentFilename)
+        return fs.rename(file.path, permanentFilename)
       })
       .then(function () {
         state.url = file.originalname
@@ -110,17 +88,14 @@ module.exports.createAudio = function createAudio({ file, user }) {
           url: state.url,
           size: file.size,
           mimetype: file.mimetype
-        }, { include: [ Audio.User ] })
+        })
       })
-      .then(function (audio) {
-        state.audio = audio
-      })
-      .catch(reject)
-      .then(function () {
-        return removeTemporaryFile(temporaryFilename)
-      })
-      .then(function () {
-        return resolve(state.audio)
+      .then(resolve)
+      .catch(function (err) {
+        if (!file) return reject(err)
+        return fs.exists(file.path)
+          .then(exists => exists && fs.unlink(file.path))
+          .then (() => reject(err))
       })
   })
 }

@@ -3,11 +3,11 @@ const agent = require('../../tests/agent')
 const clock = require('../../tests/clock')
 const signIn = require('../../tests/signIn')
 const expect = require('chai').expect
+const fs = require('fs-extra')
 const sinon = require('sinon')
 const factory = require('../../tests/factory')
 const createAudio = require('./createAudio')
 const path = require('path')
-const fs = require('fs')
 const Audio = require('./Audio')
 
 describe('audiosController', function () {
@@ -103,47 +103,6 @@ describe('audiosController', function () {
           })
       })
 
-      it('should succeed', function () {
-        const filename = path.resolve(__dirname, '../..', 'tests/fixtures/files/chicken.mp3')
-
-        return agent()
-          .post('/api/audios')
-          .cookiejar()
-          .attach('file', filename)
-          .expect(201)
-          .then(function (res) {
-            expect(res.body.ok).to.be.true;
-            expect(res.body.audio).to.include({
-              id: 1,
-              createdAt: 'Wed Aug 30 2017 17:00:00 GMT-0700 (PDT)',
-              editUrl: '/audios/1/edit',
-              formattedSize: '0.01MB',
-              mimetype: 'audio/mpeg',
-              originalName: 'chicken.mp3',
-              size: 7971,
-              updateUrl: '/api/audios/1',
-              url: 'chicken.mp3',
-              visible: true
-            })
-            expect(res.body.audio.downloadUrl).to.be.a('string');
-            expect(res.body.audio.publicUrl).to.be.a('string');
-            return Audio.findOne({ where: { id: res.body.audio.id } })
-          })
-          .then(function (audio) {
-            const filename = path.resolve(__dirname, '../..', 'store', audio.hash)
-
-            return new Promise(function (resolve, reject) {
-              fs.stat(filename, function (err, stat) {
-                if (err) return reject(err)
-                return resolve(stat)
-              })
-            })
-          })
-          .then(function (stat) {
-            expect(stat.size).to.eql(7971)
-          })
-      })
-
       it('should return errors', function () {
         return agent()
           .post('/api/audios')
@@ -154,16 +113,98 @@ describe('audiosController', function () {
           })
       })
 
-      it('should 500 when createAudio errors', function () {
-        sandbox.stub(createAudio, 'createAudio').rejects()
+      describe('when createAudio succeeds', function () {
+        beforeEach(function () {
+          sandbox.spy(createAudio, 'createAudio')
+        })
 
-        return agent()
-          .post('/api/audios')
-          .accept('application/json')
-          .cookiejar()
-          .expect(500, {
-            ok: false
-          })
+        it('should create', function () {
+          const filename = path.resolve(__dirname, '../..', 'tests/fixtures/files/chicken.mp3')
+
+          return agent()
+            .post('/api/audios')
+            .cookiejar()
+            .attach('file', filename)
+            .expect(201)
+            .then(function (res) {
+              expect(res.body.ok).to.be.true;
+              expect(res.body.audio).to.include({
+                id: 1,
+                createdAt: 'Wed Aug 30 2017 17:00:00 GMT-0700 (PDT)',
+                editUrl: '/audios/1/edit',
+                formattedSize: '0.01MB',
+                mimetype: 'audio/mpeg',
+                originalName: 'chicken.mp3',
+                size: 7971,
+                updateUrl: '/api/audios/1',
+                url: 'chicken.mp3',
+                visible: true
+              })
+              expect(res.body.audio.downloadUrl).to.be.a('string');
+              expect(res.body.audio.publicUrl).to.be.a('string');
+              return Audio.findOne({ where: { id: res.body.audio.id } })
+            })
+            .then(function (audio) {
+              return fs.stat(path.resolve(__dirname, '../..', 'store', audio.hash))
+            })
+            .then(function (stat) {
+              expect(stat.size).to.eql(7971)
+            })
+        })
+
+        it('should remove temporary file', function () {
+          const filename = path.resolve(__dirname, '../..', 'tests/fixtures/files/chicken.mp3')
+
+          return agent()
+            .post('/api/audios')
+            .cookiejar()
+            .attach('file', filename)
+            .expect(201)
+            .then(function () {
+              const filepath = createAudio.createAudio.args[0][0].file.path
+              const temporaryFilename = path.resolve(__dirname, '../../..', filepath)
+              return fs.stat(temporaryFilename)
+            })
+            .catch(function (err) {
+              expect(err.code).to.eql('ENOENT')
+            })
+        })
+      })
+
+      describe('when createAudio errors', function () {
+        const filename = path.resolve(__dirname, '../..', 'tests/fixtures/files/chicken.mp3')
+
+        beforeEach(function () {
+          sandbox.spy(createAudio, 'createAudio')
+          sandbox.stub(createAudio, 'hashTemporaryFile').rejects()
+        })
+
+        it('should 500', function () {
+          return agent()
+            .post('/api/audios')
+            .accept('application/json')
+            .cookiejar()
+            .attach('file', filename)
+            .expect(500, {
+              ok: false
+            })
+        })
+
+        it('should remove temporary file', function () {
+          return agent()
+            .post('/api/audios')
+            .cookiejar()
+            .attach('file', filename)
+            .expect(500)
+            .then(function () {
+              const filepath = createAudio.createAudio.args[0][0].file.path
+              const temporaryFilename = path.resolve(__dirname, '../../..', filepath)
+              return fs.exists(temporaryFilename)
+            })
+            .then(function (exists) {
+              expect(exists).to.be.false
+            })
+        })
       })
     })
   })

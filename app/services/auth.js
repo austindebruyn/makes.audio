@@ -11,16 +11,16 @@ passport.use(new LocalStrategy(
       user = record
 
       if (!user) {
-        return done(null, false, { message: 'Incorrect username.' })
+        return null
       }
       return bcrypt.compare(password, user.password)
     })
-      .then(function (success) {
-        return done(null, success ? user : false)
-      })
-      .catch(function (err) {
-        return done(err)
-      })
+    .then(function (success) {
+      return done(null, success ? user : false)
+    })
+    .catch(function (err) {
+      return done(err)
+    })
   }
 ))
 

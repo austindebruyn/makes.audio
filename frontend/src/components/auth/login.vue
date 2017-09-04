@@ -24,6 +24,7 @@
   import store from 'state/store'
   import actions from 'state/actions'
   import FlashEngine from 'lib/flash_engine'
+  import errors from 'i18n/errors'
 
   export default Vue.component 'login',
     data: ->
@@ -48,7 +49,7 @@
             store.dispatch actions.login json.user
             FlashEngine.create 'info', "Welcome back #{json.user.username}!"
             return @$router.push '/dashboard'
-          FlashEngine.create 'danger', error for error in json.errors
+          FlashEngine.create 'danger', errors[error] for error in json.errors
 </script>
 
 <style lang="scss">

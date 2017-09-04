@@ -4,3 +4,4 @@ module.exports =
   USED_INVITE: "That invite code has already been used!"
   USERNAME_NOT_UNIQUE: "That username has been taken."
   VALIDATION: "Something's wrong with the stuff you entered."
+  WRONG_USERNAME_OR_PASSWORD: "Wrong username or password."

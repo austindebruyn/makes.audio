@@ -70,15 +70,12 @@ module.exports.create = function (req, res, next) {
     .createAudio({ file: req.file, user: req.user })
     .then(audio => audio.toJSON())
     .then(function (audio) {
-      return res.status(201).json({
-        ok: true,
-        audio
-      })
+      return res.status(201).json({ ok: true, audio })
     })
     .catch(function (err) {
       if (err.name === 'AudioCreationError') {
         return res.status(422).json({ ok: false, errors: [err.toJSON()] })
-      } console.log(err)
+      }
       return next(err)
     })
 }
