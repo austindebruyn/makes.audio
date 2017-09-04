@@ -49,7 +49,7 @@ const Audio = db.define('audio', {
             size: this.size,
             originalName: this.originalName,
             mimetype: this.mimetype,
-            createdAt: this.createdAt.toString(),
+            createdAt: this.createdAt.toUTCString(),
             visible: this.visible
           })
         })

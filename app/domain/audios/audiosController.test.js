@@ -124,7 +124,7 @@ describe('audiosController', function () {
           sandbox.spy(createAudio, 'createAudio')
         })
 
-        it('should create', function () {
+        it.only('should create', function () {
           const filename = path.resolve(__dirname, '../..', 'tests/fixtures/files/chicken.mp3')
 
           return agent()
@@ -137,7 +137,7 @@ describe('audiosController', function () {
               expect(res.body.ok).to.be.true;
               expect(res.body.audio).to.include({
                 id: 1,
-                createdAt: 'Wed Aug 30 2017 17:00:00 GMT-0700 (PDT)',
+                createdAt: 'Thu Aug 31 2017 00:00:00 GMT+0000 (UTC)',
                 editUrl: '/audios/1/edit',
                 formattedSize: '0.01MB',
                 mimetype: 'audio/mpeg',
