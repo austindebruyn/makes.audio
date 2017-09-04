@@ -35,7 +35,5 @@
 
   .settings-page {
     padding-top: 40px;
-
-
   }
 </style>

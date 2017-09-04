@@ -7,10 +7,10 @@ const errorHandler = require('./errorHandler')
 
 function ensureAuthenticated(req, res, next) {
   if (!req.user) {
-    if (req.accepts('json')) {
-      return res.status(403).json({ ok: false })
+    if (req.accepts('html')) {
+      return res.redirect('/')
     }
-    return res.redirect('/')
+    return res.status(403).json({ ok: false })
   }
   return next()
 }

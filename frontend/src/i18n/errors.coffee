@@ -5,3 +5,5 @@ module.exports =
   USERNAME_NOT_UNIQUE: "That username has been taken."
   VALIDATION: "Something's wrong with the stuff you entered."
   WRONG_USERNAME_OR_PASSWORD: "Wrong username or password."
+  update_user:
+    WRONG_PASSWORD: 'The current password wasn\'t correct.'

@@ -1,19 +1,29 @@
 <template lang="pug">
-  form.user-form(@submit='handle_submit')
-    .form-group
-      label(for='username') Username
-      input.form-control(type='text', name='username', v-model='username', spellcheck='false', autocomplete='off', :disabled='loading')
-      label(for='email') Email
-      input.form-control(type='text', name='email', v-model='email', spellcheck='false', :disabled='loading')
-    .form-group
-      .btn.btn-link Send password reset email
-    .form-group
-      button(type='submit', :disabled='loading').btn.btn-primary Save
+  .user-form
+    form(@submit='handle_submit')
+      .form-group
+        label(for='username') Username
+        input.form-control(type='text', name='username', v-model='username', spellcheck='false', autocomplete='off', :disabled='loading')
+        label(for='email') Email
+        input.form-control(type='text', name='email', v-model='email', spellcheck='false', :disabled='loading')
+      .form-group
+        button(type='submit', :disabled='loading').btn.btn-primary Save
+    form(@submit='handle_submit_password')
+      .form-group
+        h2 Change Password
+        label(for='password') New Password
+        input.form-control(type='password', name='password', v-model='password')
+        label(for='password') Current Password
+        input.form-control(type='password', name='currentPassword', v-model='currentPassword')
+      .form-group
+        button(type='submit', :disabled='loading').btn.btn-primary Save
 </template>
 
 <script lang="coffee">
   import Vue from 'vue'
+  import errors from 'i18n/errors'
   import store from 'state/store'
+  import actions from 'state/actions'
   import audio_actions from 'state/actions/audios'
   import audio_api from 'api/audios'
   import FlashEngine from 'lib/flash_engine'
@@ -25,22 +35,47 @@
       username: @user.username
       email: @user.email
       loading: false
+      password: ''
+      currentPassword: ''
     computed:
       account_created: -> 'hi'
     methods:
       handle_submit: (e) ->
         e.preventDefault()
-        payload =
-          username: @username
         fetch '/api/users/me',
           method: 'PUT',
           credentials: 'same-origin',
-          headers: ('Content-Type': 'application/json')
-          body: JSON.stringify payload
+          headers: ('Content-Type': 'application/json', 'Accept': 'application/json')
+          body: JSON.stringify
+            username: @username
         .then (resp) -> resp.json()
-        .then (data) =>
+        .then (json) =>
           @loading = false
-          console.log(data)
+          if json.ok
+            store.dispatch actions.login json.user
+          else if json.errors and json.errors.length
+            FlashEngine.create 'danger', errors.update_user[error.code] for error in json.errors
+          else
+            FlashEngine.create 'danger', 'Something went wrong on our end. Please try again later!'
+        @loading = true
+      handle_submit_password: (e) ->
+        e.preventDefault()
+        fetch '/api/users/me',
+          method: 'PUT',
+          credentials: 'same-origin',
+          headers: ('Content-Type': 'application/json', 'Accept': 'application/json')
+          body: JSON.stringify
+            password: @password
+            currentPassword: @currentPassword
+        .then (resp) -> resp.json()
+        .then (json) =>
+          @loading = false
+          if json.ok
+            FlashEngine.create 'success', 'Done!'
+            @password = ''
+            @currentPassword = ''
+          else
+            FlashEngine.create 'danger', errors.update_user[error.code] for error in json.errors
         @loading = true
 </script>
 
