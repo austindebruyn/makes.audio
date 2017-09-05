@@ -1,4 +1,3 @@
-const _ = require('lodash')
 const db = require('../../services/db')
 
 const User = db.define('user', {
