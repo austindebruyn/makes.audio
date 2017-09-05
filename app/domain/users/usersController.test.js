@@ -59,8 +59,8 @@ describe('usersController', function () {
                 user: {
                   id: 1,
                   username:  'turkish',
-                  createdAt: '2017-08-31T00:00:00.000Z',
-                  updatedAt: '2017-08-31T00:00:00.001Z',
+                  createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
+                  updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
                 }
               })
               .expect(function (res) {
@@ -117,8 +117,8 @@ describe('usersController', function () {
           .expect(200, {
             id: 1,
             username: 'sasquatch',
-            createdAt: '2017-08-31T00:00:00.000Z',
-            updatedAt: '2017-08-31T00:00:00.001Z',
+            createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
+            updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
           })
       })
     })
@@ -139,8 +139,8 @@ describe('usersController', function () {
           ok: true,
           user: {
             id: 1,
-            createdAt: '2017-08-31T00:00:00.000Z',
-            updatedAt: '2017-08-31T00:00:00.001Z',
+            createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
+            updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
             username: 'elizabeth'
           }
         })

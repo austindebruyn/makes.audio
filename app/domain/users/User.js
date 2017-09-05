@@ -21,7 +21,12 @@ const User = db.define('user', {
   instanceMethods: {
     toJSON: function () {
       return new Promise(resolve => {
-        return resolve(_.pick(this.get(), 'id', 'username', 'createdAt', 'updatedAt'))
+        return resolve({
+          id:        this.get('id'),
+          username:  this.get('username'),
+          createdAt: this.get('createdAt').toUTCString(),
+          updatedAt: this.get('updatedAt').toUTCString()
+        })
       })
     }
   }
