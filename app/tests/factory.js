@@ -13,7 +13,8 @@ factory.setAdapter(adapter)
 
 factory.define('user', User, {
   username: () => uid(10),
-  password: () => uid(24)
+  password: () => uid(24),
+  email: factory.chance('email')
 }, {
   afterBuild: function (model, attrs) {
     return hashPassword(attrs.password || model.password).then(function (hash) {

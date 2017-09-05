@@ -5,12 +5,13 @@ module.exports.create = function (req, res, next) {
   const {
     inviteCode,
     username,
+    email,
     password,
     password2
   } = req.body
 
   return createUser.createUser({
-    username, password, password2, inviteCode
+    username, email, password, password2, inviteCode
   })
     .then(function (user) {
       req.login(user, function (err) {

@@ -2,7 +2,7 @@ const db = require('../../services/db')
 
 const User = db.define('user', {
   createdAt: { type: db.Sequelize.DATE, defaultValue: db.Sequelize.NOW },
-
+  email: { type: db.Sequelize.STRING, allowNull: false },
   username: {
     type: db.Sequelize.STRING,
     allowNull: false,
@@ -23,6 +23,7 @@ const User = db.define('user', {
         return resolve({
           id:        this.get('id'),
           username:  this.get('username'),
+          email:     this.get('email'),
           createdAt: this.get('createdAt').toUTCString(),
           updatedAt: this.get('updatedAt').toUTCString()
         })

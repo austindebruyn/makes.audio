@@ -25,7 +25,6 @@
       audios: @$select 'audios'
       user: @$select 'user'
       username: @user && @user.username
-      email: 'ass@dick.com'
     methods:
       a: ->
 </script>

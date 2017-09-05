@@ -46,6 +46,16 @@ describe('updateUser', function () {
     })
   })
 
+  it('should update the email', function () {
+    return updateUser.updateUser({
+      user,
+      attributes: { email: 'jonas@salk.com' }
+    }).then(function (user) {
+      expect(user.email).to.eql('jonas@salk.com')
+      expect(user.previous('email')).to.eql('jonas@salk.com')
+    })
+  })
+
   it('should update the password', function () {
     return updateUser.updateUser({
       user,

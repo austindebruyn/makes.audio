@@ -23,6 +23,7 @@ module.exports.createUser = function createUser(data) {
   const {
     inviteCode,
     username,
+    email,
     password,
     password2
   } = data
@@ -37,6 +38,9 @@ module.exports.createUser = function createUser(data) {
       }
       if (!password) {
         return reject(new UserCreationError('MISSING_PASSWORD'))
+      }
+      if (!(email && email.match(/^.+@.+$/))) {
+        return reject(new UserCreationError('BAD_EMAIL'))
       }
       return resolve()
     })
@@ -62,7 +66,7 @@ module.exports.createUser = function createUser(data) {
         return hashPasswords(password)
       })
       .then(function (password) {
-        return User.create({ username, password })
+        return User.create({ username, email, password })
       })
       .then(function (user) {
         userModel = user

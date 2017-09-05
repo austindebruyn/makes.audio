@@ -29,6 +29,7 @@ describe('usersController', function () {
       it('should invoke createUser', function () {
         const postBody = {
           username: 'turkish',
+          email: 'edgar@allen.poe',
           password: 'allegory',
           password2: 'fighter',
           inviteCode: 'cashmere'
@@ -50,6 +51,7 @@ describe('usersController', function () {
               .accept('application/json')
               .send({
                 username: 'turkish',
+                email: 'austin@baustin.com',
                 password: 'allegory',
                 password2: 'allegory',
                 inviteCode: 'cashmere'
@@ -59,6 +61,7 @@ describe('usersController', function () {
                 user: {
                   id: 1,
                   username:  'turkish',
+                  email: 'austin@baustin.com',
                   createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
                   updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
                 }
@@ -73,7 +76,7 @@ describe('usersController', function () {
         return agent()
           .post('/api/users')
           .accept('application/json')
-          .send({ username: 'hey', password: 'austin', password2: 'austin' })
+          .send({ username: 'hey', email: 'b@p.com', password: 'austin', password2: 'austin' })
           .expect(422, {
             ok: false,
             errors: [{ code: 'NONEXISTANT_INVITE' }]
@@ -105,7 +108,7 @@ describe('usersController', function () {
 
     describe('when signed in', function () {
       beforeEach(function () {
-        return signIn({ username: 'sasquatch' })
+        return signIn({ username: 'sasquatch', email: 'austin@baustin.com' })
       })
 
       it('should return my user on sign in', function () {
@@ -117,6 +120,7 @@ describe('usersController', function () {
           .expect(200, {
             id: 1,
             username: 'sasquatch',
+            email: 'austin@baustin.com',
             createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
             updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
           })
@@ -139,6 +143,7 @@ describe('usersController', function () {
           ok: true,
           user: {
             id: 1,
+            email: signIn.user.email,
             createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
             updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
             username: 'elizabeth'

@@ -2,6 +2,7 @@ const sessionsController = require('./sessionsController')
 const signIn = require('../../tests/signIn')
 const agent = require('../../tests/agent')
 const User = require('../users/User')
+const factory = require('../../tests/factory')
 
 describe('sessionsController', function () {
   describe('POST /login', function () {
@@ -17,9 +18,9 @@ describe('sessionsController', function () {
 
     describe('when username is right', function () {
       beforeEach(function () {
-        return User.create({
+        return factory.create('user', {
           username: 'descarte',
-          password: '$2a$10$pJ.0U0o9fVzYQzlqMPNNXOyCEOCcTv1lQ7CrHVPx.5j6f32j.IB56'
+          password: 'politics87'
         })
       })
 

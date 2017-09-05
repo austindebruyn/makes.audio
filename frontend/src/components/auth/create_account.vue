@@ -12,6 +12,10 @@
               input.transparent.round.input-lg.form-control(type='text', autocomplete='off', name='username', placeholder='Username', :disabled='async')
             .input-group
               span.input-group-addon
+                i.fa.fa-envelope-o
+              input.transparent.round.input-lg.form-control(type='text', autocomplete='off', name='email', placeholder='Email', :disabled='async')
+            .input-group
+              span.input-group-addon
                 i.fa.fa-ticket
               input.transparent.round.input-lg.form-control(type='text', autocomplete='off', name='inviteCode', placeholder='Invite Code', :disabled='async')
             .input-group
@@ -50,6 +54,7 @@
             'Content-Type': 'application/json'
           body: JSON.stringify
             username: e.target.username.value
+            email: e.target.email.value
             inviteCode: e.target.inviteCode.value
             password: e.target.password.value
             password2: e.target.password2.value

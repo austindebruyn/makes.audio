@@ -48,15 +48,17 @@
           headers: ('Content-Type': 'application/json', 'Accept': 'application/json')
           body: JSON.stringify
             username: @username
+            email: @email
         .then (resp) -> resp.json()
         .then (json) =>
           @loading = false
           if json.ok
             store.dispatch actions.login json.user
+            FlashEngine.create 'success', "You've been updated.", 'Great!'
           else if json.errors and json.errors.length
-            FlashEngine.create 'danger', errors.update_user[error.code] for error in json.errors
+            FlashEngine.create 'warn', errors.update_user[error.code] for error in json.errors
           else
-            FlashEngine.create 'danger', 'Something went wrong on our end. Please try again later!'
+            FlashEngine.create 'danger', 'Please try again later.', 'Server Error!'
         @loading = true
       handle_submit_password: (e) ->
         e.preventDefault()

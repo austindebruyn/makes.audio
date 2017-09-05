@@ -13,6 +13,7 @@ describe('createUser', function () {
   it('should reject missing invite code', function () {
     return expect(createUser({
       username: '',
+      email: 'apple@banana.com',
       password: 'a',
       password2: 'a',
       inviteCode: 'asdjflasdkf'
@@ -22,6 +23,16 @@ describe('createUser', function () {
   it('should reject missing password', function () {
     return expect(createUser({ username: '' }))
       .to.eventually.be.rejected.and.have.property('code', 'MISSING_PASSWORD')
+  })
+
+  it('should reject missing email', function () {
+    return expect(createUser({ username: '', password: 'hey', password2: 'hey', email: '' }))
+      .to.eventually.be.rejected.and.have.property('code', 'BAD_EMAIL')
+  })
+
+  it('should reject bad format email', function () {
+    return expect(createUser({ username: '', password: 'hey', password2: 'hey', email: '@kjsa' }))
+      .to.eventually.be.rejected.and.have.property('code', 'BAD_EMAIL')
   })
 
   describe('when a user exists', function () {
@@ -36,6 +47,7 @@ describe('createUser', function () {
     it('should reject used invite code', function () {
       return expect(createUser({
         username: '',
+        email: 'apple@banana.com',
         password: 'a',
         password2: 'a',
         inviteCode: 'husky'
@@ -45,6 +57,7 @@ describe('createUser', function () {
     it('should reject used username', function () {
       return expect(createUser({
         username: 'man',
+        email: 'apple@banana.com',
         password: 'a',
         password2: 'a',
         inviteCode: 'polarbear'
@@ -60,6 +73,7 @@ describe('createUser', function () {
     it('should validate model', function () {
       return expect(createUser({
         username: 'm',
+        email: 'apple@banana.com',
         password: 'b',
         password2: 'b',
         inviteCode: 'polarbear'
@@ -70,7 +84,13 @@ describe('createUser', function () {
     })
 
     it('should assign inviteCode to user', function () {
-      return createUser({ username: 'man2', password: 'b', password2: 'b', inviteCode: 'polarbear' })
+      return createUser({
+        username: 'man2',
+        email: 'peter@pan.com',
+        password: 'b',
+        password2: 'b',
+        inviteCode: 'polarbear'
+      })
         .then(user => {
           return User.findOne({ where: { id: user.id }, include: [InviteCode] })
         }).then(user => {
