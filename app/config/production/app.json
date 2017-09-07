@@ -4,5 +4,9 @@
   "protocol": "https",
   "host": "makes.audio",
   "port": null,
-  "listenPort": 5617
+  "listenPort": 5617,
+  "sentry": {
+    "public": "684e6be3ade84eed9f79be6f62ea4229",
+    "secret": null
+  }
 }

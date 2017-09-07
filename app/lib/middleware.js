@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const express = require('express')
@@ -9,11 +10,17 @@ const passport = require('passport')
 const session = require('express-session')
 const sessionStore = require('./sessionStore')
 const winston = require('winston')
+const Raven = require('raven')
 
 module.exports = function (app) {
   return new Promise(function (resolve, reject) {
     app.root = path.resolve(__dirname, '..', '..')
     app.db = db
+
+    if (config.app.sentry.secret) {
+      const dsn = `https://${config.app.sentry.public}:${config.app.sentry.secret}@sentry.io/213755`
+      Raven.config(dsn).install()
+    }
 
     const transports = config.app.logging ? [new winston.transports.Console()] : []
     winston.configure({ transports })
@@ -33,6 +40,20 @@ module.exports = function (app) {
 
     app.use(function (req, res, next) {
       res.setHeader('X-Hello', 'Have A Good time')
+      next()
+    })
+
+    app.use(function (req, res, next) {
+      if (config.app.sentry.secret) {
+        const user = {
+          ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+        }
+        if (req.user) {
+          Object.assign(user, _.pick(req.user, 'id', 'username', 'email'))
+        }
+
+        Raven.setContext({ user })
+      }
       next()
     })
 

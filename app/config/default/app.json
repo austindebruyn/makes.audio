@@ -5,5 +5,9 @@
   "host": "dev-makes.audio",
   "port": 3000,
   "listenPort": 3000,
-  "logging": true
+  "logging": true,
+  "sentry": {
+    "public": null,
+    "secret": null
+  }
 }

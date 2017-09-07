@@ -1,6 +1,9 @@
+import pick from 'lodash.pick'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
+
+import set_raven_user from 'lib/set_raven_user'
 
 import router from 'router'
 
@@ -27,6 +30,8 @@ import actions from 'state/actions'
 
 # hydrate
 user = document.getElementById('root').getAttribute 'data-user'
+store.store.subscribe ->
+  set_raven_user pick(store.state.user, 'id', 'username', 'email')
 store.dispatch actions.login JSON.parse user if user
 
 vm = new Vue

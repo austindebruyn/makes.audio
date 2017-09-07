@@ -1,4 +1,8 @@
+const Raven = require('raven')
+
 module.exports = function errorHandler(err, req, res, next) {
+  Raven.captureException(err)
+
   if (req.accepts('html')) {
     return next(err)
   }
