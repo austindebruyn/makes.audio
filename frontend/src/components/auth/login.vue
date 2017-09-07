@@ -17,6 +17,7 @@
           .form-group
             button.btn.btn-primary.btn-round.btn-lg.btn-block(type='submit', :disabled="async") Submit
           router-link.btn.btn-link(to='/create') Create an Account
+          router-link.btn.btn-link(to='/passwordResets/new') I forgot my password
 </template>
 
 <script lang="coffee">
@@ -49,7 +50,7 @@
             store.dispatch actions.login json.user
             FlashEngine.create 'info', "Welcome back #{json.user.username}!"
             return @$router.push '/dashboard'
-          FlashEngine.create 'danger', errors[error] for error in json.errors
+          FlashEngine.create 'danger', errors[error.code] for error in json.errors
 </script>
 
 <style lang="scss">

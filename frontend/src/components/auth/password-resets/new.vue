@@ -1,0 +1,66 @@
+<template lang="pug">
+  auth-template.login-page
+    .content-center
+      card.card-login.card-plain
+        .header.header-primary.text-center
+          img.branding(src='/branding/makes-audio-logo-300.png', title='MAKES.AUDIO')
+        p Forgot your password?
+        p
+          | Enter the email you signed up with and an email with instructions
+          | will be sent to you.
+        form(action='/api/passwordResets', method='POST', @submit="on_submit")
+          .form-group
+            .input-group
+              span.input-group-addon
+                i.fa.fa-envelope-o
+              input.transparent.round.input-lg.form-control(type='text',
+                                                            autocomplete='off',
+                                                            name='email',
+                                                            placeholder='Email',
+                                                            :disabled='loading')
+          .form-group
+            .input-group
+              button.btn.btn-primary.btn-round.btn-lg.btn-block(type='submit', :disabled="loading") Send Email
+          router-link.btn.btn-link(to='/', :disabled='loading') Back to Login
+</template>
+
+<script lang="coffee">
+  import Vue from 'vue'
+  import FlashEngine from 'lib/flash_engine'
+  import errors from 'i18n/errors'
+
+  export default Vue.component 'new-password-reset',
+    data: ->
+      loading: false
+    beforeRouteLeave: (to, from, next) -> next !@loading
+    methods:
+      on_submit: (e) ->
+        e.preventDefault()
+        email = e.target.email.value
+        @loading = true
+        fetch e.target.getAttribute('action'),
+          method: 'POST'
+          credentials: 'same-origin'
+          headers:
+            Accept: 'application/json'
+            'Content-Type': 'application/json'
+          body: JSON.stringify
+            email: email
+        .then (data) -> data.json()
+        .then (json) =>
+          @loading = false
+          if json.ok
+            FlashEngine.create 'success', "An email has been sent to #{email}.", 'Success!'
+            return @$router.push '/dashboard'
+          else if json.errors and json.errors.length
+            FlashEngine.create 'danger', errors.password_resets[error.code] for error in json.errors
+          else
+            FlashEngine.create 'danger', 'Something went wrong!'
+</script>
+
+<style lang="scss">
+  .header .branding {
+    width: 150px;
+    padding-bottom: 40px;
+  }
+</style>

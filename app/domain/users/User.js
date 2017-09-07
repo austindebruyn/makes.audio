@@ -1,8 +1,15 @@
 const db = require('../../services/db')
 
 const User = db.define('user', {
-  createdAt: { type: db.Sequelize.DATE, defaultValue: db.Sequelize.NOW },
-  email: { type: db.Sequelize.STRING, allowNull: false },
+  createdAt: {
+    type: db.Sequelize.DATE,
+    defaultValue: db.Sequelize.NOW
+  },
+  email: {
+    type: db.Sequelize.STRING,
+    unique: true,
+    allowNull: false
+  },
   username: {
     type: db.Sequelize.STRING,
     allowNull: false,
@@ -15,7 +22,10 @@ const User = db.define('user', {
       }
     }
   },
-  password: { type: db.Sequelize.STRING }
+  password: {
+    type: db.Sequelize.STRING,
+    allowNull: false
+  }
 }, {
   instanceMethods: {
     toJSON: function () {

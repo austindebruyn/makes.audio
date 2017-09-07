@@ -2,11 +2,22 @@ const upload = require('multer')({ dest: 'tmp/uploads/' })
 const usersController = require('../domain/users/usersController')
 const audiosController = require('../domain/audios/audiosController')
 const sessionsController = require('../domain/sessions/sessionsController')
+const passwordResetsController = require('../domain/passwordResets/passwordResetsController')
 const homeController = require('../domain/home/homeController')
 const errorHandler = require('./errorHandler')
 
 function ensureAuthenticated(req, res, next) {
   if (!req.user) {
+    if (req.accepts('html')) {
+      return res.redirect('/')
+    }
+    return res.status(403).json({ ok: false })
+  }
+  return next()
+}
+
+function ensureAnonymous(req, res, next) {
+  if (req.user) {
     if (req.accepts('html')) {
       return res.redirect('/')
     }
@@ -24,6 +35,8 @@ module.exports = function (app) {
     app.post('/login', sessionsController.create)
     app.post('/logout', sessionsController.destroy)
     app.post('/api/users', usersController.create)
+    app.post('/api/passwordResets', ensureAnonymous, passwordResetsController.create)
+    app.post('/api/passwordResets/complete', ensureAnonymous, passwordResetsController.complete)
     app.get('/api/users/me', ensureAuthenticated, usersController.get)
     app.put('/api/users/me', ensureAuthenticated, usersController.update)
     app.get('/api/audios', ensureAuthenticated, audiosController.index)
