@@ -6,18 +6,22 @@ const extractSass = new ExtractTextPlugin({
   filename: '[name].css',
   disable: false
 })
-const plugins = [ extractSass ]
+const plugins = [
+  extractSass
+]
 
-// if (process.env.NODE_ENV === 'production') {
-//   plugins.push(
-//     new webpack.DefinePlugin({ 'process.env': { NODE_ENV: '"production"' } }),
-//     new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
-//   )
-// }
+if (process.env.NODE_ENV === 'production') {
+  plugins.push(
+    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: '"production"' } }),
+    new webpack.optimize.UglifyJsPlugin({ sourceMap: true, compress: { warnings: false } })
+  )
+}
 
+const devtool = process.env.NODE_ENV === 'production' ? 'source-map' : false
 
 module.exports = {
   entry: './src/index.coffee',
+  devtool: devtool,
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, '..', 'public', 'dist'),
@@ -28,6 +32,16 @@ module.exports = {
       {
         test: /\.coffee$/,
         use: [ 'coffee-loader' ]
+      },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env']
+          }
+        },
+        include: /dot\-prop/
       },
       {
         test: /\.vue$/,
