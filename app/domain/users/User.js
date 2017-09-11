@@ -31,9 +31,9 @@ const User = db.define('user', {
     toJSON: function () {
       return new Promise(resolve => {
         return resolve({
-          id:        this.get('id'),
-          username:  this.get('username'),
-          email:     this.get('email'),
+          id: this.get('id'),
+          username: this.get('username'),
+          email: this.get('email'),
           createdAt: this.get('createdAt').toUTCString(),
           updatedAt: this.get('updatedAt').toUTCString()
         })

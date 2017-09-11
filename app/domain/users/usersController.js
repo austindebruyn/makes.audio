@@ -21,7 +21,7 @@ module.exports.create = function (req, res, next) {
           .toJSON()
           .then(json => res.json({ ok: true, user: json }))
           .catch(function (err) {
-            throw err;
+            throw err
           })
       })
     })

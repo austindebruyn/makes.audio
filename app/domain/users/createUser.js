@@ -1,7 +1,9 @@
 const _ = require('lodash')
 const User = require('./User')
+const EmailPreferences = require('../emailPreferences/EmailPreferences')
 const InviteCode = require('../inviteCodes/InviteCode')
 const hashPasswords = require('./passwords').hash
+const uid = require('uid-safe')
 
 class UserCreationError extends Error {
   constructor(code, data = {}) {
@@ -30,7 +32,7 @@ module.exports.createUser = function createUser(data) {
 
   return new Promise(function (resolve, reject) {
     var inviteCodeModel = null
-    var userModel = null
+    var state = {}
 
     return new Promise(function (resolve, reject) {
       if (password !== password2) {
@@ -69,11 +71,15 @@ module.exports.createUser = function createUser(data) {
         return User.create({ username, email, password })
       })
       .then(function (user) {
-        userModel = user
-        return inviteCodeModel.update({ userId: userModel.id })
+        state.user = user
+        return inviteCodeModel.update({ userId: state.user.id })
+      })
+      .then(() => uid(24))
+      .then(function (verificationCode) {
+        return EmailPreferences.create({ userId: state.user.id, verificationCode })
       })
       .then(function () {
-        return resolve(userModel)
+        return resolve(state.user)
       })
       .catch(function (err) {
         if (err.name === 'SequelizeValidationError') {

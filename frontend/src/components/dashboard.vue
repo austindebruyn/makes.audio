@@ -70,6 +70,8 @@
         fetch '/api/audios',
           method: 'POST'
           credentials: 'same-origin'
+          headers:
+            Accept: 'application/json'
           body: upload_file
         .then (data) -> data.json()
         .then (json) ->

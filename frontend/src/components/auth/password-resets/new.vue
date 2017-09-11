@@ -51,7 +51,7 @@
           @loading = false
           if json.ok
             FlashEngine.create 'success', "An email has been sent to #{email}.", 'Success!'
-            return @$router.push '/dashboard'
+            return @$router.push '/passwordResets/complete'
           else if json.errors and json.errors.length
             FlashEngine.create 'danger', errors.password_resets[error.code] for error in json.errors
           else

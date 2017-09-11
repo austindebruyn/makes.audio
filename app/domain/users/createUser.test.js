@@ -1,8 +1,10 @@
 const { createUser } = require('./createUser')
 const InviteCode = require('../inviteCodes/InviteCode')
+const EmailPreferences = require('../emailPreferences/EmailPreferences')
 const User = require('../users/User')
 const { expect } = require('chai')
 const factory = require('../../tests/factory')
+const clock = require('../../tests/clock')
 
 describe('createUser', function () {
   it('should reject non matching passwords', function () {
@@ -66,6 +68,8 @@ describe('createUser', function () {
   })
 
   describe('invite code is correct', function () {
+    clock()
+
     beforeEach(function () {
       return InviteCode.create({ code: 'polarbear' })
     })
@@ -95,6 +99,29 @@ describe('createUser', function () {
           return User.findOne({ where: { id: user.id }, include: [InviteCode] })
         }).then(user => {
           expect(user.inviteCode.code).to.eql('polarbear')
+        })
+    })
+
+    it('should create email preferences model', function () {
+      return createUser({
+        username: 'man2',
+        email: 'peter@pan.com',
+        password: 'b',
+        password2: 'b',
+        inviteCode: 'polarbear'
+      })
+        .then(user => {
+          return User.findOne({ where: { id: user.id }, include: [EmailPreferences] })
+        }).then(user => user.emailPreferences.toJSON())
+          .then(emailPreferences => {
+          expect(emailPreferences).to.include({
+            id: 1,
+            verifiedAt: null,
+            optedOutAt: null,
+            createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
+            updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
+            userId: 1
+          })
         })
     })
   })

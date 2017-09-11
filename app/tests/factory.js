@@ -3,6 +3,7 @@
 const FactoryGirl = require('factory-girl')
 const hashPassword = require('../domain/users/passwords').hash
 const User = require('../domain/users/User')
+const EmailPreferences = require('../domain/emailPreferences/EmailPreferences')
 const Audio = require('../domain/audios/Audio')
 const adapter = new FactoryGirl.SequelizeAdapter()
 const uid = require('uid-safe')
@@ -22,6 +23,11 @@ factory.define('user', User, {
       return model
     })
   }
+})
+
+factory.define('emailPreferences', EmailPreferences, {
+  verificationCode: () => uid(24),
+  user: factory.assoc('user', 'userId')
 })
 
 factory.define('audio', Audio, {

@@ -8,7 +8,7 @@ const factory = require('../../tests/factory')
 const expect = require('chai').expect
 const sinon = require('sinon')
 
-describe.only('passwordResetsController', function () {
+describe('passwordResetsController', function () {
   var user
 
   clock()
