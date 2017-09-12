@@ -2,7 +2,6 @@ const _ = require('lodash')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const express = require('express')
-const expressFlash = require('express-flash')
 const config = require('../config')
 const db = require('../services/db')
 const path = require('path')
@@ -34,7 +33,6 @@ module.exports = function (app) {
     app.use(express.static(path.resolve(app.root, 'public')))
 
     app.use(session({ secret: config.app.sessionSecret, resave: true, saveUninitialized: true, store: sessionStore }))
-    app.use(expressFlash())
     app.use(passport.initialize())
     app.use(passport.session())
 

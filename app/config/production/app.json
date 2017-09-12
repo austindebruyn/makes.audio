@@ -1,6 +1,7 @@
 {
   "sessionSecret": null,
   "cookieSecret": null,
+  "sessionDriver": "redis",
   "protocol": "https",
   "host": "makes.audio",
   "port": null,

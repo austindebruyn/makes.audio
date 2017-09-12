@@ -1,6 +1,7 @@
 {
   "sessionSecret": "m(l&fFk2;K10kdDfsdf",
   "cookieSecret": "Pq)jaNg3*[QssiU7}4]",
+  "sessionDriver": "file",
   "protocol": "http",
   "host": "dev-makes.audio",
   "port": 3000,
