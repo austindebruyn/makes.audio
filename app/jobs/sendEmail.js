@@ -1,4 +1,3 @@
-const kue = require('kue')
 const config = require('../config')
 const getKue = require('./getKue')
 
