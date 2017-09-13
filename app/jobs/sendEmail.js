@@ -63,7 +63,6 @@ function process(job, done) {
     job.log(body)
     return done()
   })
-
 }
 
 module.exports = {

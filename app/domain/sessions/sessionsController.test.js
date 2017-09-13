@@ -3,8 +3,11 @@ const signIn = require('../../tests/signIn')
 const agent = require('../../tests/agent')
 const User = require('../users/User')
 const factory = require('../../tests/factory')
+const clock = require('../../tests/clock')
 
 describe('sessionsController', function () {
+  clock()
+
   describe('POST /login', function () {
     it('should error for wrong username', function () {
       return agent()
@@ -20,7 +23,8 @@ describe('sessionsController', function () {
       beforeEach(function () {
         return factory.create('user', {
           username: 'descarte',
-          password: 'politics87'
+          password: 'politics87',
+          email: 'descarte@gov.gov'
         })
       })
 
@@ -42,7 +46,10 @@ describe('sessionsController', function () {
             ok: true,
             user: {
               id: 1,
-              username: 'descarte'
+              username: 'descarte',
+              email: 'descarte@gov.gov',
+              createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
+              updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
             }
           })
       })
