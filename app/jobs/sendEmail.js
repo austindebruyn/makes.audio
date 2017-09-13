@@ -1,6 +1,6 @@
 const kue = require('kue')
 const config = require('../config')
-const kueQueue = kue.createQueue()
+const getKue = require('./getKue')
 
 /**
  * Promises to push a job onto the queue with the given name and data.
@@ -11,7 +11,7 @@ const kueQueue = kue.createQueue()
  */
 function createKueJob(name, data) {
   return new Promise(function (resolve, reject) {
-    const job = kueQueue.create(name, data).save(function (err) {
+    const job = getKue().create(name, data).save(function (err) {
       if (err) return reject(err)
       return resolve(job)
     })
