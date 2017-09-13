@@ -16,13 +16,12 @@ module.exports.create = function (req, res, next) {
     req.login(user, function (err) {
       if (err) throw err
 
-      return res.json({
-        ok: true,
-        user: {
-          id: user.id,
-          username: user.username
-        }
-      })
+      return user.toJSON().then(function (json) {
+        return res.json({
+          ok: true,
+          user: json
+        })
+      }).catch(next)
     })
   })(req, res, next)
 }
