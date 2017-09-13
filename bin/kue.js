@@ -1,13 +1,5 @@
-const express = require('express')
-const app = express()
-const config = require('../app/config')
-const basicAuth = require('basic-auth-connect')
 const kue = require('kue')
+const queue = kue.createQueue()
+const sendEmail = require('../app/jobs/sendEmail')
 
-if (config.kue.ui.username) {
-  const { username, password } = config.kue.ui
-  app.use(basicAuth(username, password))
-}
-
-app.use(kue.app)
-app.listen(config.kue.ui.port)
+queue.process('email', sendEmail.process)

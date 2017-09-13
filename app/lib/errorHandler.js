@@ -1,7 +1,10 @@
 const config = require('../config')
 const Raven = require('raven')
+const winston = require('winston')
 
 module.exports = function errorHandler(err, req, res, next) {
+  winston.log('error', err)
+
   if (config.app.sentry.secret) {
     Raven.captureException(err)
   }

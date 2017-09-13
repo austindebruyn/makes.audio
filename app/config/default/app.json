@@ -10,5 +10,9 @@
   "sentry": {
     "public": null,
     "secret": null
+  },
+  "mailgun": {
+    "key": null,
+    "domain": "mg.makes.audio"
   }
 }

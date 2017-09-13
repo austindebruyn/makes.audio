@@ -2,6 +2,7 @@ const User = require('../users/User')
 const PasswordReset = require('./PasswordReset')
 const uid = require('uid-safe')
 const passwordUtils = require('../users/passwords')
+const sendEmail = require('../../jobs/sendEmail')
 
 class PasswordResetCreationError extends Error {
   constructor(code, data = {}) {
@@ -44,6 +45,11 @@ module.exports.create = function (req, res, next) {
       .catch(reject)
   })
     .then(function (model) {
+      return sendEmail.queue(email, 'Password reset for makes.audio', 'password-reset', {
+        passwordResetId: model.id
+      })
+    })
+    .then(function () {
       return res.json({ ok: true })
     })
     .catch(function (err) {
