@@ -51,6 +51,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.1",
+    "query-string": "^5.0.0",
     "raven": "^2.1.2",
     "raven-js": "^3.17.0",
     "redux": "^3.6.0",

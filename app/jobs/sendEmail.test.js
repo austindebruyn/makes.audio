@@ -8,9 +8,9 @@ const queue = require('kue').createQueue()
 const DEFAULT_EMAIL = {
   to: 'ok@cool.net',
   subject: 'Test Email',
-  template: 'good-times',
+  template: 'test',
   values: {
-    header: true
+    name: 'john'
   }
 }
 
@@ -50,7 +50,7 @@ describe('sendEmail', function () {
         expect(mockMg.send).to.have.been.calledWith({
           from: 'makes.audio <donotreply@mg.makes.audio>',
           subject: 'Test Email',
-          text: 'good-times undefined',
+          text: '<h1>Welcome, john!</h1><p>Hello.</p>',
           to: 'ok@cool.net'
         })
       })

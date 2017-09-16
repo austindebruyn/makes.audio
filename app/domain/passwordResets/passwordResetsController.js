@@ -22,24 +22,23 @@ class PasswordResetCreationError extends Error {
 
 module.exports.create = function (req, res, next) {
   const { email } = req.body
+  const state = {}
 
   return new Promise(function (resolve, reject) {
     if (typeof email !== 'string' || email.length < 1) {
       return reject(new PasswordResetCreationError('MISSING_EMAIL'))
     }
 
-    const state = {}
-
     return User.findOne({ where: { email } })
       .then(function (user) {
         if (!user) {
           throw new PasswordResetCreationError('INVALID_EMAIL')
         }
-        state.userId = user.id
+        state.user = user
         return uid(24)
       })
       .then(function (code) {
-        return PasswordReset.create({ code, userId: state.userId })
+        return PasswordReset.create({ code, userId: state.user.id })
       })
       .then(resolve)
       .catch(reject)
@@ -50,7 +49,8 @@ module.exports.create = function (req, res, next) {
         subject: 'Password reset for makes.audio',
         template: 'password-reset',
         values: {
-          passwordResetId: model.id
+          username: state.user.username,
+          href: `/passwordResets/complete?code=${model.code}`
         }
       })
     })

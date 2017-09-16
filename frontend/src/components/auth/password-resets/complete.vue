@@ -13,6 +13,7 @@
               input.transparent.round.input-lg.form-control(type='text',
                                                             autocomplete='off',
                                                             name='code',
+                                                            v-model='code',
                                                             placeholder='Code',
                                                             :disabled='loading')
             .input-group
@@ -44,11 +45,16 @@
   import actions from 'state/actions'
   import FlashEngine from 'lib/flash_engine'
   import errors from 'i18n/errors'
+  import query_string from 'query-string'
 
   export default Vue.component 'complete-password-reset',
     data: ->
       loading: false
+      code: null
     beforeRouteLeave: (to, from, next) -> next !@loading
+    mounted: ->
+      params = query_string.parse(location.search)
+      @code = params.code if params.code?
     methods:
       on_submit: (e) ->
         e.preventDefault()
@@ -60,7 +66,7 @@
             Accept: 'application/json'
             'Content-Type': 'application/json'
           body: JSON.stringify
-            code: e.target.code.value
+            code: @code
             password: e.target.password.value
             password2: e.target.password2.value
         .then (data) -> data.json()

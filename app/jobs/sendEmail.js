@@ -1,5 +1,16 @@
 const defineJob = require('./defineJob')
 const mailgun = require('../services/mailgun')
+const pug = require('pug')
+const path = require('path')
+
+/**
+ * Returns a compiled pug template.
+ * @param  {string}   name
+ * @return {Function} Can be called with values and will return html as string.
+ */
+function getTemplate(name) {
+  return pug.compileFile(path.resolve(__dirname, '..', 'views', 'emails', `${name}.pug`))
+}
 
 module.exports = defineJob({
   queueName: 'email',
@@ -19,13 +30,15 @@ module.exports = defineJob({
    */
   perform: function perform(data, job) {
     const mg = mailgun.get()
+    const { to, subject } = data
+    const text = getTemplate(data.template)(data.values)
 
     return mg.messages()
       .send({
         from: 'makes.audio <donotreply@mg.makes.audio>',
-        to: data.to,
-        subject: data.subject,
-        text: data.template + ' ' + data.values.passwordResetId
+        to,
+        subject,
+        text
       })
       .then(function (body) {
         job.log(body)
