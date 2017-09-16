@@ -1,70 +1,34 @@
-const config = require('../config')
-const getKue = require('./getKue')
+const defineJob = require('./defineJob')
+const mailgun = require('../services/mailgun')
 
-/**
- * Promises to push a job onto the queue with the given name and data.
- * This is basically a Promisif-ied version of queue.create
- * @param  {string} name
- * @param  {Object} data
- * @return {Promise}
- */
-function createKueJob(name, data) {
-  return new Promise(function (resolve, reject) {
-    const job = getKue().create(name, data).save(function (err) {
-      if (err) return reject(err)
-      return resolve(job)
-    })
-  })
-}
+module.exports = defineJob({
+  queueName: 'email',
 
-/**
- * Queues an email job.
- * @param  {string} to
- * @param  {string} title
- * @param  {string} template
- * @return {Promise}
- */
-function queue(to, title, template, data) {
-  return createKueJob('email', {
-    to,
-    title,
-    template,
-    data
-  })
-}
+  args: {
+    to:       String,
+    subject:  String,
+    template: String,
+    values:   Object
+  },
 
-/**
- * Processes a kue job.
- * @param  {Object} job
- * @param  {Function} callback
- * @return {Promise}
- */
-function process(job, done) {
-  if (!config.app.mailgun.key) {
-    return done(new Error('No mailgun API key. Is the app in test mode?'))
+  /**
+   * Promises to process a fulfill the email-sending job.
+   * @param  {Object}  data
+   * @param  {Object}  job
+   * @return {Promise}
+   */
+  perform: function perform(data, job) {
+    const mg = mailgun.get()
+
+    return mg.messages()
+      .send({
+        from: 'makes.audio <donotreply@mg.makes.audio>',
+        to: data.to,
+        subject: data.subject,
+        text: data.template + ' ' + data.values.passwordResetId
+      })
+      .then(function (body) {
+        job.log(body)
+      })
   }
-
-  const mailgun = require('mailgun-js')({
-    apiKey: config.app.mailgun.key,
-    domain: config.app.mailgun.domain
-  })
-
-  const data = {
-    from: 'makes.audio <donotreply@mg.makes.audio>',
-    to: job.data.to,
-    subject: job.data.title,
-    text: job.data.template + ' ' + job.data.data.passwordResetId
-  }
-
-  mailgun.messages().send(data, function (err, body) {
-    if (err) return done(err)
-
-    job.log(body)
-    return done()
-  })
-}
-
-module.exports = {
-  queue,
-  process
-}
+})

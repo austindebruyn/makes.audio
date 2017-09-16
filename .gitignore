@@ -3,3 +3,4 @@ public/dist
 /sessions
 /memory
 tmp/uploads/*
+dump.rdb

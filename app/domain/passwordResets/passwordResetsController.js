@@ -45,8 +45,13 @@ module.exports.create = function (req, res, next) {
       .catch(reject)
   })
     .then(function (model) {
-      return sendEmail.queue(email, 'Password reset for makes.audio', 'password-reset', {
-        passwordResetId: model.id
+      return sendEmail({
+        to: email,
+        subject: 'Password reset for makes.audio',
+        template: 'password-reset',
+        values: {
+          passwordResetId: model.id
+        }
       })
     })
     .then(function () {

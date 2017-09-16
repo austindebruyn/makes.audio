@@ -1,8 +1,8 @@
 const db = require('../services/db')
-const getKue = require('../jobs/getKue')
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const sinonChai = require('sinon-chai')
+const queue = require('kue').createQueue()
 chai.use(sinonChai)
 chai.use(chaiAsPromised)
 
@@ -10,6 +10,14 @@ beforeEach(function () {
   return db.sync({ force: true })
 })
 
+afterEach(function () {
+  queue.testMode.clear()
+})
+
 before(function() {
-  getKue.q = { create: () => { return { save: c => { setTimeout(c, 100); return { id: 1 }} }}}
+  queue.testMode.enter()
+})
+
+after(function () {
+  queue.testMode.exit()
 })
