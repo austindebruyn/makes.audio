@@ -62,7 +62,7 @@ function validateArgTypes(args, argTypes, queueName) {
  * @param  {Object} descriptor contains a `name` and `perform` func
  * @return {Function}
  */
-function defineKueJob({ perform, queueName, args={} }) {
+function defineKueJob({ perform, queueName, args = {} }) {
   assert.equal(typeof queueName, 'string')
   assert.equal(typeof perform, 'function')
   assert.equal(typeof args, 'object')

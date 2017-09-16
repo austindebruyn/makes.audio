@@ -12,8 +12,7 @@ function mockMailgun(opts) {
               id: '<20170913061408.34260.78C88EA7BE247B5B@mg.makes.audio>',
               message: 'Queued. Thank you.'
             })
-          }
-          else {
+          } else {
             return Promise.reject(new Error('getaddrinfo EAI_AGAIN api.mailgun.net:443'))
           }
         }

@@ -5,10 +5,10 @@ module.exports = defineJob({
   queueName: 'email',
 
   args: {
-    to:       String,
-    subject:  String,
+    to: String,
+    subject: String,
     template: String,
-    values:   Object
+    values: Object
   },
 
   /**
