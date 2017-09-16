@@ -31,14 +31,14 @@ module.exports = defineJob({
   perform: function perform(data, job) {
     const mg = mailgun.get()
     const { to, subject } = data
-    const text = getTemplate(data.template)(data.values)
+    const html = getTemplate(data.template)(data.values)
 
     return mg.messages()
       .send({
         from: 'makes.audio <donotreply@mg.makes.audio>',
         to,
         subject,
-        text
+        html
       })
       .then(function (body) {
         job.log(body)

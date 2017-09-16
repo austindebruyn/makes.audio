@@ -50,7 +50,7 @@ describe('sendEmail', function () {
         expect(mockMg.send).to.have.been.calledWith({
           from: 'makes.audio <donotreply@mg.makes.audio>',
           subject: 'Test Email',
-          text: '<h1>Welcome, john!</h1><p>Hello.</p>',
+          html: '<h1>Welcome, john!</h1><p>Hello.</p>',
           to: 'ok@cool.net'
         })
       })
