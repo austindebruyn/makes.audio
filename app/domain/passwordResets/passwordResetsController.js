@@ -3,6 +3,7 @@ const PasswordReset = require('./PasswordReset')
 const uid = require('uid-safe')
 const passwordUtils = require('../users/passwords')
 const sendEmail = require('../../jobs/sendEmail')
+const buildUrl = require('../../lib/buildUrl')
 
 class PasswordResetCreationError extends Error {
   constructor(code, data = {}) {
@@ -44,13 +45,15 @@ module.exports.create = function (req, res, next) {
       .catch(reject)
   })
     .then(function (model) {
+      const href = buildUrl(`/passwordResets/complete?code=${model.code}`)
+
       return sendEmail({
         to: email,
-        subject: 'Password reset for makes.audio',
+        subject: 'Reset your makes.audio account',
         template: 'password-reset',
         values: {
           username: state.user.username,
-          href: `/passwordResets/complete?code=${model.code}`
+          href
         }
       })
     })

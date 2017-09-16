@@ -1,6 +1,6 @@
 const db = require('../../services/db')
 const User = require('../users/User')
-const config = require('../../config')
+const buildUrl = require('../../lib/buildUrl')
 
 const Audio = db.define('audio', {
   createdAt: { type: db.Sequelize.DATE, defaultValue: db.Sequelize.NOW },
@@ -33,8 +33,7 @@ const Audio = db.define('audio', {
     },
     toJSON: function () {
       return this.ensureUserLoaded().then(() => {
-        const portWithColon = config.app.port ? `:${config.app.port}` : ''
-        const url = `${config.app.protocol}://${this.user.username}.${config.app.host}${portWithColon}/${this.url}`
+        const url = buildUrl(this.url, this.user.username)
         const formattedSize = (this.size / 1024 / 1024).toLocaleString('en-US', { maximumFractionDigits: 2 }) + 'MB'
 
         return new Promise((resolve, reject) => {
