@@ -14,7 +14,7 @@ const DEFAULT_EMAIL = {
   }
 }
 
-describe.only('sendEmail', function () {
+describe('sendEmail', function () {
   var mockMg
 
   beforeEach(function () {
