@@ -61,10 +61,11 @@
         .then (json) =>
           @loading = false
           if json.ok
-            FlashEngine.create 'success', 'Thanks for verifying your email. Please log in now.', 'Success!'
             if @user
+              FlashEngine.create 'success', 'Thanks for verifying your email.', 'Success!'
               return @$router.push '/dashboard'
             else
+              FlashEngine.create 'success', 'Thanks for verifying your email. Please log in now.', 'Success!'
               return @$router.push '/'
           else if json.errors and json.errors.length
             FlashEngine.create 'danger', errors.verify_email[error.code] for error in json.errors
