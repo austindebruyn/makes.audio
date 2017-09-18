@@ -3,7 +3,7 @@ const User = require('./User')
 const EmailPreferences = require('../emailPreferences/EmailPreferences')
 const InviteCode = require('../inviteCodes/InviteCode')
 const hashPasswords = require('./passwords').hash
-const sendEmail = require('../../jobs/sendEmail')
+const sendVerificationEmail = require('../emailPreferences/sendVerificationEmail')
 const uid = require('uid-safe')
 
 class UserCreationError extends Error {
@@ -78,6 +78,10 @@ module.exports.createUser = function createUser(data) {
       .then(() => uid(24))
       .then(function (verificationCode) {
         return EmailPreferences.create({ userId: state.user.id, verificationCode })
+      })
+      .then(function (model) {
+        model.user = state.user
+        return sendVerificationEmail.sendVerificationEmail(model)
       })
       .then(function () {
         return resolve(state.user)

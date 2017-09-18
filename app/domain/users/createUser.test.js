@@ -5,6 +5,7 @@ const User = require('../users/User')
 const { expect } = require('chai')
 const factory = require('../../tests/factory')
 const clock = require('../../tests/clock')
+const queue = require('kue').createQueue()
 
 describe('createUser', function () {
   it('should reject non matching passwords', function () {
@@ -121,6 +122,33 @@ describe('createUser', function () {
             createdAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
             updatedAt: 'Thu, 31 Aug 2017 00:00:00 GMT',
             userId: 1
+          })
+        })
+    })
+
+    it('should send verify email', function () {
+      return createUser({
+        username: 'man2',
+        email: 'peter@pan.com',
+        password: 'b',
+        password2: 'b',
+        inviteCode: 'polarbear'
+      })
+        .then(user => {
+          return User.findOne({ where: { id: user.id }, include: [EmailPreferences] })
+        })
+        .then(function (user) {
+          const job = queue.testMode.jobs[0]
+
+          expect(job).to.have.property('type', 'email')
+          expect(job.data).to.eql({
+            to: 'peter@pan.com',
+            subject: 'Please verify your email',
+            template: 'verify-email',
+            values: {
+              username: 'man2',
+              href: `https://makes.audio/users/me/emailPreferences/verify?verificationCode=${user.emailPreferences.verificationCode}`
+            }
           })
         })
     })
