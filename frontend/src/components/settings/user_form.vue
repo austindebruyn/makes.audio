@@ -6,6 +6,10 @@
         input.form-control(type='text', name='username', v-model='username', spellcheck='false', autocomplete='off', :disabled='loading')
         label(for='email') Email
         input.form-control(type='text', name='email', v-model='email', spellcheck='false', :disabled='loading')
+        small.verify-email-warning(v-if='!email_preferences.verifiedAt')
+          i.fa.fa-exclamation-triangle
+          span Your email has not been verified yet.&nbsp;
+          a(href='javascript:;', @click='handle_resend_email_verification_link') Send email again
       .form-group
         button(type='submit', :disabled='loading').btn.btn-primary Save
     form(@submit='handle_submit_password')
@@ -31,6 +35,7 @@
   export default Vue.component 'user-form',
     props:
       user: (type: Object, required: true)
+      email_preferences: (type: Object, required: true)
     data: ->
       username: @user.username
       email: @user.email
@@ -79,11 +84,38 @@
           else
             FlashEngine.create 'danger', errors.update_user[error.code] for error in json.errors
         @loading = true
+      handle_resend_email_verification_link: (e) ->
+        e.preventDefault()
+        fetch '/api/users/me/emailPreferences/sendVerificationEmail',
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: ('Accept': 'application/json')
+        .then (resp) -> resp.json()
+        .then (json) =>
+          @loading = false
+          if json.ok
+            FlashEngine.create 'success', 'Please check your email for a verification link.'
+          else
+            FlashEngine.create 'danger', 'Something went wrong.'
+        @loading = true
 </script>
 
 <style lang="scss">
   @import 'src/styles/colors';
 
   .user-form {
+  }
+
+  .verify-email-warning {
+    color: $gray-dark;
+
+    a {
+      text-decoration: underline;
+      color: $gray-dark;
+    }
+
+    i { margin-right: 5px; }
+
+    font-size: 0.7rem;
   }
 </style>

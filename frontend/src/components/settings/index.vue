@@ -6,25 +6,28 @@
           img
           h2 {{ user.username }}
         .col-12.col-md-9
-          loading(v-if='!user')
-          card.card-plain(v-if='user')
+          loading(v-if='!loaded')
+          card.card-plain(v-if='loaded')
             .card-content
               h1 Account Settings
-              user-form(:user='user')
+              user-form(:user='user', :email_preferences='email_preferences')
 </template>
 
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
-  import audio_actions from 'state/actions/audios'
-  import audio_api from 'api/audios'
+  import email_preferences_api from 'api/email_preferences'
   import FlashEngine from 'lib/flash_engine'
 
   export default Vue.component 'settings',
     data: ->
-      audios: @$select 'audios'
       user: @$select 'user'
+      email_preferences: @$select 'email_preferences'
       username: @user && @user.username
+    computed:
+      loaded: -> @email_preferences and @user
+    mounted: ->
+      email_preferences_api.fetch() unless @email_preferences
     methods:
       a: ->
 </script>

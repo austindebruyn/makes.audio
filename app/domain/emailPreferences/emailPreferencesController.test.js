@@ -3,6 +3,7 @@ const EmailPreferences = require('./EmailPreferences')
 const agent = require('../../tests/agent')
 const clock = require('../../tests/clock')
 const signIn = require('../../tests/signIn')
+const queue = require('kue').createQueue()
 const factory = require('../../tests/factory')
 const expect = require('chai').expect
 const sinon = require('sinon')
@@ -57,7 +58,7 @@ describe('emailPreferencesController', function () {
     })
   })
 
-  describe('POST /api/users/me/emailPreferences', function () {
+  describe('PATCH /api/users/me/emailPreferences', function () {
     var emailPreferences
 
     beforeEach(function () {
@@ -144,6 +145,64 @@ describe('emailPreferencesController', function () {
               }
             })
         })
+      })
+    })
+  })
+
+  describe.only('POST /api/users/me/emailPreferences/sendVerificationEmail', function () {
+    it('should 403 if signed out', function () {
+      return agent()
+        .post('/api/users/me/emailPreferences/sendVerificationEmail')
+        .cookiejar()
+        .accept('application/json')
+        .expect(403, { ok: false })
+    })
+
+    it('should 404 if no preferences', function () {
+      return signIn()
+        .then(function () {
+          return agent()
+            .post('/api/users/me/emailPreferences/sendVerificationEmail')
+            .cookiejar()
+            .accept('application/json')
+            .expect(404, { ok: false })
+        })
+    })
+
+    describe('when signed in', function () {
+      var emailPreferences
+
+      beforeEach(function () {
+        return factory.create('user')
+          .then(user => signIn(user))
+          .then(function () {
+            return factory.create('emailPreferences', { userId: signIn.user.id })
+          })
+          .then(function (model) {
+            emailPreferences = model
+          })
+      })
+
+      it('should send email', function () {
+        return agent()
+          .post('/api/users/me/emailPreferences/sendVerificationEmail')
+          .cookiejar()
+          .accept('application/json')
+          .expect(200, { ok: true })
+          .then(function () {
+            const job = queue.testMode.jobs[0]
+
+            expect(job).to.have.property('type', 'email')
+            expect(job.data).to.eql({
+              subject: 'Please verify your email',
+              template: 'verify-email',
+              to: signIn.user.email,
+              values: {
+                username: signIn.user.username,
+                href: `https://makes.audio/users/me/emailPreferences/verify?verificationCode=${emailPreferences.verificationCode}`
+              }
+            })
+          })
       })
     })
   })

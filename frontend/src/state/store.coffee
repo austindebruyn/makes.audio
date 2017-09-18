@@ -9,6 +9,8 @@ redux_store = createStore (state, action) ->
     return ( user: null, audios: null )
   if action.type is 'LOGIN'
     state.user = action.user
+  if action.type is 'SET_EMAIL_PREFERENCES'
+    state.email_preferences = action.record
   if action.type is 'LOGOUT'
     state.user = null
   if action.type is 'SET_AUDIOS'

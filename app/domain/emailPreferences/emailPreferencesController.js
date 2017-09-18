@@ -1,4 +1,6 @@
 const EmailPreferences = require('./EmailPreferences')
+const User = require('../users/User')
+const sendVerificationEmail = require('./sendVerificationEmail')
 
 class EmailPreferencesError extends Error {
   constructor(code, data = {}) {
@@ -36,6 +38,27 @@ module.exports.get = function (req, res, next) {
           return res.status(404).json({
             ok: false
           })
+        }
+      }
+      return next(err)
+    })
+}
+
+module.exports.sendVerificationEmail = function (req, res, next) {
+  return EmailPreferences.findOne({ where: { userId: req.user.id }, include: [User] })
+    .then(function (model) {
+      if (!model) {
+        throw new EmailPreferencesError('NOT_FOUND')
+      }
+      return sendVerificationEmail.sendVerificationEmail(model)
+    })
+    .then(function () {
+      return res.json({ ok: true })
+    })
+    .catch(function (err) {
+      if (err.name === 'EmailPreferencesError') {
+        if (err.code === 'NOT_FOUND') {
+          return res.status(404).json({ ok: false })
         }
       }
       return next(err)
