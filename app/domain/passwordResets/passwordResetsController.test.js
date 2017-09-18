@@ -5,6 +5,7 @@ const agent = require('../../tests/agent')
 const clock = require('../../tests/clock')
 const signIn = require('../../tests/signIn')
 const factory = require('../../tests/factory')
+const queue = require('kue').createQueue()
 const expect = require('chai').expect
 const sinon = require('sinon')
 
@@ -62,6 +63,27 @@ describe('passwordResetsController', function () {
         .then(function () {
           return PasswordReset.count({ where: { userId: user.id, claimedAt: null } })
             .then(ct => expect(ct).to.eql(1))
+        })
+    })
+
+    it('should send the email', function () {
+      return agent()
+        .post('/api/passwordResets')
+        .accept('application/json')
+        .send({ email: 'jhoffy@gmail.com' })
+        .then(function () {
+          return PasswordReset.findOne({ where: {} })
+        })
+        .then(function (model) {
+          expect(queue.testMode.jobs[0].data).to.eql({
+            to: 'jhoffy@gmail.com',
+            subject: 'Reset your makes.audio account',
+            template: 'password-reset',
+            values: {
+              username: 'jhoffy',
+              href: `https://makes.audio/passwordResets/complete?code=${model.code}`
+            }
+          })
         })
     })
   })

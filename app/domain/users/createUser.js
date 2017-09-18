@@ -3,6 +3,7 @@ const User = require('./User')
 const EmailPreferences = require('../emailPreferences/EmailPreferences')
 const InviteCode = require('../inviteCodes/InviteCode')
 const hashPasswords = require('./passwords').hash
+const sendEmail = require('../../jobs/sendEmail')
 const uid = require('uid-safe')
 
 class UserCreationError extends Error {
