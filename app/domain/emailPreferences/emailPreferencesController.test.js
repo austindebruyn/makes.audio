@@ -149,7 +149,7 @@ describe('emailPreferencesController', function () {
     })
   })
 
-  describe.only('POST /api/users/me/emailPreferences/sendVerificationEmail', function () {
+  describe('POST /api/users/me/emailPreferences/sendVerificationEmail', function () {
     it('should 403 if signed out', function () {
       return agent()
         .post('/api/users/me/emailPreferences/sendVerificationEmail')
