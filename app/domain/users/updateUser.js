@@ -1,5 +1,8 @@
 const _ = require('lodash')
 const passwordUtils = require('./passwords')
+const User = require('./User')
+const EmailPreferences = require('../emailPreferences/EmailPreferences')
+const sendVerificationEmail = require('../emailPreferences/sendVerificationEmail')
 
 class UserUpdateError extends Error {
   constructor(code, data = {}) {
@@ -75,6 +78,22 @@ module.exports.updateUser = function updateUser({ user, attributes = {} }) {
         return Promise.all(attributeKeys.map(function (key) {
           return exports.updateAttribute(user, key, attributes[key], { verifiedCurrentPassword })
         }))
+      })
+      .then(function () {
+        if (attributeKeys.includes('email')) {
+          var emailPreferences = null
+
+          return EmailPreferences.findOne({ where: { userId: user.id }, include: [ User ] })
+            .then(function (record) {
+              emailPreferences = record
+              emailPreferences.verifiedAt = null
+              return emailPreferences.save()
+            })
+            .then(function () {
+              return sendVerificationEmail.sendVerificationEmail(emailPreferences)
+            })
+        }
+        return null
       })
       .then(function () {
         return user.save()

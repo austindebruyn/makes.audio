@@ -1,14 +1,21 @@
 const updateUser = require('./updateUser')
+const EmailPreferences = require('../emailPreferences/EmailPreferences')
+const sendVerificationEmail = require('../emailPreferences/sendVerificationEmail')
 const factory = require('../../tests/factory')
 const expect = require('chai').expect
+const sinon = require('sinon')
 const bcrypt = require('bcrypt')
 
 describe('updateUser', function () {
   var user
 
   beforeEach(function () {
-    return factory.build('user', { password: 'bananas' }).then(function (record) {
+    return factory.create('user', { password: 'bananas' }).then(function (record) {
       user = record
+      return factory.create('emailPreferences', {
+        userId: user.id,
+        verifiedAt: new Date()
+      })
     })
   })
 
@@ -61,7 +68,42 @@ describe('updateUser', function () {
       user,
       attributes: { password: 'cherubim', currentPassword: 'bananas' }
     }).then(function (user) {
-      return bcrypt.compare('cherubim', user.password)
-    }).then(verified => expect(verified).to.be.true)
+      return expect(bcrypt.compare('cherubim', user.password)).to.eventually.be.true
+    })
+  })
+
+  describe('changing email', function () {
+    beforeEach(function () {
+      sinon.stub(sendVerificationEmail, 'sendVerificationEmail')
+    })
+
+    afterEach(function () {
+      sendVerificationEmail.sendVerificationEmail.restore()
+    })
+
+    it('should mark the email as un-verified if email is changed', function () {
+      return updateUser.updateUser({
+        user,
+        attributes: { email: 'steve@jobs.com' }
+      }).then(function (user) {
+        return EmailPreferences.findOne({ where: { userId: user.id } })
+      }).then(function (emailPreferences) {
+        expect(emailPreferences.verifiedAt).to.be.null
+        expect(sendVerificationEmail.sendVerificationEmail).to.have.been.called
+        expect(sendVerificationEmail.sendVerificationEmail.args[0][0].id).to.eql(emailPreferences.id)
+      })
+    })
+
+    it('should not mark the email as un-verified if email isnt changed', function () {
+      return updateUser.updateUser({
+        user,
+        attributes: { username: 'steven' }
+      }).then(function (user) {
+        return EmailPreferences.findOne({ where: { userId: user.id } })
+      }).then(function (emailPreferences) {
+        expect(emailPreferences.verifiedAt).to.not.be.null
+        expect(sendVerificationEmail.sendVerificationEmail).to.not.have.been.called
+      })
+    })
   })
 })
