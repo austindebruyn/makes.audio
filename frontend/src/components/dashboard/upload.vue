@@ -30,7 +30,7 @@
         upload_file.append 'file', e.target.file.files[0]
 
         UploadService.start e.target.file.files
-        return null
+        e.target.file.value = ''
 </script>
 
 <style lang="scss">

@@ -3,6 +3,7 @@ import Revue from 'revue'
 import { createStore } from 'redux'
 import actions from './actions'
 import pick from 'lodash.pick'
+import find from 'lodash.find'
 
 redux_store = createStore (state, action) ->
   if typeof state is 'undefined'
@@ -26,6 +27,13 @@ redux_store = createStore (state, action) ->
     state.audios = new_audios
   if action.type is 'CREATE_UPLOAD'
     state.uploads.push action.upload
+  if action.type is 'UPDATE_UPLOAD'
+    id = action.data.id
+    target_upload = find state.uploads, id: id
+    throw new Error("cannot update upload #{id}") unless target_upload
+    Object.assign target_upload, action.data
+    new_uploads = state.uploads.slice 0
+    state.uploads = new_uploads
   state
 
 store = new Revue Vue, redux_store, actions
