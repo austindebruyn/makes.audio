@@ -7,6 +7,9 @@
   "port": 3000,
   "listenPort": 3000,
   "logging": true,
+  "cache": {
+    "defaultTimeout": 600
+  },
   "sentry": {
     "public": null,
     "secret": null

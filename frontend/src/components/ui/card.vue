@@ -35,6 +35,7 @@
   .card-plain {
     background: transparent;
     background: none;
+    border: none;
     color: black;
 
     .header {

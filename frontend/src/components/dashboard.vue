@@ -3,11 +3,7 @@
     .dashboard
       .row
         .col-12.col-md-5.col-lg-3
-          a.upload-cta(href='javascript:;', @click='handle_upload_cta_click') Upload New Audio
-          span.drag-file-reminder ...Or drag a file here
-          form(action='/api/audios', method='post', enctype='multipart/form-data', @submit="handle_upload")
-            input(type='file', name='file')
-            input(type='submit' value='Upload')
+          dashboard-upload
           h2 Search
           input.form-control(name='q', type='search', autocomplete='off', placeholder='Keywords, title, URLs...', @search='handle_search', @keyup='handle_search_keyup')
         .col-12.col-md-7.col-lg-9
@@ -60,45 +56,13 @@
         @search =
           q: @search.q
           loading: false
-      handle_upload_cta_click: (e) ->
-
-      handle_upload: (e) ->
-        e.preventDefault()
-        upload_file = new FormData
-        upload_file.append 'file', e.target.file.files[0]
-
-        fetch '/api/audios',
-          method: 'POST'
-          credentials: 'same-origin'
-          headers:
-            Accept: 'application/json'
-          body: upload_file
-        .then (data) -> data.json()
-        .then (json) ->
-          if json.errors?
-            e.target.file.value = ''
-            FlashEngine.create 'danger', error, 'Oops!' for error in json.errors
-          else
-            e.target.file.value = ''
-            store.dispatch audio_actions.add_audio json
-            FlashEngine.create 'success', "#{json.url} is uploaded.", 'Great!'
 </script>
 
 <style lang="scss">
   @import 'src/styles/colors';
+
   .dashboard {
     font-family: 'arconregular';
     padding-top: 40px;
-  }
-
-  .upload-cta {
-    display: block;
-    font-size: 1.4rem;
-    text-decoration: underline;
-  }
-  .drag-file-reminder {
-    color: $gray;
-    text-transform: uppercase;
-    font-size: 0.8rem;
   }
 </style>

@@ -17,6 +17,7 @@
               a.nav-link(@click='handle_logout_click', href='javascript:;') Logout
     .container
       slot
+    uploads-progress
 </template>
 
 <script lang="coffee">

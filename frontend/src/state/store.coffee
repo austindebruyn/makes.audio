@@ -6,7 +6,7 @@ import pick from 'lodash.pick'
 
 redux_store = createStore (state, action) ->
   if typeof state is 'undefined'
-    return ( user: null, audios: null )
+    return ( user: null, audios: null, email_preferences: null, uploads: [] )
   if action.type is 'LOGIN'
     state.user = action.user
   if action.type is 'SET_EMAIL_PREFERENCES'
@@ -24,6 +24,8 @@ redux_store = createStore (state, action) ->
     new_audios = state.audios.slice 0
     new_audios.push action.audio
     state.audios = new_audios
+  if action.type is 'CREATE_UPLOAD'
+    state.uploads.push action.upload
   state
 
 store = new Revue Vue, redux_store, actions

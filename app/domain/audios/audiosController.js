@@ -66,7 +66,7 @@ module.exports.delete = function (req, res, next) {
 }
 
 module.exports.create = function (req, res, next) {
-  createAudio
+  return createAudio
     .createAudio({ file: req.file, user: req.user })
     .then(audio => audio.toJSON())
     .then(function (audio) {
@@ -140,7 +140,7 @@ module.exports.update = function (req, res, next) {
       } else if (err.message === 'required param `url`') {
         errors.push('Missing required param `url`.')
       }
-      console.log(err)
+
       return res.status(422).json({
         errors: errors.length ? errors : ['Something went wrong.']
       })
