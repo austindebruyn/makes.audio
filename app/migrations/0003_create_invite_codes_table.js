@@ -1,10 +1,10 @@
 module.exports = {
   up: function (q, Sequelize) {
-    return q.createTable('password_resets', {
+    return q.createTable('inviteCodes', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -14,13 +14,7 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       },
-      claimedAt: {
-        type: Sequelize.DATE
-      },
-      code: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
+      code: { type: Sequelize.STRING, allowNull: false, unique: true },
       userId: {
         type: Sequelize.INTEGER,
         references: {
@@ -31,6 +25,6 @@ module.exports = {
     })
   },
   down: function (q, Sequelize) {
-    return q.dropTable('password_resets')
+    return q.dropTable('inviteCodes')
   }
 }

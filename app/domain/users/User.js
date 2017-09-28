@@ -1,10 +1,6 @@
 const db = require('../../services/db')
 
 const User = db.define('user', {
-  createdAt: {
-    type: db.Sequelize.DATE,
-    defaultValue: db.Sequelize.NOW
-  },
   email: {
     type: db.Sequelize.STRING,
     unique: true,

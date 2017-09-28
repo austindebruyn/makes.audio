@@ -4,10 +4,12 @@ const sequelize = require('../app/services/db')
 const program = require('commander')
 program
   .option('-r, --rollback', 'Rollback migrations')
+  .option('-v, --verbose', 'Print umzug logs')
   .parse(process.argv)
 
 const umzug = new Umzug({
   storage: 'sequelize',
+  logging: program.verbose && console.log,
   storageOptions: {
     sequelize: sequelize,
     modelName: 'Migration',
