@@ -73,7 +73,7 @@ describe('createAudio', function () {
       file: Object.assign({}, file, { mimetype: 'text/html' })
     }).catch(function (err) {
       expect(err.code).to.eql('BAD_MIMETYPE')
-      expect(err.allowedMimetypes).to.eql(config.audio.allowedMaimetypes)
+      expect(err.allowedMimetypes).to.eql(config.audio.allowedMimetypes)
     })
   })
 
