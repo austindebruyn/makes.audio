@@ -22,20 +22,18 @@ const User = db.define('user', {
     type: db.Sequelize.STRING,
     allowNull: false
   }
-}, {
-  instanceMethods: {
-    toJSON: function () {
-      return new Promise(resolve => {
-        return resolve({
-          id: this.get('id'),
-          username: this.get('username'),
-          email: this.get('email'),
-          createdAt: this.get('createdAt').toUTCString(),
-          updatedAt: this.get('updatedAt').toUTCString()
-        })
-      })
-    }
-  }
 })
+
+User.prototype.toJSON = function () {
+  return new Promise(resolve => {
+    return resolve({
+      id: this.get('id'),
+      username: this.get('username'),
+      email: this.get('email'),
+      createdAt: this.get('createdAt').toUTCString(),
+      updatedAt: this.get('updatedAt').toUTCString()
+    })
+  })
+}
 
 module.exports = User

@@ -19,31 +19,30 @@ const EmailPreferences = db.define('emailPreferences', {
   freezeTableName: true,
   name: {
     singular: 'emailPreferences'
-  },
-  instanceMethods: {
-    toJSON: function () {
-      return new Promise(resolve => {
-        const {
-          id,
-          userId,
-          createdAt,
-          updatedAt,
-          optedOutAt,
-          verifiedAt
-        } = this.get()
-
-        return resolve({
-          id,
-          userId,
-          createdAt: createdAt && createdAt.toUTCString(),
-          updatedAt: updatedAt && updatedAt.toUTCString(),
-          optedOutAt: optedOutAt && optedOutAt.toUTCString(),
-          verifiedAt: verifiedAt && verifiedAt.toUTCString()
-        })
-      })
-    }
   }
 })
+
+EmailPreferences.prototype.toJSON = function () {
+  return new Promise(resolve => {
+    const {
+      id,
+      userId,
+      createdAt,
+      updatedAt,
+      optedOutAt,
+      verifiedAt
+    } = this.get()
+
+    return resolve({
+      id,
+      userId,
+      createdAt: createdAt && createdAt.toUTCString(),
+      updatedAt: updatedAt && updatedAt.toUTCString(),
+      optedOutAt: optedOutAt && optedOutAt.toUTCString(),
+      verifiedAt: verifiedAt && verifiedAt.toUTCString()
+    })
+  })
+}
 
 EmailPreferences.belongsTo(User)
 User.hasOne(EmailPreferences)

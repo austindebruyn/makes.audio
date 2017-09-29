@@ -11,7 +11,7 @@ const uid = require('uid-safe')
 
 function buildOrGetUser(user = {}) {
   return new Promise(function (resolve, reject) {
-    if (user instanceof User.Instance) {
+    if (user instanceof User) {
       return resolve(user)
     }
     return factory.create('user', user)

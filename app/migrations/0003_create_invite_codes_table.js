@@ -1,10 +1,10 @@
 module.exports = {
   up: function (q, Sequelize) {
-    return q.createTable('inviteCodes', {
+    return q.createTable('invite_codes', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -25,6 +25,6 @@ module.exports = {
     })
   },
   down: function (q, Sequelize) {
-    return q.dropTable('inviteCodes')
+    return q.dropTable('invite_codes')
   }
 }

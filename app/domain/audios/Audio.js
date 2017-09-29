@@ -21,42 +21,41 @@ const Audio = db.define('audio', {
   indexes: [{
     unique: true,
     fields: [ 'userId', 'url' ]
-  } ],
-  instanceMethods: {
-    ensureUserLoaded: function () {
-      if (this.user) {
-        return new Promise(resolve => resolve(this.user))
-      }
-      return User.findOne({ where: { id: this.userId } }).then(user => {
-        this.user = user
-      })
-    },
-    toJSON: function () {
-      return this.ensureUserLoaded().then(() => {
-        const url = buildUrl(this.url, this.user.username)
-        const formattedSize = (this.size / 1024 / 1024).toLocaleString('en-US', { maximumFractionDigits: 2 }) + 'MB'
+  } ]
+})
 
-        return new Promise((resolve, reject) => {
-          return resolve({
-            id: this.id,
-            url: this.url,
-            publicUrl: url,
-            downloadUrl: `${url}/download`,
-            editUrl: `/audios/${this.id}/edit`,
-            updateUrl: `/api/audios/${this.id}`,
-            formattedSize: formattedSize,
-            size: this.size,
-            originalName: this.originalName,
-            mimetype: this.mimetype,
-            createdAt: this.createdAt.toUTCString(),
-            visible: this.visible
-          })
-        })
-      })
-    }
+Audio.prototype.ensureUserLoaded = function () {
+  if (this.user) {
+    return new Promise(resolve => resolve(this.user))
   }
+  return User.findOne({ where: { id: this.userId } }).then(user => {
+    this.user = user
+  })
 }
-)
+
+Audio.prototype.toJSON = function () {
+  return this.ensureUserLoaded().then(() => {
+    const url = buildUrl(this.url, this.user.username)
+    const formattedSize = (this.size / 1024 / 1024).toLocaleString('en-US', { maximumFractionDigits: 2 }) + 'MB'
+
+    return new Promise((resolve, reject) => {
+      return resolve({
+        id: this.id,
+        url: this.url,
+        publicUrl: url,
+        downloadUrl: `${url}/download`,
+        editUrl: `/audios/${this.id}/edit`,
+        updateUrl: `/api/audios/${this.id}`,
+        formattedSize: formattedSize,
+        size: this.size,
+        originalName: this.originalName,
+        mimetype: this.mimetype,
+        createdAt: this.createdAt.toUTCString(),
+        visible: this.visible
+      })
+    })
+  })
+}
 
 Audio.User = Audio.belongsTo(User, { as: 'user' })
 User.Audio = User.hasMany(Audio)
