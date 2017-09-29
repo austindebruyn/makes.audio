@@ -4,3 +4,5 @@ public/dist
 /memory
 tmp/uploads/*
 dump.rdb
+coverage
+.nyc_output
