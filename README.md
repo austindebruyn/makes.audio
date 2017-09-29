@@ -35,12 +35,25 @@ Node v8+ is required.
 
 To run locally, clone and install dependencies:
 
-```
+```shell
 git clone git@github.com:austindebruyn/makes.audio
 cd makes.audio
 npm i -g yarn
 yarn
-node .
+```
+
+To set up the database locally, make sure you install MySQL separately.
+
+```shell
+node bin/createDatabase
+node bin/migrate
+```
+
+To run the server:
+
+```shell
+npm i -g nodemon
+nodemon
 ```
 
 The app will listen on https://localhost:3000.
