@@ -60,12 +60,26 @@ The app will listen on https://localhost:3000.
 
 To build the frontend:
 
-```
+```shell
 npm run build
 ```
 
 For everyday development, `npm run watch` and `nodemon` in separate tabs are
-recommended. The Travis CI job runs `npm test`.
+recommended.
+
+## Tests
+
+For backend unit tests:
+
+```shell
+yarn test
+```
+
+For frontend unit tests:
+
+```shell
+yarn test:vue
+```
 
 ## License
 
