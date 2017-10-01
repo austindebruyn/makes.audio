@@ -3,7 +3,7 @@ const auth = require('../../services/auth')
 module.exports.create = function (req, res, next) {
   auth.authenticate(function (err, user, info) {
     if (err) {
-      throw err
+      return next(err)
     }
 
     if (!user) {
@@ -14,7 +14,7 @@ module.exports.create = function (req, res, next) {
     }
 
     req.login(user, function (err) {
-      if (err) throw err
+      if (err) return next(err)
 
       return user.toJSON().then(function (json) {
         return res.json({

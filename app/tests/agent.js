@@ -5,25 +5,16 @@ const supertest = require('supertest')
 
 var _agent
 
-function boot() {
+before(function () {
   if (_agent) {
-    return Promise.resolve(_agent)
+    return _agent
   }
 
-  return Promise.resolve(express())
-    .then(require('../lib/middleware'))
-    .then(require('../lib/routes'))
-    .then(function (app) {
-      _agent = supertest(app)
-      return null
-    })
-    .catch(function (err) {
-      console.error(err)
-    })
-}
+  const app = express()
+  require('../lib/middleware')(app)
+  require('../lib/routes')(app)
 
-before(function () {
-  return boot()
+  _agent = supertest(app)
 })
 
 module.exports = function () {

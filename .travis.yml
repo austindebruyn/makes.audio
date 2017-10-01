@@ -1,11 +1,19 @@
 language: node_js
+dist: trusty
+sudo: required
 install:
   - yarn
 node_js:
   - 8.0
 script:
   - npm run lint
-  - npm run test:cover
-  - npm run test:vue
+  - npm run test:app:cover
+  - npm run test:frontend
+  - NODE_ENV=test npm run build
+  - npm run test:integration
 services:
   - redis-server
+addons:
+  sauce_connect: true
+  hosts:
+    - test-makes.audio

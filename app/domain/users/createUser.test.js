@@ -147,7 +147,7 @@ describe('createUser', function () {
             template: 'verify-email',
             values: {
               username: 'man2',
-              href: `https://makes.audio/users/me/emailPreferences/verify?verificationCode=${user.emailPreferences.verificationCode}`
+              href: `http://test-makes.audio:8000/users/me/emailPreferences/verify?verificationCode=${user.emailPreferences.verificationCode}`
             }
           })
         })

@@ -72,13 +72,21 @@ recommended.
 For backend unit tests:
 
 ```shell
-yarn test
+yarn test:app
 ```
 
 For frontend unit tests:
 
 ```shell
-yarn test:vue
+yarn test:frontend
+```
+
+For the integration suite, you will need to ensure that:
+1. You have placed `127.0.0.1 test-makes.audio` in your hostfile
+1. You are running a Selenium server locally.
+
+```shell
+yarn test:integration
 ```
 
 ## License

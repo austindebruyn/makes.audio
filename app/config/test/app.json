@@ -1,9 +1,9 @@
 {
   "sessionSecret": "session secret",
   "cookieSecret": "cookie secret",
-  "protocol": "https",
-  "host": "makes.audio",
-  "port": null,
-  "listenPort": 14141,
+  "protocol": "http",
+  "host": "test-makes.audio",
+  "port": 8000,
+  "listenPort": 8000,
   "logging": false
 }

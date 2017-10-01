@@ -6,3 +6,4 @@ tmp/uploads/*
 dump.rdb
 coverage
 .nyc_output
+integration/screenshots

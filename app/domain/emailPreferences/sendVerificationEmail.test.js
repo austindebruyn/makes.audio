@@ -38,7 +38,7 @@ describe('sendVerificationEmail', function () {
             to: user.email,
             values: {
               username: 'charles',
-              href: `https://makes.audio/users/me/emailPreferences/verify?verificationCode=${emailPreferences.verificationCode}`
+              href: `http://test-makes.audio:8000/users/me/emailPreferences/verify?verificationCode=${emailPreferences.verificationCode}`
             }
           })
       })

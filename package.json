@@ -10,7 +10,7 @@
     "basic-auth-connect": "^1.0.0",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
-    "bootstrap": "4.0.0.alpha6",
+    "bootstrap": "4.0.0-alpha.6",
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "coffee-loader": "^0.7.3",
@@ -80,6 +80,9 @@
     "vue-loader": "^12.2.1",
     "vue-router": "^2.5.3",
     "vue-template-compiler": "^2.3.4",
+    "wdio-mocha-framework": "^0.5.11",
+    "wdio-spec-reporter": "^0.1.2",
+    "webdriverio": "^4.8.0",
     "webpack": "^3.5.3",
     "whatwg-fetch": "^2.0.3",
     "winston": "^2.3.1"
@@ -90,9 +93,10 @@
     "nodemon": "nodemon --config .nodemonrc",
     "lint": "eslint app --ignore-pattern *.test.js",
     "lint:fix": "eslint app --fix --ignore-pattern *.test.js",
-    "test": "NODE_ENV=test mocha --recursive 'app/**/*.test.js'",
-    "test:cover": "nyc --reporter=text npm test",
-    "test:vue:watch": "cd frontend && karma start",
-    "test:vue": "cd frontend && karma start --single-run"
+    "test:app": "NODE_ENV=test mocha --recursive 'app/**/*.test.js'",
+    "test:app:cover": "nyc --reporter=text npm test",
+    "test:frontend:watch": "cd frontend && karma start",
+    "test:frontend": "cd frontend && karma start --single-run",
+    "test:integration": "NODE_ENV=test wdio wdio.conf.js"
   }
 }

@@ -37,6 +37,6 @@ export default (opts) ->
   store.store.subscribe ->
     if raven
       raven.set_raven_user pick(store.state.user, 'id', 'username', 'email')
-  store.dispatch actions.login JSON.parse user if user
+  store.dispatch actions.login user if user
 
   new Vue(router: router)

@@ -81,7 +81,7 @@ describe('passwordResetsController', function () {
             template: 'password-reset',
             values: {
               username: 'jhoffy',
-              href: `https://makes.audio/passwordResets/complete?code=${model.code}`
+              href: `http://test-makes.audio:8000/passwordResets/complete?code=${model.code}`
             }
           })
         })

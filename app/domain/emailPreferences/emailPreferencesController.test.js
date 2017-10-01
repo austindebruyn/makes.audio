@@ -199,7 +199,7 @@ describe('emailPreferencesController', function () {
               to: signIn.user.email,
               values: {
                 username: signIn.user.username,
-                href: `https://makes.audio/users/me/emailPreferences/verify?verificationCode=${emailPreferences.verificationCode}`
+                href: `http://test-makes.audio:8000/users/me/emailPreferences/verify?verificationCode=${emailPreferences.verificationCode}`
               }
             })
           })

@@ -39,6 +39,7 @@
           method: 'POST'
           credentials: 'same-origin'
           headers:
+            'Accept': 'application/json'
             'Content-Type': 'application/json'
           body: JSON.stringify
             username: e.target.username.value
@@ -50,7 +51,10 @@
             store.dispatch actions.login json.user
             FlashEngine.create 'info', "Welcome back #{json.user.username}!"
             return @$router.push '/dashboard'
-          FlashEngine.create 'danger', errors[error.code] for error in json.errors
+          else if json.errors and json.errors.length
+            FlashEngine.create 'danger', errors[error.code] for error in json.errors
+          else
+            FlashEngine.create 'danger', 'Something went wrong!'
 </script>
 
 <style lang="scss">

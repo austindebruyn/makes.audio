@@ -2,7 +2,24 @@ const config = require('../config')
 const buildUrl = require('./buildUrl')
 const expect = require('chai').expect
 
+function stubConfig(key, val) {
+  var oldValue
+
+  beforeEach(function () {
+    oldValue = config.app[key]
+    config.app[key] = val
+  })
+
+  afterEach(function () {
+    config.app[key] = oldValue
+  })
+}
+
 describe('buildUrl', function () {
+  stubConfig('host', 'makes.audio')
+  stubConfig('protocol', 'https')
+  stubConfig('port', null)
+
   it('should return root', function () {
     expect(buildUrl()).to.eql('https://makes.audio')
   })
@@ -18,16 +35,7 @@ describe('buildUrl', function () {
   })
 
   describe('when app listening on port', function () {
-    var oldPort = null
-
-    beforeEach(function () {
-      oldPort = config.app.port
-      config.app.port = 3000
-    })
-
-    afterEach(function () {
-      config.app.port = oldPort
-    })
+    stubConfig('port', 3000)
 
     it('should include port', function () {
       expect(buildUrl('route')).to.eql('https://makes.audio:3000/route')

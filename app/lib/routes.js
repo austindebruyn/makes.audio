@@ -28,28 +28,24 @@ function ensureAnonymous(req, res, next) {
 }
 
 module.exports = function (app) {
-  return new Promise(function (resolve, reject) {
-    app.get('/', homeController.index)
+  app.get('/', homeController.index)
 
-    app.use(audiosController.get)
+  app.use(audiosController.get)
 
-    app.post('/login', sessionsController.create)
-    app.post('/logout', sessionsController.destroy)
-    app.post('/api/users', usersController.create)
-    app.post('/api/passwordResets', ensureAnonymous, passwordResetsController.create)
-    app.post('/api/passwordResets/complete', ensureAnonymous, passwordResetsController.complete)
-    app.get('/api/users/me', ensureAuthenticated, usersController.get)
-    app.put('/api/users/me', ensureAuthenticated, usersController.update)
-    app.get('/api/users/me/emailPreferences', ensureAuthenticated, emailPreferencesController.get)
-    app.patch('/api/users/me/emailPreferences', emailPreferencesController.update)
-    app.post('/api/users/me/emailPreferences/sendVerificationEmail', ensureAuthenticated, emailPreferencesController.sendVerificationEmail)
-    app.get('/api/audios', ensureAuthenticated, audiosController.index)
-    app.post('/api/audios', ensureAuthenticated, upload.single('file'), audiosController.create)
-    app.put('/api/audios/:id', ensureAuthenticated, audiosController.update)
-    app.get('*', homeController.index)
+  app.post('/login', sessionsController.create)
+  app.post('/logout', sessionsController.destroy)
+  app.post('/api/users', usersController.create)
+  app.post('/api/passwordResets', ensureAnonymous, passwordResetsController.create)
+  app.post('/api/passwordResets/complete', ensureAnonymous, passwordResetsController.complete)
+  app.get('/api/users/me', ensureAuthenticated, usersController.get)
+  app.put('/api/users/me', ensureAuthenticated, usersController.update)
+  app.get('/api/users/me/emailPreferences', ensureAuthenticated, emailPreferencesController.get)
+  app.patch('/api/users/me/emailPreferences', emailPreferencesController.update)
+  app.post('/api/users/me/emailPreferences/sendVerificationEmail', ensureAuthenticated, emailPreferencesController.sendVerificationEmail)
+  app.get('/api/audios', ensureAuthenticated, audiosController.index)
+  app.post('/api/audios', ensureAuthenticated, upload.single('file'), audiosController.create)
+  app.put('/api/audios/:id', ensureAuthenticated, audiosController.update)
+  app.get('*', homeController.index)
 
-    app.use(errorHandler)
-
-    resolve(app)
-  })
+  app.use(errorHandler)
 }
