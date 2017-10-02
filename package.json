@@ -19,6 +19,7 @@
     "connect-redis": "^3.3.0",
     "cookie-parser": "^1.4.3",
     "cookie-signature": "^1.0.6",
+    "coveralls": "^3.0.0",
     "css-loader": "^0.28.4",
     "eslint": "^4.5.0",
     "eslint-config-standard": "^10.2.1",
@@ -94,9 +95,10 @@
     "lint": "eslint app --ignore-pattern *.test.js",
     "lint:fix": "eslint app --fix --ignore-pattern *.test.js",
     "test:app": "NODE_ENV=test mocha --recursive 'app/**/*.test.js'",
-    "test:app:cover": "nyc --reporter=text npm test",
+    "test:app:cover": "nyc --reporter=lcov --reporter=text npm run test:app",
     "test:frontend:watch": "cd frontend && karma start",
     "test:frontend": "cd frontend && karma start --single-run",
-    "test:integration": "NODE_ENV=test wdio wdio.conf.js"
+    "test:integration": "NODE_ENV=test wdio wdio.conf.js",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   }
 }

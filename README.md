@@ -1,6 +1,8 @@
 # makes.audio
 
 [![Build Status](https://travis-ci.org/austindebruyn/makes.audio.svg?branch=master)](https://travis-ci.org/austindebruyn/makes.audio)
+[![Coverage Status](https://coveralls.io/repos/austindebruyn/makes.audio/badge.svg?branch=master)](https://coveralls.io/r/austindebruyn/makes.audio?branch=master)
+
 
 Easy synchronization of a local folder of audio files with an online bucket that
 supports URL shortening, sharing tools, and a slick, personalized domain.
