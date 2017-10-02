@@ -15,13 +15,13 @@ module.exports.create = function (req, res, next) {
   })
     .then(function (user) {
       req.login(user, function (err) {
-        if (err) throw err
+        if (err) return next(err)
 
         return user
           .toJSON()
           .then(json => res.json({ ok: true, user: json }))
           .catch(function (err) {
-            throw err
+            return next(err)
           })
       })
     })

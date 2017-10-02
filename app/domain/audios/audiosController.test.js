@@ -23,7 +23,7 @@ describe('audiosController', function () {
 
   clock()
 
-  describe('GET /api/AUDIOS', function () {
+  describe('GET /api/audios', function () {
     it('when signed out should 403', function () {
       return agent()
         .get('/api/audios')
@@ -217,4 +217,28 @@ describe('audiosController', function () {
       })
     })
   })
+
+  // describe.only('GET /<url>', function () {
+  //   beforeEach(function () {
+  //     return factory.create('user', { username: 'ludwig' })
+  //       .then(user => factory.create('audio', { url: 'ode', userId: user.id }))
+  //   })
+
+  //   it('should return the file', function () {
+  //     // supertest does not support GETs with subdomains
+  //     const req = {
+  //       subdomains: ['ludwig'],
+  //       host: 'test-makes.audio',
+  //       port: 8000,
+  //       path: '/ode'
+  //     }
+  //     const res = {
+  //       download: sinon.spy(),
+  //       writeHeader: sinon.spy()
+  //     }
+  //     const next = sinon.spy()
+
+  //     audiosController.get(req, res, next)
+  //   })
+  // })
 })

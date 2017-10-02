@@ -51,19 +51,19 @@ module.exports.get = function (req, res, next) {
   }
 }
 
-module.exports.delete = function (req, res, next) {
-  let audio
-  const id = parseInt(req.params.id, 10)
+// module.exports.delete = function (req, res, next) {
+//   let audio
+//   const id = parseInt(req.params.id, 10)
 
-  Audio.findOne({ where: { id: id } }, { include: [ Audio.User ] })
-    .then(function (record) {
-      audio = record
-      return audio
-    })
-    .then(function () {
-      console.log(audio)
-    })
-}
+//   Audio.findOne({ where: { id: id } }, { include: [ Audio.User ] })
+//     .then(function (record) {
+//       audio = record
+//       return audio
+//     })
+//     .then(function () {
+//       console.log(audio)
+//     })
+// }
 
 module.exports.create = function (req, res, next) {
   return createAudio
@@ -80,69 +80,69 @@ module.exports.create = function (req, res, next) {
     })
 }
 
-module.exports.update = function (req, res, next) {
-  let audio
-  const id = parseInt(req.params.id, 10)
+// module.exports.update = function (req, res, next) {
+//   let audio
+//   const id = parseInt(req.params.id, 10)
 
-  Audio.findOne({ where: { id: id } }, { include: [ Audio.User ] })
-    .then(function (record) {
-      audio = record
-      return audio
-    })
-    .then(function () {
-      if (req.user.id !== audio.userId) {
-        throw new Error('unauthorized')
-      }
-    })
-    .then(function () {
-      if (req.body.url) {
-        audio.url = req.body.url.toLowerCase()
-      }
-      if (typeof req.body.visible !== 'undefined') {
-        audio.visible = req.body.visible
-      }
-      return audio.validate()
-    })
-    .then(function (err) {
-      if (err) throw err
+//   Audio.findOne({ where: { id: id } }, { include: [ Audio.User ] })
+//     .then(function (record) {
+//       audio = record
+//       return audio
+//     })
+//     .then(function () {
+//       if (req.user.id !== audio.userId) {
+//         throw new Error('unauthorized')
+//       }
+//     })
+//     .then(function () {
+//       if (req.body.url) {
+//         audio.url = req.body.url.toLowerCase()
+//       }
+//       if (typeof req.body.visible !== 'undefined') {
+//         audio.visible = req.body.visible
+//       }
+//       return audio.validate()
+//     })
+//     .then(function (err) {
+//       if (err) throw err
 
-      return audio.save()
-    })
-    .then(function () {
-      return audio.toJSON()
-    })
-    .then(function (json) {
-      return res.status(200).json(json)
-    })
-    .catch(function (err) {
-      let errors = []
+//       return audio.save()
+//     })
+//     .then(function () {
+//       return audio.toJSON()
+//     })
+//     .then(function (json) {
+//       return res.status(200).json(json)
+//     })
+//     .catch(function (err) {
+//       let errors = []
 
-      if (err.name === 'SequelizeValidationError') {
-        const validationErrors = compact(err.errors.map(function (propertyError) {
-          if (propertyError.path === 'url' && propertyError.message === 'Validation len failed') {
-            return 'Please keep url less than 128 characters.'
-          } else if (propertyError.path === 'url' && propertyError.message === 'Validation is failed') {
-            return "Only URL safe characters allowed - letters, numbers, and any of `-', `_', `.'"
-          } else {
-            return null
-          }
-        }))
+//       if (err.name === 'SequelizeValidationError') {
+//         const validationErrors = compact(err.errors.map(function (propertyError) {
+//           if (propertyError.path === 'url' && propertyError.message === 'Validation len failed') {
+//             return 'Please keep url less than 128 characters.'
+//           } else if (propertyError.path === 'url' && propertyError.message === 'Validation is failed') {
+//             return "Only URL safe characters allowed - letters, numbers, and any of `-', `_', `.'"
+//           } else {
+//             return null
+//           }
+//         }))
 
-        if (validationErrors.length < 1) {
-          validationErrors.push('Something went wrong with what you entered.')
-        }
+//         if (validationErrors.length < 1) {
+//           validationErrors.push('Something went wrong with what you entered.')
+//         }
 
-        errors = validationErrors
-      } else if (err.name === 'SequelizeUniqueConstraintError') {
-        errors.push(`You already have a upload with the url "${err.errors[0].value}"`)
-      } else if (err.message === 'unauthorized') {
-        return res.status(403).json({ errors: ["That isn't your upload!"] })
-      } else if (err.message === 'required param `url`') {
-        errors.push('Missing required param `url`.')
-      }
+//         errors = validationErrors
+//       } else if (err.name === 'SequelizeUniqueConstraintError') {
+//         errors.push(`You already have a upload with the url "${err.errors[0].value}"`)
+//       } else if (err.message === 'unauthorized') {
+//         return res.status(403).json({ errors: ["That isn't your upload!"] })
+//       } else if (err.message === 'required param `url`') {
+//         errors.push('Missing required param `url`.')
+//       }
 
-      return res.status(422).json({
-        errors: errors.length ? errors : ['Something went wrong.']
-      })
-    })
-}
+//       return res.status(422).json({
+//         errors: errors.length ? errors : ['Something went wrong.']
+//       })
+//     })
+// }

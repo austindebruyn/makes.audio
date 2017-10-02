@@ -9,6 +9,7 @@ switch (config.app.sessionDriver) {
   case 'file':
     SessionStoreClass = require('session-file-store')(session)
     break
+  /* istanbul ignore next */
   case 'redis':
     SessionStoreClass = require('connect-redis')(session)
     options = _.pick(config.redis, 'host', 'port')

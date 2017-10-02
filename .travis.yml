@@ -1,6 +1,4 @@
 language: node_js
-dist: trusty
-sudo: required
 install:
   - yarn
 node_js:
