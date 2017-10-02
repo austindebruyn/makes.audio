@@ -1,7 +1,7 @@
 const Audio = require('./Audio')
 const User = require('../users/User')
 const serve = require('../../services/serve')
-const compact = require('lodash.compact')
+// const compact = require('lodash.compact')
 const createAudio = require('./createAudio')
 
 module.exports.index = function (req, res, next) {
