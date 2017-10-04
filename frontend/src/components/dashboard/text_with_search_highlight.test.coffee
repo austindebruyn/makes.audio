@@ -1,7 +1,5 @@
-import Vue from 'vue'
 import text_with_search_highlight from './text_with_search_highlight'
 import { mount } from 'avoriaz'
-import { expect } from 'chai'
 
 describe 'text-with-search-highlight', ->
   it 'should render text with no q', ->
