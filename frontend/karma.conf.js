@@ -1,6 +1,12 @@
 // Karma configuration
 // Generated on Fri Sep 29 2017 05:55:41 GMT+0000 (UTC)
-
+const webpack = require('webpack')
+const webpackConfig = require('./webpack.config')
+webpackConfig.devtool = false
+webpackConfig.plugins.push(new webpack.SourceMapDevToolPlugin({
+  filename: null,
+  test: /\.(vue|coffee)($|\?)/i
+}))
 
 module.exports = function(config) {
   config.set({
@@ -11,12 +17,12 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['phantomjs-shim', 'mocha-debug', 'mocha'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      './**/*.test.coffee'
+      './jasmine_suite.coffee'
     ],
 
 
@@ -28,16 +34,17 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '**/*.coffee': ['webpack']
+      './**/*.coffee': ['webpack', 'sourcemap'],
+      './**/*.vue': ['webpack', 'sourcemap']
     },
 
-    webpack: require('./webpack.config'),
+    webpack: webpackConfig,
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['kjhtml', 'mocha'],
+    reporters: ['mocha'],
 
 
     // web server port

@@ -1,6 +1,9 @@
 language: node_js
 install:
   - yarn
+cache:
+  directories:
+    - travis_phantomjs
 node_js:
   - 8.0
 script:

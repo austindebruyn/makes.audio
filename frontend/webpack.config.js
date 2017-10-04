@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
   )
 }
 
-const devtool = process.env.NODE_ENV === 'production' ? 'source-map' : false
+const devtool = process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map'
 
 module.exports = {
   entry: './src/index.coffee',

@@ -34,7 +34,7 @@
           return @audios if @search.q is null
           @audios.filter (a) => a.url.includes(@search.q)
         else
-          nil
+          null
     methods:
       handle_search: (e) ->
         if @search.q != e.target.value
