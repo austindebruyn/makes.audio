@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/austindebruyn/makes.audio.svg?branch=master)](https://travis-ci.org/austindebruyn/makes.audio)
 [![Coverage Status](https://coveralls.io/repos/austindebruyn/makes.audio/badge.svg?branch=master)](https://coveralls.io/r/austindebruyn/makes.audio?branch=master)
+[![Dependency Status](https://david-dm.org/austindebruyn/makes.audio.svg)](https://david-dm.org/austindebruyn/makes.audio)
 
 
 Easy synchronization of a local folder of audio files with an online bucket that
@@ -28,7 +29,7 @@ everyday streaming, or personal expression.
 ## Tech
 
 **makes.audio** is an API-driven Node/Express application. The frontend is
-a Vue/Redux application written in Coffescript. The goal is to ship objects to
+a Vue/Vuex application written in Coffescript. The goal is to ship objects to
 S3.
 
 ## Development
@@ -63,10 +64,10 @@ The app will listen on https://localhost:3000.
 To build the frontend:
 
 ```shell
-npm run build
+yarn build
 ```
 
-For everyday development, `npm run watch` and `nodemon` in separate tabs are
+For everyday development, `yarn watch` and `nodemon` in separate tabs are
 recommended.
 
 ## Tests
