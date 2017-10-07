@@ -4,11 +4,12 @@ import errors from 'i18n/errors'
 
 class UploadService
   @start: (files) ->
-    id = Math.random().toString()
-    upload = Object.assign {},  files[0], id: id
+    upload =
+      id: Math.random().toString()
+      name: files[0].name
     store.commit 'create_upload', upload
     @_fetch id, files
-    id
+    upload
 
   @_handle_progress: (id, percentage) ->
     store.commit 'update_upload',
@@ -16,8 +17,6 @@ class UploadService
       progress: percentage
 
   @_handle_error: (id) ->
-    action = upload_actions.update_upload(id: id, error: true)
-    store.dispatch action
     store.commit 'update_upload',
       id: id
       error: true
