@@ -41,7 +41,7 @@
 
 <script lang="coffee">
   import Vue from 'vue'
-  import FlashEngine from 'lib/flash_engine'
+  import { create_toast } from 'lib/toaster'
   import errors from 'i18n/errors'
   import query_string from 'query-string'
 
@@ -72,12 +72,12 @@
           @loading = false
           if json.ok
             @$store.commit 'set_user', json.user
-            FlashEngine.create 'success', 'Your password has been changed.', 'Success!'
+            create_toast 'success', 'Your password has been changed.', 'Success!'
             return @$router.push '/dashboard'
           else if json.errors and json.errors.length
-            FlashEngine.create 'danger', errors.password_resets[error.code] for error in json.errors
+            create_toast 'danger', errors.password_resets[error.code] for error in json.errors
           else
-            FlashEngine.create 'danger', 'Something went wrong!'
+            create_toast 'danger', 'Something went wrong!'
 </script>
 
 <style lang="scss">

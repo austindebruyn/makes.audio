@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    flash-container
+    toast-container
     router-view
 </template>
 

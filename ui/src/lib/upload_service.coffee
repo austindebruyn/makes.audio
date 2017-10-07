@@ -1,5 +1,5 @@
 import store from 'state/store'
-import FlashEngine from 'lib/flash_engine'
+import { create_toast } from 'lib/toaster'
 import errors from 'i18n/errors'
 
 class UploadService
@@ -23,13 +23,13 @@ class UploadService
 
   @_handle_complete: (id, status, json) ->
     if json.errors?
-      FlashEngine.create 'danger', errors.create_upload[error.code], 'Oops!' for error in json.errors
+      create_toast 'danger', errors.create_upload[error.code], 'Oops!' for error in json.errors
       @_handle_error id
     else if status >= 400
-      FlashEngine.create 'danger', 'Something went wrong. Please try again.', 'Oops!'
+      create_toast 'danger', 'Something went wrong. Please try again.', 'Oops!'
       @_handle_error id
     else
-      FlashEngine.create 'success', "#{json.audio.url} is uploaded.", 'Great!'
+      create_toast 'success', "#{json.audio.url} is uploaded.", 'Great!'
       store.commit 'create_audio', json.audio
       store.commit 'update_upload', id: id, progress: 100
 

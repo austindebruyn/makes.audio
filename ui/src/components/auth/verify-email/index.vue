@@ -26,7 +26,7 @@
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
-  import FlashEngine from 'lib/flash_engine'
+  import { create_toast } from 'lib/toaster'
   import errors from 'i18n/errors'
   import query_string from 'query-string'
   import { mapState } from 'vuex'
@@ -63,15 +63,15 @@
           @loading = false
           if json.ok
             if @user
-              FlashEngine.create 'success', 'Thanks for verifying your email.', 'Success!'
+              create_toast 'success', 'Thanks for verifying your email.', 'Success!'
               return @$router.push '/dashboard'
             else
-              FlashEngine.create 'success', 'Thanks for verifying your email. Please log in now.', 'Success!'
+              create_toast 'success', 'Thanks for verifying your email. Please log in now.', 'Success!'
               return @$router.push '/'
           else if json.errors and json.errors.length
-            FlashEngine.create 'danger', errors.verify_email[error.code] for error in json.errors
+            create_toast 'danger', errors.verify_email[error.code] for error in json.errors
           else
-            FlashEngine.create 'danger', 'Something went wrong!'
+            create_toast 'danger', 'Something went wrong!'
 </script>
 
 <style lang="scss">

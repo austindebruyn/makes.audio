@@ -22,7 +22,7 @@
   import Vue from 'vue'
   import one_of from 'lib/one_of'
 
-  export default Vue.component 'flash',
+  export default Vue.component 'toast',
     props:
       idx: Number
       level: one_of ['success', 'danger', 'warning', 'info']

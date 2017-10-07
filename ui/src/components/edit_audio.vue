@@ -24,7 +24,7 @@
   import Vue from 'vue'
   import store from 'state/store'
   import find from 'lodash/find'
-  import FlashEngine from 'lib/flash_engine'
+  import { create_toast } from 'lib/toaster'
   import moment from 'moment'
 
   export default Vue.component 'edit_audio',
@@ -60,11 +60,11 @@
         .then (data) -> data.json()
         .then (json) ->
           if json.errors
-            FlashEngine.create 'danger', error for error in json.errors
+            create_toast.create 'danger', error for error in json.errors
           else
             # store.commit 'set_
             store.dispatch audio_actions.update_audio json
-            FlashEngine.create 'success', "#{json.url} has been saved.", 'Great!'
+            create_toast.create 'success', "#{json.url} has been saved.", 'Great!'
 </script>
 
 <style lang="scss">

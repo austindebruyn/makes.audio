@@ -15,7 +15,6 @@
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
-  import FlashEngine from 'lib/flash_engine'
 
   export default Vue.component 'dashboard',
     data: ->

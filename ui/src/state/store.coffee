@@ -37,6 +37,7 @@ store = new Vuex.Store
         name:     payload.name
         error:    false
         progress: null
+      debugger
       new_uploads = state.uploads.slice(0)
       new_uploads.push upload
       state.uploads = new_uploads

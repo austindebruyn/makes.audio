@@ -22,7 +22,7 @@
 
 <script lang="coffee">
   import Vue from 'vue'
-  import FlashEngine from 'lib/flash_engine'
+  import { create_toast } from 'lib/toaster'
   import remove from 'lodash.remove'
 
   export default Vue.component 'app-template',
@@ -48,10 +48,10 @@
         .then (data) -> data.json()
         .then (json) =>
           if json.ok
-            FlashEngine.create 'info', "You're signed out.", 'Bye!'
+            create_toast 'info', "You're signed out.", 'Bye!'
             @$store.commit 'set_user', null
             return @$router.push '/'
-          FlashEngine.create 'danger', "You weren't signed out.", 'Error!'
+          create_toast 'danger', "You weren't signed out.", 'Error!'
 </script>
 
 <style lang="scss">
