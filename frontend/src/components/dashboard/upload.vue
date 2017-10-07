@@ -16,8 +16,9 @@
 
   export default Vue.component 'dashboard-upload',
     data: ->
-      uploads: @$select 'uploads'
       loading: false
+    computed:
+      uploads: -> @$store.state.uploads
     methods:
       handle_upload_cta_click: (e) ->
         @$refs.file_input.click()

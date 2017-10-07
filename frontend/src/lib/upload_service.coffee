@@ -1,23 +1,28 @@
 import store from 'state/store'
-import upload_actions from 'state/actions/uploads'
-import audio_actions from 'state/actions/audios'
 import FlashEngine from 'lib/flash_engine'
 import errors from 'i18n/errors'
 
 class UploadService
   @start: (files) ->
-    action = upload_actions.create_upload files[0]
-    store.dispatch action
-    @_dispatch action.upload.id, files
-    action
+    id = Math.random().toString()
+    upload = Object.assign {},  files[0], id: id
+    store.commit 'create_upload', upload: upload
+    @_fetch id, files
+    id
 
   @_handle_progress: (id, percentage) ->
-    action = upload_actions.update_upload(id: id, progress: percentage)
-    store.dispatch action
+    store.commit 'update_upload',
+      upload:
+        id: id
+        progress: percentage
 
   @_handle_error: (id) ->
     action = upload_actions.update_upload(id: id, error: true)
     store.dispatch action
+    store.commit 'update_upload',
+      upload:
+        id: id
+        error: true
 
   @_handle_complete: (id, status, json) ->
     if json.errors?
@@ -27,12 +32,11 @@ class UploadService
       FlashEngine.create 'danger', 'Something went wrong. Please try again.', 'Oops!'
       @_handle_error id
     else
-      store.dispatch audio_actions.add_audio json.audio
       FlashEngine.create 'success', "#{json.audio.url} is uploaded.", 'Great!'
-      action = upload_actions.update_upload(id: id, progress: 100)
-      store.dispatch action
+      store.commit 'create_audio', audio: json.audio
+      store.commit 'update_upload', upload: (id: id, progress: 100)
 
-  @_dispatch: (id, files) ->
+  @_fetch: (id, files) ->
     # whatwg-fetch will does not let you observe the progress of the request
     # see implementation work https://github.com/whatwg/fetch/issues/607
     xhr = new XMLHttpRequest()

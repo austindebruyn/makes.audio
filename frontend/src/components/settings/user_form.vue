@@ -27,9 +27,6 @@
   import Vue from 'vue'
   import errors from 'i18n/errors'
   import store from 'state/store'
-  import actions from 'state/actions'
-  import audio_actions from 'state/actions/audios'
-  import audio_api from 'api/audios'
   import FlashEngine from 'lib/flash_engine'
 
   export default Vue.component 'user-form',
@@ -58,7 +55,7 @@
         .then (json) =>
           @loading = false
           if json.ok
-            store.dispatch actions.login json.user
+            @$store.commit 'set_user', user: json.user
             FlashEngine.create 'success', "You've been updated.", 'Great!'
           else if json.errors and json.errors.length
             FlashEngine.create 'warn', errors.update_user[error.code] for error in json.errors

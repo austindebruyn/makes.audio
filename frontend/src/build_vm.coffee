@@ -1,7 +1,6 @@
 import pick from 'lodash.pick'
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+import Vuex from 'vuex'
 
 import build_raven from 'lib/build_raven'
 
@@ -28,15 +27,16 @@ import 'components/ui/card'
 
 import 'whatwg-fetch'
 import store from 'state/store'
-import actions from 'state/actions'
 
 export default (opts) ->
   # hydrate
   user = opts.user
   raven = build_raven opts.context.sentry
-  store.store.subscribe ->
-    if raven
-      raven.set_raven_user pick(store.state.user, 'id', 'username', 'email')
-  store.dispatch actions.login user if user
+  # store.store.subscribe ->
+  #   if raven
+  #     raven.set_raven_user pick(store.state.user, 'id', 'username', 'email')
+  store.commit 'set_user', user: user
 
-  new Vue(router: router)
+  new Vue
+    store: store
+    router: router

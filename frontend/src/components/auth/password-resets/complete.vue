@@ -41,8 +41,6 @@
 
 <script lang="coffee">
   import Vue from 'vue'
-  import store from 'state/store'
-  import actions from 'state/actions'
   import FlashEngine from 'lib/flash_engine'
   import errors from 'i18n/errors'
   import query_string from 'query-string'
@@ -73,7 +71,7 @@
         .then (json) =>
           @loading = false
           if json.ok
-            store.dispatch actions.login json.user
+            @$store.commit 'set_user', user: json.user
             FlashEngine.create 'success', 'Your password has been changed.', 'Success!'
             return @$router.push '/dashboard'
           else if json.errors and json.errors.length

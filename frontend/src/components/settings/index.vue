@@ -16,20 +16,17 @@
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
-  import email_preferences_api from 'api/email_preferences'
   import FlashEngine from 'lib/flash_engine'
 
   export default Vue.component 'settings',
     data: ->
-      user: @$select 'user'
-      email_preferences: @$select 'email_preferences'
       username: @user && @user.username
     computed:
+      user: -> @$store.state.user
+      email_preferences: -> @$store.state.email_preferences
       loaded: -> @email_preferences and @user
     mounted: ->
-      email_preferences_api.fetch() unless @email_preferences
-    methods:
-      a: ->
+      store.dispatch 'fetch_email_preferences' unless @email_preferences
 </script>
 
 <style lang="scss">

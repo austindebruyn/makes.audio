@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import VueRouter from 'vue-router'
 import 'components/root'
 import Login from 'components/auth/login'
@@ -11,11 +12,14 @@ import NotFound from 'components/not_found'
 import Settings from 'components/settings'
 import store from 'state/store'
 
+Vue.use VueRouter
+
 ensureAuthenticated = (to, from, next) ->
-  return next '/' unless store.store.getState().user
+  return next '/' unless store.state.user
   next()
+
 ensureAnonymous = (to, from, next) ->
-  return next '/dashboard' if store.store.getState().user
+  return next '/dashboard' if store.state.user
   next()
 
 export default new VueRouter

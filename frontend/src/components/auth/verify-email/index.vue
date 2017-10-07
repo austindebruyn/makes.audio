@@ -26,16 +26,17 @@
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
-  import actions from 'state/actions'
   import FlashEngine from 'lib/flash_engine'
   import errors from 'i18n/errors'
   import query_string from 'query-string'
+  import { mapState } from 'vuex'
 
   export default Vue.component 'verify-email',
     data: ->
       loading: false
       verificationCode: null
-      user: @$select 'user'
+    computed:
+      user: -> @$store.state.user
     beforeRouteLeave: (to, from, next) -> next !@loading
     mounted: ->
       params = query_string.parse(location.search)

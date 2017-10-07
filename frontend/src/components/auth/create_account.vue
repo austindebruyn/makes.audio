@@ -35,7 +35,6 @@
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
-  import actions from 'state/actions'
   import FlashEngine from 'lib/flash_engine'
   import errors from 'i18n/errors'
 

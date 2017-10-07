@@ -34,16 +34,6 @@ module.exports = {
         use: [ 'coffee-loader' ]
       },
       {
-        test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['env']
-          }
-        },
-        include: /dot\-prop/
-      },
-      {
         test: /\.vue$/,
         use: [ {
           loader: 'vue-loader',

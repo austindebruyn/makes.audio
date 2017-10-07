@@ -24,19 +24,16 @@
   import Vue from 'vue'
   import store from 'state/store'
   import find from 'lodash/find'
-  import audio_api from 'api/audios'
-  import audio_actions from 'state/actions/audios'
   import FlashEngine from 'lib/flash_engine'
   import moment from 'moment'
 
   export default Vue.component 'edit_audio',
-    data: ->
-      audios: @$select 'audios'
     computed:
+      audios: -> @$store.state.audios
       audio: -> if @audios then find(@audios, id: parseInt(@$route.params.id)) else null
       display_created_at: ->
         moment(@audio.createdAt).format 'LL'
-    mounted: -> audio_api.fetch() unless @audios
+    mounted: -> store.dispatch 'fetch_audios' unless @audios
     methods:
       handle_change: (e) ->
         @save()
@@ -65,6 +62,7 @@
           if json.errors
             FlashEngine.create 'danger', error for error in json.errors
           else
+            # store.commit 'set_
             store.dispatch audio_actions.update_audio json
             FlashEngine.create 'success', "#{json.url} has been saved.", 'Great!'
 </script>

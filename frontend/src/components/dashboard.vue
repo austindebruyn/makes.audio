@@ -15,18 +15,14 @@
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
-  import audio_actions from 'state/actions/audios'
-  import audio_api from 'api/audios'
   import FlashEngine from 'lib/flash_engine'
 
   export default Vue.component 'dashboard',
     data: ->
-      audios: @$select 'audios'
-      user: @$select 'user'
       search:
         q: null
         loading: false
-    mounted: -> audio_api.fetch() unless @audios
+    mounted: -> store.dispatch 'fetch_audios' unless @audios
     computed:
       filtered_audios: ->
         if @audios
@@ -35,6 +31,8 @@
           @audios.filter (a) => a.url.includes(@search.q)
         else
           null
+      user: -> @$store.state.user
+      audios: -> @$store.state.audios
     methods:
       handle_search: (e) ->
         if @search.q != e.target.value

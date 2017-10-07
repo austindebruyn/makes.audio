@@ -23,8 +23,6 @@
 <script lang="coffee">
   import Vue from 'vue'
   import FlashEngine from 'lib/flash_engine'
-  import store from 'state/store'
-  import actions from 'state/actions'
   import remove from 'lodash.remove'
 
   export default Vue.component 'app-template',
@@ -51,7 +49,7 @@
         .then (json) =>
           if json.ok
             FlashEngine.create 'info', "You're signed out.", 'Bye!'
-            store.dispatch actions.logout()
+            @$store.commit 'set_user', user: null
             return @$router.push '/'
           FlashEngine.create 'danger', "You weren't signed out.", 'Error!'
 </script>
