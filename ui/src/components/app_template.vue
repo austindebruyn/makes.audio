@@ -49,7 +49,7 @@
         .then (json) =>
           if json.ok
             FlashEngine.create 'info', "You're signed out.", 'Bye!'
-            @$store.commit 'set_user', user: null
+            @$store.commit 'set_user', null
             return @$router.push '/'
           FlashEngine.create 'danger', "You weren't signed out.", 'Error!'
 </script>

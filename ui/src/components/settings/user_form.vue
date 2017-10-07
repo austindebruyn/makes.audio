@@ -55,7 +55,7 @@
         .then (json) =>
           @loading = false
           if json.ok
-            @$store.commit 'set_user', user: json.user
+            @$store.commit 'set_user', json.user
             FlashEngine.create 'success', "You've been updated.", 'Great!'
           else if json.errors and json.errors.length
             FlashEngine.create 'warn', errors.update_user[error.code] for error in json.errors

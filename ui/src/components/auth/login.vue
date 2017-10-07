@@ -47,7 +47,7 @@
         .then (json) =>
           @async = false
           if json.ok
-            @$store.commit 'set_user', user: json.user
+            @$store.commit 'set_user', json.user
             FlashEngine.create 'info', "Welcome back #{json.user.username}!"
             return @$router.push '/dashboard'
           else if json.errors and json.errors.length

@@ -71,7 +71,7 @@
         .then (json) =>
           @loading = false
           if json.ok
-            @$store.commit 'set_user', user: json.user
+            @$store.commit 'set_user', json.user
             FlashEngine.create 'success', 'Your password has been changed.', 'Success!'
             return @$router.push '/dashboard'
           else if json.errors and json.errors.length

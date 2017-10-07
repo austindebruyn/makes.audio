@@ -6,23 +6,21 @@ class UploadService
   @start: (files) ->
     id = Math.random().toString()
     upload = Object.assign {},  files[0], id: id
-    store.commit 'create_upload', upload: upload
+    store.commit 'create_upload', upload
     @_fetch id, files
     id
 
   @_handle_progress: (id, percentage) ->
     store.commit 'update_upload',
-      upload:
-        id: id
-        progress: percentage
+      id: id
+      progress: percentage
 
   @_handle_error: (id) ->
     action = upload_actions.update_upload(id: id, error: true)
     store.dispatch action
     store.commit 'update_upload',
-      upload:
-        id: id
-        error: true
+      id: id
+      error: true
 
   @_handle_complete: (id, status, json) ->
     if json.errors?
@@ -33,8 +31,8 @@ class UploadService
       @_handle_error id
     else
       FlashEngine.create 'success', "#{json.audio.url} is uploaded.", 'Great!'
-      store.commit 'create_audio', audio: json.audio
-      store.commit 'update_upload', upload: (id: id, progress: 100)
+      store.commit 'create_audio', json.audio
+      store.commit 'update_upload', id: id, progress: 100
 
   @_fetch: (id, files) ->
     # whatwg-fetch will does not let you observe the progress of the request

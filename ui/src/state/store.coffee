@@ -17,31 +17,31 @@ store = new Vuex.Store
     uploads: []
 
   mutations:
-    set_user: (state, { user }) ->
+    set_user: (state, user) ->
       state.user = user
 
-    set_email_preferences: (state, { email_preferences }) ->
+    set_email_preferences: (state, email_preferences) ->
       state.email_preferences = email_preferences
 
-    set_audios: (state, { audios }) ->
+    set_audios: (state, audios) ->
       state.audios = audios
 
-    create_audio: (state, { audio }) ->
+    create_audio: (state, audio) ->
       new_audios = state.audios.slice(0)
       new_audios.push audio
       state.audios = new_audios
 
     create_upload: (state, payload) ->
       upload =
-        id:       payload.upload.id
-        name:     payload.upload.name
+        id:       payload.id
+        name:     payload.name
         error:    false
         progress: null
       new_uploads = state.uploads.slice(0)
       new_uploads.push upload
       state.uploads = new_uploads
 
-    update_upload: (state, { upload }) ->
+    update_upload: (state, upload) ->
       id = upload.id
       target_upload = find state.uploads, id: id
       throw new Error("cannot update upload #{id}") unless target_upload
@@ -57,13 +57,13 @@ store = new Vuex.Store
         .then (data) -> data.json()
         .then (json) ->
           if json.ok
-            commit 'set_audios', audios: json.records
+            commit 'set_audios', json.records
 
     fetch_email_preferences: ({ state, commit }) ->
       fetch('/api/users/me/emailPreferences', credentials: 'same-origin')
         .then (data) -> data.json()
         .then (json) ->
           if json.ok
-            commit 'set_email_preferences', email_preferences: json.record
+            commit 'set_email_preferences', json.record
 
 export default store

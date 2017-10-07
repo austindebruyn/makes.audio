@@ -35,7 +35,7 @@ export default (opts) ->
   # store.store.subscribe ->
   #   if raven
   #     raven.set_raven_user pick(store.state.user, 'id', 'username', 'email')
-  store.commit 'set_user', user: user
+  store.commit 'set_user', user
 
   new Vue
     store: store
