@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const config = require('../app/config')
+const config = require('../api/config')
 const basicAuth = require('basic-auth-connect')
 const kue = require('kue')
 

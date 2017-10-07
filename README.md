@@ -74,13 +74,13 @@ recommended.
 For backend unit tests:
 
 ```shell
-yarn test:app
+yarn test:api
 ```
 
 For frontend unit tests:
 
 ```shell
-yarn test:frontend
+yarn test:ui
 ```
 
 For the integration suite, you will need to ensure that:

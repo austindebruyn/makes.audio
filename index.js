@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
 
-require('./app/lib/middleware')(app)
-require('./app/lib/routes')(app)
-require('./app/lib/boot')(app)
+require('./api/lib/middleware')(app)
+require('./api/lib/routes')(app)
+require('./api/lib/boot')(app)

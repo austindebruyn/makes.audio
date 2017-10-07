@@ -1,4 +1,4 @@
-const config = require('../app/config')
+const config = require('../api/config')
 const mysql = require('mysql2/promise')
 
 var connection

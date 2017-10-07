@@ -3,7 +3,7 @@ const path = require('path')
 const leftPad = require('left-pad')
 const inquirer = require('inquirer')
 
-const migrationsDir = path.join(__dirname, '..', 'app', 'migrations')
+const migrationsDir = path.join(__dirname, '..', 'api', 'migrations')
 const migrationFilenames = fs.readdirSync(migrationsDir)
 
 const DEFAULT_MIGRATION = `module.exports = {

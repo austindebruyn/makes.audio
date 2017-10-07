@@ -8,7 +8,7 @@ chai.use(chaiAsPromised)
 
 const express = require('express')
 const app = express()
-const db = require('../app/services/db')
+const db = require('../api/services/db')
 var server
 
 before(function () {  
@@ -16,9 +16,9 @@ before(function () {
     throw new Error('NODE_ENV is not test')
   }
 
-  require('../app/lib/middleware')(app)
-  require('../app/lib/routes')(app)
-  server = require('../app/lib/boot')(app)
+  require('../api/lib/middleware')(app)
+  require('../api/lib/routes')(app)
+  server = require('../api/lib/boot')(app)
 })
 
 after(function () {

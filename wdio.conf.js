@@ -1,4 +1,4 @@
-const buildUrl = require('./app/lib/buildUrl')
+const buildUrl = require('./api/lib/buildUrl')
 
 exports.config = {
     

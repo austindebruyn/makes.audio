@@ -88,15 +88,15 @@
     "winston": "^2.3.1"
   },
   "scripts": {
-    "build": "cd frontend; webpack",
-    "watch": "cd frontend; webpack --watch",
+    "build": "cd ui; webpack",
+    "watch": "cd ui; webpack --watch",
     "nodemon": "nodemon --config .nodemonrc",
-    "lint": "eslint app --ignore-pattern *.test.js",
-    "lint:fix": "eslint app --fix --ignore-pattern *.test.js",
-    "test:app": "NODE_ENV=test mocha --recursive 'app/**/*.test.js'",
-    "test:app:cover": "nyc --reporter=lcov --reporter=text npm run test:app",
-    "test:frontend:watch": "cd frontend && karma start --debug",
-    "test:frontend": "cd frontend && karma start --single-run",
+    "lint": "eslint api --ignore-pattern *.test.js",
+    "lint:fix": "eslint api --fix --ignore-pattern *.test.js",
+    "test:api": "NODE_ENV=test mocha --recursive 'api/**/*.test.js'",
+    "test:api:cover": "nyc --reporter=lcov --reporter=text npm run test:api",
+    "test:ui:watch": "cd ui && karma start --debug",
+    "test:ui": "cd ui && karma start --single-run",
     "test:integration": "NODE_ENV=test wdio wdio.conf.js",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   }

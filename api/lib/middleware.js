@@ -21,7 +21,7 @@ module.exports = function (app) {
   const transports = config.app.logging ? [new winston.transports.Console()] : []
   winston.configure({ transports })
 
-  app.set('views', path.resolve(app.root, 'app', 'views'))
+  app.set('views', path.resolve(app.root, 'api', 'views'))
   app.set('view engine', 'pug')
 
   app.use(require('body-parser').urlencoded({ extended: true }))

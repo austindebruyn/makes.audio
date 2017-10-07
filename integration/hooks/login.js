@@ -1,4 +1,4 @@
-const buildAuthenticatedSession = require('../../app/tests/buildAuthenticatedSession')
+const buildAuthenticatedSession = require('../../api/tests/buildAuthenticatedSession')
 
 global.login = function login(userAttributes) {
   beforeEach(function () {

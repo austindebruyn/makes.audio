@@ -1,7 +1,7 @@
 const { expect } = require('chai')
-const InviteCode = require('../app/domain/inviteCodes/InviteCode')
-const User = require('../app/domain/users/User')
-const createUser = require('../app/domain/users/createUser')
+const InviteCode = require('../api/domain/inviteCodes/InviteCode')
+const User = require('../api/domain/users/User')
+const createUser = require('../api/domain/users/createUser')
 
 describe('home page', function () {
   beforeEach(function () {

@@ -1,6 +1,6 @@
 const Umzug = require('umzug')
 const Sequelize = require('sequelize')
-const sequelize = require('../app/services/db')
+const sequelize = require('../api/services/db')
 const program = require('commander')
 program
   .option('-r, --rollback', 'Rollback migrations')
