@@ -8,8 +8,8 @@ node_js:
   - 8.0
 script:
   - npm run lint
-  - npm run test:app:cover
-  - npm run test:frontend
+  - npm run test:api:cover
+  - npm run test:ui
   - NODE_ENV=test npm run build
   - npm run test:integration
 services:
