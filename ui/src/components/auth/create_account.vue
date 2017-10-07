@@ -34,7 +34,6 @@
 
 <script lang="coffee">
   import Vue from 'vue'
-  import store from 'state/store'
   import FlashEngine from 'lib/flash_engine'
   import errors from 'i18n/errors'
 
@@ -61,7 +60,7 @@
         .then (json) =>
           @async = false
           if json.ok
-            store.dispatch actions.login json.user
+            @$store.commit 'set_user', user: json.user
             FlashEngine.create 'info', "Welcome #{json.user.username}!"
             return @$router.push '/dashboard'
           else if json.errors and json.errors.length
