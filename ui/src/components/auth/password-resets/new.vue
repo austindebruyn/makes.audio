@@ -26,7 +26,7 @@
 
 <script lang="coffee">
   import Vue from 'vue'
-  import { create_toast } from 'lib/toaster'
+  import Toaster from 'lib/toaster'
   import errors from 'i18n/errors'
 
   export default Vue.component 'new-password-reset',
@@ -50,12 +50,12 @@
         .then (json) =>
           @loading = false
           if json.ok
-            create_toast 'success', "An email has been sent to #{email}.", 'Success!'
+            Toaster.create 'success', "An email has been sent to #{email}.", 'Success!'
             return @$router.push '/passwordResets/complete'
           else if json.errors and json.errors.length
-            create_toast 'danger', errors.password_resets[error.code] for error in json.errors
+            Toaster.create 'danger', errors.password_resets[error.code] for error in json.errors
           else
-            create_toast 'danger', 'Something went wrong!'
+            Toaster.create 'danger', 'Something went wrong!'
 </script>
 
 <style lang="scss">

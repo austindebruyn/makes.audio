@@ -1,7 +1,7 @@
 <template lang='pug'>
   #toast-container
     toast(
-      v-for="val in toast"
+      v-for="val in toasts"
       :key="val.id"
       :idx="val.idx"
       :level="val.level"
@@ -15,13 +15,13 @@
 
 <script lang="coffee">
   import Vue from 'vue'
-  import { $on, $off, toasts, destroy_toast } from 'lib/toaster'
+  import Toaster from 'lib/toaster'
   import find from 'lodash.find'
   import remove from 'lodash.remove'
 
   export default Vue.component 'toast-container',
     data: ->
-      toast: toasts.slice 0
+      toasts: toasts.slice 0
     mounted: ->
       $on 'create', @handle_create
       $on 'dismiss', @handle_dismiss
@@ -31,7 +31,7 @@
     methods:
       handle_create: ->
         new_toasts = @toast.slice 0
-        for toast in toasts
+        for toast in Toaster.all()
           unless find(@toast, id: toast.id)
             new_toasts.unshift toast
         idx = 0
@@ -50,7 +50,7 @@
           idx = 0
           @toast.forEach (toast) -> toast.idx = idx++ unless toast.dead
         @toast = new_toasts
-      handle_dismiss_click: (id) -> destroy_toast id
+      handle_dismiss_click: (id) -> Toaster.destroy id
 </script>
 
 <style lang="scss">

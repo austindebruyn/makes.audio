@@ -1,14 +1,16 @@
 import store from 'state/store'
-import { create_toast } from 'lib/toaster'
+import Toaster from 'lib/toaster'
 import errors from 'i18n/errors'
+import uniqueid from 'lodash.uniqueid'
+
 
 class UploadService
   @start: (files) ->
     upload =
-      id: Math.random().toString()
+      id: uniqueid()
       name: files[0].name
     store.commit 'create_upload', upload
-    @_fetch id, files
+    @_fetch upload.id, files
     upload
 
   @_handle_progress: (id, percentage) ->
@@ -23,13 +25,13 @@ class UploadService
 
   @_handle_complete: (id, status, json) ->
     if json.errors?
-      create_toast 'danger', errors.create_upload[error.code], 'Oops!' for error in json.errors
+      Toaster.create 'danger', errors.create_upload[error.code], 'Oops!' for error in json.errors
       @_handle_error id
     else if status >= 400
-      create_toast 'danger', 'Something went wrong. Please try again.', 'Oops!'
+      Toaster.create 'danger', 'Something went wrong. Please try again.', 'Oops!'
       @_handle_error id
     else
-      create_toast 'success', "#{json.audio.url} is uploaded.", 'Great!'
+      Toaster.create 'success', "#{json.audio.url} is uploaded.", 'Great!'
       store.commit 'create_audio', json.audio
       store.commit 'update_upload', id: id, progress: 100
 

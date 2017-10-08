@@ -26,7 +26,7 @@
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
-  import { create_toast } from 'lib/toaster'
+  import Toaster from 'lib/toaster'
   import errors from 'i18n/errors'
   import query_string from 'query-string'
   import { mapState } from 'vuex'
@@ -63,15 +63,15 @@
           @loading = false
           if json.ok
             if @user
-              create_toast 'success', 'Thanks for verifying your email.', 'Success!'
+              Toaster.create 'success', 'Thanks for verifying your email.', 'Success!'
               return @$router.push '/dashboard'
             else
-              create_toast 'success', 'Thanks for verifying your email. Please log in now.', 'Success!'
+              Toaster.create 'success', 'Thanks for verifying your email. Please log in now.', 'Success!'
               return @$router.push '/'
           else if json.errors and json.errors.length
-            create_toast 'danger', errors.verify_email[error.code] for error in json.errors
+            Toaster.create 'danger', errors.verify_email[error.code] for error in json.errors
           else
-            create_toast 'danger', 'Something went wrong!'
+            Toaster.create 'danger', 'Something went wrong!'
 </script>
 
 <style lang="scss">

@@ -34,7 +34,7 @@
 
 <script lang="coffee">
   import Vue from 'vue'
-  import { create_toast } from 'lib/toaster'
+  import Toaster from 'lib/toaster'
   import errors from 'i18n/errors'
 
   export default Vue.component 'create-account',
@@ -61,12 +61,12 @@
           @async = false
           if json.ok
             @$store.commit 'set_user', json.user
-            create_toast 'info', "Welcome #{json.user.username}!"
+            Toaster.create 'info', "Welcome #{json.user.username}!"
             return @$router.push '/dashboard'
           else if json.errors and json.errors.length
-            create_toast 'danger', errors[error.code] for error in json.errors
+            Toaster.create 'danger', errors[error.code] for error in json.errors
           else
-            create_toast 'danger', 'Something went wrong!'
+            Toaster.create 'danger', 'Something went wrong!'
 </script>
 
 <style lang="scss">

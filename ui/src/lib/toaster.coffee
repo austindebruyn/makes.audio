@@ -1,32 +1,57 @@
 import pull from 'lodash.pull'
 import remove from 'lodash.remove'
 
-i = 0
+class Toaster
+  DEFAULT_TIMEOUT = 5000
 
-toasts = []
+  @_i = 0
+  @_toasts = []
 
-handlers =
-  create: []
-  dismiss: []
+  @_handlers =
+    create: []
+    dismiss: []
+    timeouts: []
 
-$emit = (evt, arg) ->
-  handlers[evt].forEach (fn) -> fn arg
+  @count = -> @_toasts.length
+  @all = -> @_toasts.slice 0
+  @at = (idx) -> @_toasts[idx]
 
-create_toast = (level, message, title=null, dismissable=true) ->
-  new_toast =
-    id: i++
-    level: level
-    message: message
-    title: title
-    dismissable: dismissable
-  toasts.unshift new_toast
-  $emit 'create', new_toast
-  setTimeout((-> destroy_toast new_toast.id), 5000)
+  @$on = (evt, handler) -> @_handlers[evt].push handler
+  @$off = (evt, handler) -> pull @_handlers[evt], handler
 
-destroy_toast = (id) ->
-  removed = remove(toasts, id: id)
-  $emit 'dismiss', removed[0] if removed.length > 0
+  @$emit = (evt, arg) ->
+    @_handlers[evt].forEach (fn) -> fn arg
 
-export { toasts, create_toast, destroy_toast }
-export $on = (evt, handler) -> handlers[evt].push handler
-export $off = (evt, handler) -> pull handlers[evt], handler
+  @create = (level, message, title=null, dismissable=true) ->
+    if level not in ['danger', 'info', 'success', 'warn']
+      throw new Error("Toaster.create invoked with level=#{level}")
+    new_toast =
+      id: @_i++
+      level: level
+      message: message
+      title: title
+      dismissable: dismissable
+    @_toasts.unshift new_toast
+    @$emit 'create', new_toast
+
+    timeout_handler = =>
+      @destroy new_toast.id
+      pull @_handlers.timeouts, timeout_ref
+    timeout_ref = setTimeout timeout_handler, Toaster.DEFAULT_TIMEOUT
+    @_handlers.timeouts.push timeout_ref
+
+    new_toast
+
+  @destroy = (id) ->
+    removed = remove(@_toasts, id: id)
+    @$emit 'dismiss', removed[0] if removed.length > 0
+
+  @destroy_all_toasts = ->
+    @_i = 0
+    @_toasts.length = 0
+    @_handlers.create.length = 0
+    @_handlers.dismiss.length = 0
+    clearTimeout ref for ref in @_handlers.timeouts
+    @_handlers.timeouts.length = 0
+
+export default Toaster

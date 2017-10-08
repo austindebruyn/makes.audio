@@ -27,7 +27,7 @@
   import Vue from 'vue'
   import errors from 'i18n/errors'
   import store from 'state/store'
-  import { create_toast } from 'lib/toaster'
+  import Toaster from 'lib/toaster'
 
   export default Vue.component 'user-form',
     props:
@@ -56,11 +56,11 @@
           @loading = false
           if json.ok
             @$store.commit 'set_user', json.user
-            create_toast.create 'success', "You've been updated.", 'Great!'
+            Toaster.create.create 'success', "You've been updated.", 'Great!'
           else if json.errors and json.errors.length
-            create_toast.create 'warn', errors.update_user[error.code] for error in json.errors
+            Toaster.create.create 'warn', errors.update_user[error.code] for error in json.errors
           else
-            create_toast.create 'danger', 'Please try again later.', 'Server Error!'
+            Toaster.create.create 'danger', 'Please try again later.', 'Server Error!'
         @loading = true
       handle_submit_password: (e) ->
         e.preventDefault()
@@ -75,11 +75,11 @@
         .then (json) =>
           @loading = false
           if json.ok
-            create_toast.create 'success', 'Done!'
+            Toaster.create.create 'success', 'Done!'
             @password = ''
             @currentPassword = ''
           else
-            create_toast.create 'danger', errors.update_user[error.code] for error in json.errors
+            Toaster.create.create 'danger', errors.update_user[error.code] for error in json.errors
         @loading = true
       handle_resend_email_verification_link: (e) ->
         e.preventDefault()
@@ -91,9 +91,9 @@
         .then (json) =>
           @loading = false
           if json.ok
-            create_toast.create 'success', 'Please check your email for a verification link.'
+            Toaster.create.create 'success', 'Please check your email for a verification link.'
           else
-            create_toast.create 'danger', 'Something went wrong.'
+            Toaster.create.create 'danger', 'Something went wrong.'
         @loading = true
 </script>
 
