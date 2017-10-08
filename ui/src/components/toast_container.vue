@@ -21,35 +21,35 @@
 
   export default Vue.component 'toast-container',
     data: ->
-      toasts: toasts.slice 0
+      toasts: Toaster.all()
     mounted: ->
-      $on 'create', @handle_create
-      $on 'dismiss', @handle_dismiss
+      Toaster.$on 'create', @handle_create
+      Toaster.$on 'dismiss', @handle_dismiss
     beforeDestroy: ->
-      $off 'create', @handle_create
-      $off 'dismiss', @handle_dismiss
+      Toaster.$off 'create', @handle_create
+      Toaster.$off 'dismiss', @handle_dismiss
     methods:
       handle_create: ->
-        new_toasts = @toast.slice 0
+        new_toasts = @toasts.slice 0
         for toast in Toaster.all()
-          unless find(@toast, id: toast.id)
+          unless find(@toasts, id: toast.id)
             new_toasts.unshift toast
         idx = 0
         new_toasts.forEach (toast) -> toast.idx = idx++ unless toast.dead
-        @toast = new_toasts
+        @toasts = new_toasts
       handle_dismiss: (removed) ->
-        new_toasts = @toast.slice 0
+        new_toasts = @toasts.slice 0
         removed_toast = find(new_toasts, id: removed.id)
         if removed_toast
           removed_toast.dead = true
           setTimeout =>
-            new_toasts = @toast.slice 0
+            new_toasts = @toasts.slice 0
             remove(new_toasts, id: removed.id)
             @toast = new_toasts
           , 200
           idx = 0
-          @toast.forEach (toast) -> toast.idx = idx++ unless toast.dead
-        @toast = new_toasts
+          @toasts.forEach (toast) -> toast.idx = idx++ unless toast.dead
+        @toasts = new_toasts
       handle_dismiss_click: (id) -> Toaster.destroy id
 </script>
 

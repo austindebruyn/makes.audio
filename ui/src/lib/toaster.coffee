@@ -2,7 +2,7 @@ import pull from 'lodash.pull'
 import remove from 'lodash.remove'
 
 class Toaster
-  DEFAULT_TIMEOUT = 5000
+  @DEFAULT_TIMEOUT = 5000
 
   @_i = 0
   @_toasts = []
