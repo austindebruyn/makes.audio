@@ -23,7 +23,7 @@ class Toaster
     @_handlers[evt].forEach (fn) -> fn arg
 
   @create = (level, message, title=null, dismissable=true) ->
-    if level not in ['danger', 'info', 'success', 'warn']
+    if level not in ['danger', 'info', 'success', 'warning']
       throw new Error("Toaster.create invoked with level=#{level}")
     new_toast =
       id: @_i++

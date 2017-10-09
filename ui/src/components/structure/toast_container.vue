@@ -1,35 +1,40 @@
 <template lang='pug'>
   #toast-container
     toast(
-      v-for="val in toasts"
-      :key="val.id"
-      :idx="val.idx"
-      :level="val.level"
-      :title="val.title"
-      :message="val.message"
-      :dismissable="val.dismissable"
-      :dead="val.dead"
-      @click="handle_dismiss_click(val.id)"
+      v-for='val in toasts'
+      :key='val.id'
+      :idx='val.idx'
+      :level='val.level'
+      :title='val.title'
+      :message='val.message'
+      :dismissable='val.dismissable'
+      :dead='val.dead'
+      @click='handle_dismiss_click(val.id)'
     )
 </template>
 
-<script lang="coffee">
+<script lang='coffee'>
   import Vue from 'vue'
   import Toaster from 'lib/toaster'
+  import toast_component from './toast'
   import find from 'lodash.find'
   import remove from 'lodash.remove'
 
   export default Vue.component 'toast-container',
+    components:
+      toast: toast_component
     data: ->
-      toasts: Toaster.all()
+      toasts: []
     mounted: ->
       Toaster.$on 'create', @handle_create
       Toaster.$on 'dismiss', @handle_dismiss
+      @build_list()
     beforeDestroy: ->
       Toaster.$off 'create', @handle_create
       Toaster.$off 'dismiss', @handle_dismiss
     methods:
-      handle_create: ->
+      handle_create: -> @build_list()
+      build_list: ->
         new_toasts = @toasts.slice 0
         for toast in Toaster.all()
           unless find(@toasts, id: toast.id)
@@ -45,7 +50,7 @@
           setTimeout =>
             new_toasts = @toasts.slice 0
             remove(new_toasts, id: removed.id)
-            @toast = new_toasts
+            @toasts = new_toasts
           , 200
           idx = 0
           @toasts.forEach (toast) -> toast.idx = idx++ unless toast.dead
@@ -53,7 +58,7 @@
       handle_dismiss_click: (id) -> Toaster.destroy id
 </script>
 
-<style lang="scss">
+<style lang='scss'>
   @import 'src/styles/mixins';
 
   #toast-container {

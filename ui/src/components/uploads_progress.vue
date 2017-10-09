@@ -42,6 +42,10 @@
 
     transition: bottom 400ms ease-in-out;
 
+    .progress-bar {
+      transition: width 50ms ease-out;
+    }
+
     .uploads-progress-content {
       height: 100%;
     }

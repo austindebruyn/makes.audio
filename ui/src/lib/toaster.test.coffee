@@ -43,7 +43,7 @@ describe 'toaster', ->
       expect(value).to.eql Toaster.at 0
 
     it 'should use unique ids', ->
-      Toaster.create 'warn', 'your laundry is done'
+      Toaster.create 'warning', 'your laundry is done'
       Toaster.create 'danger', 'now it is on fire'
       expect(Toaster.at(0).id).to.eql 1
       expect(Toaster.at(1).id).to.eql 0
