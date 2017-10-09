@@ -12,7 +12,6 @@
 </template>
 
 <script lang="coffee">
-  import Vue from 'vue'
   import one_of from 'lib/one_of'
 
   export default {

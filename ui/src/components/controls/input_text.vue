@@ -12,9 +12,8 @@
 </template>
 
 <script lang="coffee">
-  import Vue from 'vue'
-
-  export default Vue.component 'input-text',
+  export default {
+    name: 'input-text'
     props:
       name: String
       placeholder: String
@@ -31,6 +30,7 @@
     methods:
       handle_focus: -> @focus = true
       handle_blur: -> @focus = false
+  }
 </script>
 
 <style lang="scss">
