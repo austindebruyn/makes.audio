@@ -7,16 +7,21 @@ import Vuex from 'vuex'
 
 Vue.use Vuex
 
+initial_state =
+  user: null
+  audios: null
+  email_preferences: null
+  uploads: []
+
 store = new Vuex.Store
   strict: process.env.NODE_ENV != 'production'
 
-  state:
-    user: null
-    audios: null
-    email_preferences: null
-    uploads: []
+  state: initial_state
 
   mutations:
+    reset: (state) ->
+      Object.assign state, initial_state
+
     set_user: (state, user) ->
       state.user = user
 
@@ -37,7 +42,6 @@ store = new Vuex.Store
         name:     payload.name
         error:    false
         progress: null
-      debugger
       new_uploads = state.uploads.slice(0)
       new_uploads.push upload
       state.uploads = new_uploads

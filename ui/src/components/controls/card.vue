@@ -6,10 +6,9 @@
 <script lang="coffee">
   import Vue from 'vue'
 
-  export default Vue.component 'card',
-    data: -> {}
-    computed:
-      classes: -> {}
+  export default {
+    name: 'card'
+  }
 </script>
 
 <style lang="scss">

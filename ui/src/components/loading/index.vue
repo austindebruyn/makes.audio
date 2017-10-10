@@ -5,10 +5,9 @@
 </template>
 
 <script lang="coffee">
-  import Vue from 'vue'
-
-  export default Vue.component 'loading',
-    data: -> {}
+  export default {
+    name: 'loading'
+  }
 </script>
 
 <style lang="scss">

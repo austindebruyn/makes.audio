@@ -25,7 +25,8 @@
   import Toaster from 'lib/toaster'
   import remove from 'lodash.remove'
 
-  export default Vue.component 'app-template',
+  export default {
+    name: 'app-template'
     data: ->
       open: false
       nav_open: false
@@ -52,6 +53,7 @@
             @$store.commit 'set_user', null
             return @$router.push '/'
           Toaster.create 'danger', "You weren't signed out.", 'Error!'
+  }
 </script>
 
 <style lang="scss">

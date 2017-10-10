@@ -3,7 +3,7 @@
     .container
       .uploads-progress-content.d-flex.align-items-center
         .progress
-          .progress-bar.bg-success(:classes='progress_bar_classes',
+          .progress-bar.bg-success(:class='progress_bar_classes',
                                    :style='progress_bar_styles')
             | {{ label_text }}
 </template>
@@ -18,8 +18,8 @@
       is_active: ->
         @uploads and @uploads.filter((u) -> u.progress != 100).length
       progress_bar_classes: ->
-        'progress-bar-striped':  @is_active and not @uploads.progress
-        'progress-bar-animated': @is_active and not @uploads.progress
+        'progress-bar-striped':  @is_active and not @uploads[0].progress
+        'progress-bar-animated': @is_active and not @uploads[0].progress
       progress_bar_styles: ->
         if @is_active and @uploads[0].progress
           width = "#{@uploads[0].progress}%"

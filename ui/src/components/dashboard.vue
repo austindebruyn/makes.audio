@@ -15,8 +15,11 @@
 <script lang="coffee">
   import Vue from 'vue'
   import store from 'state/store'
+  import loading_component from 'components/loading'
 
   export default Vue.component 'dashboard',
+    components:
+      loading: loading_component
     data: ->
       search:
         q: null

@@ -29,7 +29,8 @@
   import store from 'state/store'
   import Toaster from 'lib/toaster'
 
-  export default Vue.component 'user-form',
+  export default {
+    name: 'user-form'
     props:
       user: (type: Object, required: true)
       email_preferences: (type: Object, required: true)
@@ -95,6 +96,7 @@
           else
             Toaster.create.create 'danger', 'Something went wrong.'
         @loading = true
+  }
 </script>
 
 <style lang="scss">
