@@ -16,7 +16,7 @@ describe 'settings', ->
       fetch_email_preferences: sinon.spy()
     @store = new Vuex.Store
       state:
-        user: users_fixture.user
+        user: users_fixture.austin
         email_preferences: null
       actions: @actions
 

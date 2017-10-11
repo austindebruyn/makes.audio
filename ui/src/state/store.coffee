@@ -58,14 +58,18 @@ store = new Vuex.Store
 
   actions:
     fetch_audios: ({ state, commit }) ->
-      fetch('/api/audios', credentials: 'same-origin')
+      fetch('/api/audios', credentials: 'same-origin', headers: headers)
         .then (data) -> data.json()
         .then (json) ->
           if json.ok
             commit 'set_audios', json.records
 
     fetch_email_preferences: ({ state, commit }) ->
-      fetch('/api/users/me/emailPreferences', credentials: 'same-origin')
+      headers =
+        'Content-Type': 'application/json'
+        'Accept': 'application/json'
+      url = '/api/users/me/emailPreferences'
+      fetch(url, credentials: 'same-origin', headers: headers)
         .then (data) -> data.json()
         .then (json) ->
           if json.ok

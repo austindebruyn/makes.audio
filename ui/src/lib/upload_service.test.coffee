@@ -8,6 +8,7 @@ describe 'UploadService', ->
   beforeEach ->
     sinon.stub Toaster, 'create'
     sinon.stub store, 'commit'
+
     @xhr_stub = sinon.useFakeXMLHttpRequest()
     @xhrs = []
     @xhr_stub.onCreate = (xhr) => @xhrs.push xhr

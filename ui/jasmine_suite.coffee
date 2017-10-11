@@ -19,5 +19,29 @@ chai.use sinon_chai
 
 global.expect = expect
 
+beforeEach ->
+  @fetches = []
+  Object.defineProperty @fetches, 'first', get: -> @[0]
+
+  global.fetch = (url, descriptor) =>
+    new Promise (resolve, reject) =>
+      fetch_obj = Object.assign {}, descriptor,
+        url: url
+        respond_with: ({ status=200, body }) ->
+          response =
+            status: status
+            headers: {}
+          if body?
+            response.json = -> new Promise (r) -> r body
+          resolve response
+        reject: reject
+      fetch_obj.body = JSON.parse fetch_obj.body if fetch_obj.body?
+      @fetches.push fetch_obj
+
+  @fill_in = (wrapper) ->
+    with: (value) ->
+      wrapper.element.value = value
+      wrapper.trigger 'input'
+
 tests_context = require.context '.', true, /\.test\.coffee$/
 tests_context.keys().forEach tests_context
