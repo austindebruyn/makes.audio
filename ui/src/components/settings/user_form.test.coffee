@@ -9,7 +9,7 @@ import Toaster from 'lib/toaster'
 
 Vue.use Vuex
 
-describe.only 'user-form', ->
+describe 'user-form', ->
   beforeEach ->
     sinon.stub Toaster, 'create'
     @mutations =

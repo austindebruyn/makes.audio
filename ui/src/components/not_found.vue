@@ -9,8 +9,9 @@
 <script lang="coffee">
   import Vue from 'vue'
 
-  export default Vue.component 'not-found',
-    data: -> {}
+  export default {
+    name: 'not-found'
+  }
 </script>
 
 <style lang="scss">

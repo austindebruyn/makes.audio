@@ -1,5 +1,5 @@
 <template lang="pug">
-  .card(:class='classes')
+  .card
     slot
 </template>
 

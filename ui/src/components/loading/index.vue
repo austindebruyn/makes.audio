@@ -10,7 +10,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .loading-container {
     text-align: center;
     margin: 0 auto;

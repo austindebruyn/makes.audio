@@ -3,23 +3,36 @@
     .content-center
       card.card-login.card-plain
         .header.header-primary.text-center
-          img.branding(src='/branding/makes-audio-logo-300.png', title='MAKES.AUDIO')
+          img.branding(
+            src='/branding/makes-audio-logo-300.png'
+            title='MAKES.AUDIO'
+          )
         p Enter the token received in your email.
-        form(action='/api/users/me/emailPreferences', ref='form', method='PATCH', @submit="on_submit")
+        form(
+          action='/api/users/me/emailPreferences'
+          ref='form'
+          method='PATCH'
+          @submit='on_submit'
+        )
           .form-group
             input(type='hidden', name='action', value='verify')
             .input-group
               span.input-group-addon
                 i.fa.fa-lock
-              input.transparent.round.input-lg.form-control(type='text',
-                                                            autocomplete='off',
-                                                            name='verificationCode',
-                                                            v-model='verificationCode',
-                                                            placeholder='Verification code',
-                                                            :disabled='loading')
+              input.transparent.round.input-lg.form-control(
+                type='text'
+                autocomplete='off'
+                name='verificationCode'
+                v-model='verificationCode'
+                placeholder='Verification code'
+                :disabled='loading'
+              )
           .form-group
             .input-group
-              button.btn.btn-primary.btn-round.btn-lg.btn-block(type='submit', :disabled="loading") Verify
+              button.btn.btn-primary.btn-round.btn-lg.btn-block(
+                type='submit'
+                :disabled='loading'
+              ) Verify
           router-link.btn.btn-link(to='/', :disabled='loading') Back to Login
 </template>
 
@@ -30,8 +43,12 @@
   import errors from 'i18n/errors'
   import query_string from 'query-string'
   import { mapState } from 'vuex'
+  import card from 'components/controls/card'
 
-  export default Vue.component 'verify-email',
+  export default {
+    name: 'verify-email'
+    components:
+      card: card
     data: ->
       loading: false
       verificationCode: null
@@ -39,9 +56,8 @@
       user: -> @$store.state.user
     beforeRouteLeave: (to, from, next) -> next !@loading
     mounted: ->
-      params = query_string.parse(location.search)
-      @verificationCode = params.verificationCode if params.verificationCode?
-
+      if @$route and @$route.query.verificationCode?
+        @verificationCode = @$route.query.verificationCode
       @submit() if @verificationCode
     methods:
       on_submit: (e) ->
@@ -64,14 +80,15 @@
           if json.ok
             if @user
               Toaster.create 'success', 'Thanks for verifying your email.', 'Success!'
-              return @$router.push '/dashboard'
+              @$router.push '/dashboard'
             else
               Toaster.create 'success', 'Thanks for verifying your email. Please log in now.', 'Success!'
-              return @$router.push '/'
+              @$router.push '/'
           else if json.errors and json.errors.length
             Toaster.create 'danger', errors.verify_email[error.code] for error in json.errors
           else
             Toaster.create 'danger', 'Something went wrong!'
+  }
 </script>
 
 <style lang="scss">

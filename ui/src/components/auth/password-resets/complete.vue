@@ -3,39 +3,58 @@
     .content-center
       card.card-login.card-plain
         .header.header-primary.text-center
-          img.branding(src='/branding/makes-audio-logo-300.png', title='MAKES.AUDIO')
+          img.branding(
+              src='/branding/makes-audio-logo-300.png'
+              title='MAKES.AUDIO'
+            )
         p Enter the token received in your password reset email.
-        form(action='/api/passwordResets/complete', method='POST', @submit="on_submit")
+        form(
+          action='/api/passwordResets/complete'
+          method='POST'
+          @submit='on_submit'
+        )
           .form-group
             .input-group
               span.input-group-addon
                 i.fa.fa-key
-              input.transparent.round.input-lg.form-control(type='text',
-                                                            autocomplete='off',
-                                                            name='code',
-                                                            v-model='code',
-                                                            placeholder='Code',
-                                                            :disabled='loading')
+              input.transparent.round.input-lg.form-control(
+                type='text'
+                autocomplete='off'
+                name='code'
+                v-model='code'
+                placeholder='Code'
+                :disabled='loading'
+              )
             .input-group
               span.input-group-addon
                 i.fa.fa-lock
-              input.transparent.round.input-lg.form-control(type='password',
-                                                            autocomplete='off',
-                                                            name='password',
-                                                            placeholder='New Password',
-                                                            :disabled='loading')
+              input.transparent.round.input-lg.form-control(
+                type='password'
+                autocomplete='off'
+                name='password'
+                placeholder='New Password'
+                :disabled='loading'
+              )
             .input-group
               span.input-group-addon
                 i.fa.fa-lock
-              input.transparent.round.input-lg.form-control(type='password',
-                                                            autocomplete='off',
-                                                            name='password2',
-                                                            placeholder='Confirm Password',
-                                                            :disabled='loading')
+              input.transparent.round.input-lg.form-control(
+                type='password'
+                autocomplete='off'
+                name='password2'
+                placeholder='Confirm Password'
+                :disabled='loading'
+              )
           .form-group
             .input-group
-              button.btn.btn-primary.btn-round.btn-lg.btn-block(type='submit', :disabled="loading") Reset
-          router-link.btn.btn-link(to='/passwordResets/new', :disabled='loading') Send Email Again
+              button.btn.btn-primary.btn-round.btn-lg.btn-block(
+                type='submit'
+                :disabled="loading"
+              ) Reset
+          router-link.btn.btn-link(
+            to='/passwordResets/new'
+            :disabled='loading'
+          ) Send Email Again
           router-link.btn.btn-link(to='/', :disabled='loading') Back to Login
 </template>
 
@@ -43,16 +62,20 @@
   import Vue from 'vue'
   import Toaster from 'lib/toaster'
   import errors from 'i18n/errors'
-  import query_string from 'query-string'
+  import card from 'components/controls/card'
+  import auth_template from 'components/auth/auth_template'
 
-  export default Vue.component 'complete-password-reset',
+  export default {
+    name: 'complete-password-reset'
+    components:
+      'auth-template': auth_template
+      card: card
     data: ->
       loading: false
       code: null
     beforeRouteLeave: (to, from, next) -> next !@loading
     mounted: ->
-      params = query_string.parse(location.search)
-      @code = params.code if params.code?
+      @code = @$route.query.code if @$route and @$route.query.code?
     methods:
       on_submit: (e) ->
         e.preventDefault()
@@ -72,12 +95,15 @@
           @loading = false
           if json.ok
             @$store.commit 'set_user', json.user
-            Toaster.create 'success', 'Your password has been changed.', 'Success!'
-            return @$router.push '/dashboard'
+            message = 'Your password has been changed.'
+            Toaster.create 'success', message, 'Success!'
+            @$router.push '/dashboard'
           else if json.errors and json.errors.length
-            Toaster.create 'danger', errors.password_resets[error.code] for error in json.errors
+            for error in json.errors
+              Toaster.create 'danger', errors.password_resets[error.code]
           else
             Toaster.create 'danger', 'Something went wrong!'
+  }
 </script>
 
 <style lang="scss">
