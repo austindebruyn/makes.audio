@@ -1,7 +1,11 @@
-<template lang='pug'>
+<template lang="pug">
   div(:class='{ "nav-open": nav_open }')
     nav.navbar.navbar-toggleable-md
-      button.navbar-toggler.navbar-toggler-right(@click='handle_navbar_click', :class='toggler_class', type='button', data-toggle='collapse', data-target='#example-navbar', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+      button.navbar-toggler.navbar-toggler-right(
+        @click='handle_navbar_click'
+        :class='toggler_class'
+        type='button'
+      )
         .fa.fa-bars
       .container
         a.navbar-brand(href='#') Makes.Audio
@@ -14,10 +18,13 @@
             li.nav-item
               router-link.nav-link(to='/settings') Account
             li.nav-item
-              a.nav-link(@click='handle_logout_click', href='javascript:;') Logout
+              a.nav-link(
+                @click='handle_logout_click'
+                href='javascript:;'
+              ) Logout
     .container
       slot
-    uploads-progress
+    uploads-progress(v-if='render_uploads_progress')
 </template>
 
 <script lang="coffee">
@@ -33,15 +40,9 @@
     computed:
       toggler_class: ->
         toggled: @nav_open
+      render_uploads_progress: -> @$store and @$store.uploads
     methods:
-      handle_navbar_click: ->
-        @nav_open = !@nav_open
-        body_click_mask = document.getElementById 'bodyClick'
-        if body_click_mask and !@nav_open
-          body_click_mask = document.createElement 'div'
-          body_click_mask.parentElement.removeChild body_click_mask
-      handle_dropdown_click: ->
-        @open = !@open
+      handle_navbar_click: -> @nav_open = !@nav_open
       handle_logout_click: ->
         fetch '/logout',
           method: 'POST'
@@ -51,8 +52,9 @@
           if json.ok
             Toaster.create 'info', "You're signed out.", 'Bye!'
             @$store.commit 'set_user', null
-            return @$router.push '/'
-          Toaster.create 'danger', "You weren't signed out.", 'Error!'
+            @$router.push '/'
+          else
+            Toaster.create 'danger', "You weren't signed out.", 'Error!'
   }
 </script>
 

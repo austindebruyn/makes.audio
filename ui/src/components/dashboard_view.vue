@@ -5,30 +5,45 @@
         .col-12.col-md-5.col-lg-3
           dashboard-upload
           h2 Search
-          input.form-control(name='q', type='search', autocomplete='off', placeholder='Keywords, title, URLs...', @search='handle_search', @keyup='handle_search_keyup')
+          input.form-control(
+            name='q'
+            type='search'
+            autocomplete='off'
+            placeholder='Keywords, title, URLs...'
+            @search='handle_search'
+            @keyup='handle_search_keyup'
+          )
         .col-12.col-md-7.col-lg-9
-          dashboard-audio-list(:q='search && search.q', :audios='filtered_audios', v-if='audios && !search.loading')
+          dashboard-audio-list(
+            v-if='audios'
+            :q='search && search.q'
+            :audios='filtered_audios'
+          )
           div(v-else=true)
             loading
 </template>
 
 <script lang="coffee">
   import Vue from 'vue'
-  import store from 'state/store'
   import loading_component from 'components/loading'
+  import app_template from 'components/app_template'
+  import dashboard_audio_list from 'components/dashboard/audio_list'
+  import dashboard_upload from 'components/dashboard/upload'
 
-  export default Vue.component 'dashboard',
+  export default {
+    name: 'dashboard-view'
     components:
+      'app-template': app_template
       loading: loading_component
+      'dashboard-audio-list': dashboard_audio_list
+      'dashboard-upload': dashboard_upload
     data: ->
       search:
         q: null
-        loading: false
-    mounted: -> store.dispatch 'fetch_audios' unless @audios
+    mounted: -> @$store.dispatch 'fetch_audios' unless @audios
     computed:
       filtered_audios: ->
         if @audios
-          return @audios if @search.loading
           return @audios if @search.q is null
           @audios.filter (a) => a.url.includes(@search.q)
         else
@@ -40,22 +55,11 @@
         if @search.q != e.target.value
           @search =
             q: if e.target.value == '' then null else e.target.value
-            loading: false
-          if @timeout
-            clearTimeout @timeout
-            @timeout = null
-          @perform_search()
       handle_search_keyup: (e) ->
         if @search.q != e.target.value
           @search =
             q: if e.target.value == '' then null else e.target.value
-            loading: true
-          clearTimeout @timeout if @timeout
-          @timeout = setTimeout @perform_search, 200
-      perform_search: ->
-        @search =
-          q: @search.q
-          loading: false
+  }
 </script>
 
 <style lang="scss">

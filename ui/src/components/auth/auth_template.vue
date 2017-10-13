@@ -8,10 +8,12 @@
 <script lang="coffee">
   import Vue from 'vue'
 
-  export default Vue.component 'auth-template',
+  export default {
+    name: 'auth-template'
     data: ->
       background_styles:
         backgroundImage: "url(#{require './landing-page/hero-image@2k.jpg'})"
+  }
 </script>
 
 <style lang="scss">

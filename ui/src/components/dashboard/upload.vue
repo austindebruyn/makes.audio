@@ -3,18 +3,32 @@
     a.upload-cta(href='javascript:;', @click='handle_upload_cta_click')
       | Upload New Audio
     span.drag-file-reminder ...Or drag a file here
-    form(hidden='true', action='/api/audios', method='post',
-         enctype='multipart/form-data', @submit="handle_upload")
-      input(type='file', multiple=true, name='file', ref='file_input',
-            @change='handle_file_change')
+    form(
+      hidden='true'
+      action='/api/audios'
+      method='post'
+      enctype='multipart/form-data'
+      @submit='handle_upload'
+    )
+      input(
+        type='file'
+        multiple=true
+        name='file'
+        ref='file_input'
+        @change='handle_file_change'
+      )
       input(type='submit' value='Upload')
 </template>
 
 <script lang="coffee">
   import Vue from 'vue'
   import UploadService from 'lib/upload_service'
+  import card from 'components/controls/card'
 
-  export default Vue.component 'dashboard-upload',
+  export default {
+    name: 'dashboard-upload'
+    components:
+      card: card
     data: ->
       loading: false
     computed:
@@ -27,11 +41,9 @@
         UploadService.start file_list
       handle_upload: (e) ->
         e.preventDefault()
-        upload_file = new FormData
-        upload_file.append 'file', e.target.file.files[0]
-
         UploadService.start e.target.file.files
         e.target.file.value = ''
+  }
 </script>
 
 <style lang="scss">

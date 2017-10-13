@@ -4,7 +4,7 @@
       card.card-login.card-plain
         .header.header-primary.text-center
           img.branding(
-            src='/branding/makes-audio-logo-300.png'
+            :src='branding_logo'
             title='MAKES.AUDIO'
           )
         p Enter the token received in your email.
@@ -44,16 +44,20 @@
   import query_string from 'query-string'
   import { mapState } from 'vuex'
   import card from 'components/controls/card'
+  import auth_template from 'components/auth/auth_template'
+  import branding_logo from 'components/auth/branding/makes-audio-logo-300.png'
 
   export default {
     name: 'verify-email'
     components:
       card: card
+      'auth-template': auth_template
     data: ->
       loading: false
       verificationCode: null
     computed:
       user: -> @$store.state.user
+      branding_logo: -> branding_logo
     beforeRouteLeave: (to, from, next) -> next !@loading
     mounted: ->
       if @$route and @$route.query.verificationCode?

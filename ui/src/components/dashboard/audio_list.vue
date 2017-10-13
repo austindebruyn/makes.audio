@@ -1,15 +1,25 @@
 <template lang="pug">
   ul.dashboard-audio-list
-    dashboard-audio-list-item(v-for='audio in audios', :key='audio.id', :audio='audio', :q='q')
+    dashboard-audio-list-item(
+      v-for='audio in audios'
+      :key='audio.id'
+      :audio='audio'
+      :q='q'
+    )
 </template>
 
 <script lang="coffee">
   import Vue from 'vue'
+  import list_item from 'components/dashboard/audio_list_item'
 
-  export default Vue.component 'dashboard-audio-list',
+  export default {
+    name: 'dashboard-audio-list'
+    components:
+      'dashboard-audio-list-item': list_item
     props:
       audios: Array
       q: String
+  }
 </script>
 
 <style lang="scss">

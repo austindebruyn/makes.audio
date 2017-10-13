@@ -4,7 +4,7 @@
       card.card-login.card-plain
         .header.header-primary.text-center
           img.branding(
-            src='/branding/makes-audio-logo-300.png'
+            :src='branding_logo'
             title='MAKES.AUDIO'
           )
         p Forgot your password?
@@ -37,13 +37,18 @@
   import Toaster from 'lib/toaster'
   import errors from 'i18n/errors'
   import card from 'components/controls/card'
+  import auth_template from 'components/auth/auth_template'
+  import branding_logo from 'components/auth/branding/makes-audio-logo-300.png'
 
   export default {
     name: 'new-password-reset'
     components:
       card: card
+      'auth-template': auth_template
     data: ->
       loading: false
+    computed:
+      branding_logo: -> branding_logo
     beforeRouteLeave: (to, from, next) -> next !@loading
     methods:
       on_submit: (e) ->

@@ -1,6 +1,10 @@
 <template lang="pug">
   li.dashboard-audio-list-item
-    a.public-link(:title='public_link_title', :href='audio.publicUrl', target='_blank')
+    a.public-link(
+      :title='public_link_title'
+      :href='audio.publicUrl'
+      target='_blank'
+    )
       .basename
         text-with-search-highlight(:text='basename', :q='q')
       .extension
@@ -19,19 +23,19 @@
   import Vue from 'vue'
   import moment from 'moment'
   import one_of from 'lib/one_of'
+  import highlight from 'components/dashboard/text_with_search_highlight'
 
-  export default Vue.component 'dashboard-audio-list-item',
+  export default {
+    name: 'dashboard-audio-list-item'
+    components:
+      'text-with-search-highlight': highlight
     props:
       audio: Object
       q: String
-      time_mode: one_of(['relative', 'date'])
     computed:
       public_link_title: -> "Open up #{@audio.url} in a new tab"
       uploaded_at: ->
-        if @time_mode is 'relative'
-          "Uploaded #{moment(@audio.createdAt).fromNow()}"
-        else
-          "Uploaded #{moment(@audio.createdAt).fromNow()}"
+        "Uploaded #{moment(@audio.createdAt).fromNow()}"
       display_description: ->
         @audio.description || 'no description'
       length: ->
@@ -40,6 +44,7 @@
         @audio.url.split('.')[0]
       extension: ->
         '.' + @audio.url.split('.')[1]
+  }
 </script>
 
 <style lang="scss">

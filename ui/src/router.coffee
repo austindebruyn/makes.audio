@@ -6,7 +6,7 @@ import CreateAccount from 'components/auth/create_account'
 import NewPasswordReset from 'components/auth/password-resets/new'
 import CompletePasswordReset from 'components/auth/password-resets/complete'
 import VerifyEmail from 'components/auth/verify-email'
-import Dashboard from 'components/dashboard'
+import DashboardView from 'components/dashboard_view'
 import EditAudio from 'components/edit_audio'
 import NotFound from 'components/not_found'
 import Settings from 'components/settings'
@@ -30,7 +30,7 @@ export default new VueRouter
     ( path: '/passwordResets/new', component: NewPasswordReset, beforeEnter: ensureAnonymous )
     ( path: '/passwordResets/complete', component: CompletePasswordReset, beforeEnter: ensureAnonymous )
     ( path: '/users/me/emailPreferences/verify', component: VerifyEmail )
-    ( path: '/dashboard', component: Dashboard, beforeEnter: ensureAuthenticated )
+    ( path: '/dashboard', component: DashboardView, beforeEnter: ensureAuthenticated )
     ( path: '/audios/:id/edit', component: EditAudio, beforeEnter: ensureAuthenticated )
     ( path: '/settings', component: Settings, beforeEnter: ensureAuthenticated )
     ( path: '*', component: NotFound )
