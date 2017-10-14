@@ -15,10 +15,11 @@
           )
         .col-12.col-md-7.col-lg-9
           dashboard-audio-list(
-            v-if='audios'
+            v-if='audios && audios.length'
             :q='search && search.q'
             :audios='filtered_audios'
           )
+          zero-data-state(v-if='audios')
           div(v-else=true)
             loading
 </template>
@@ -29,6 +30,7 @@
   import app_template from 'components/app_template'
   import dashboard_audio_list from 'components/dashboard/audio_list'
   import dashboard_upload from 'components/dashboard/upload'
+  import dashboard_zds from 'components/dashboard/zero_data_state'
 
   export default {
     name: 'dashboard-view'
@@ -37,6 +39,7 @@
       loading: loading_component
       'dashboard-audio-list': dashboard_audio_list
       'dashboard-upload': dashboard_upload
+      'zero-data-state': dashboard_zds
     data: ->
       search:
         q: null

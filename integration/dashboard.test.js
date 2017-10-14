@@ -11,6 +11,15 @@ describe('dashboard', function () {
     it('should show me dashboard', function () {
       browser.url('/')
       browser.waitForExist('.dashboard')
+
+      const actual = browser.getText('.dashboard .dashboard-zero-data-state')
+      const zdsText = [
+        'NOTHING HERE',
+        'You haven’t uploaded anything yet. Drag a file onto this page to ' +
+        'get started!'
+      ].join('\n')
+
+      expect(actual).to.eql(zdsText)
     })
     
     xit('should let me upload', function () {
