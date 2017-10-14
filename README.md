@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/austindebruyn/makes.audio.svg?branch=master)](https://travis-ci.org/austindebruyn/makes.audio)
 [![Coverage Status](https://coveralls.io/repos/austindebruyn/makes.audio/badge.svg?branch=master)](https://coveralls.io/r/austindebruyn/makes.audio?branch=master)
 [![Dependency Status](https://david-dm.org/austindebruyn/makes.audio.svg)](https://david-dm.org/austindebruyn/makes.audio)
+[![Build Status](https://saucelabs.com/buildstatus/austindebruyn)](https://saucelabs.com/beta/builds/e8db3dc924e14b4f8d3f7291bd17d23c)
 
 
 Easy synchronization of a local folder of audio files with an online bucket that
