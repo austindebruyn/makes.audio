@@ -58,6 +58,9 @@ store = new Vuex.Store
 
   actions:
     fetch_audios: ({ state, commit }) ->
+      headers =
+        'Content-Type': 'application/json'
+        'Accept': 'application/json'
       fetch('/api/audios', credentials: 'same-origin', headers: headers)
         .then (data) -> data.json()
         .then (json) ->

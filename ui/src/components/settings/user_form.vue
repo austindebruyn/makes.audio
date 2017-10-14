@@ -3,11 +3,22 @@
     form(@submit='handle_submit')
       .form-group
         label(for='username') Username
-        input.form-control(type='text', name='username', v-model='username',
-          spellcheck='false', autocomplete='off', :disabled='loading')
+        input.form-control(
+          type='text'
+          name='username'
+          v-model='username'
+          spellcheck='false'
+          autocomplete='off'
+          :disabled='loading'
+        )
         label(for='email') Email
-        input.form-control(type='text', name='email', v-model='email',
-          spellcheck='false', :disabled='loading')
+        input.form-control(
+          type='text'
+          name='email'
+          v-model='email'
+          spellcheck='false'
+          :disabled='loading'
+        )
         small.verify-email-warning(v-if='!email_preferences.verifiedAt')
           i.fa.fa-exclamation-triangle
           span Your email has not been verified yet.&nbsp;
@@ -19,11 +30,19 @@
       .form-group
         h2 Change Password
         label(for='password') New Password
-        input.form-control(type='password', name='password', v-model='password',
-          :disabled='loading')
+        input.form-control(
+          type='password'
+          name='password'
+          v-model='password'
+          :disabled='loading'
+        )
         label(for='password') Current Password
-        input.form-control(type='password', name='currentPassword',
-          v-model='currentPassword', :disabled='loading')
+        input.form-control(
+          type='password'
+          name='currentPassword'
+          v-model='currentPassword'
+          :disabled='loading'
+        )
       .form-group
         button(type='submit', :disabled='loading').btn.btn-primary Save
 </template>

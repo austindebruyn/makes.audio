@@ -3,8 +3,9 @@
     .settings-page
       .row
         .col-12.col-md-3
-          img
-          h2 {{ user.username }}
+          .user-info-card
+            img
+            h2 {{ user.username }}
         .col-12.col-md-9
           loading(v-if='!loaded')
           card.card-plain(v-if='loaded')

@@ -40,7 +40,7 @@
     computed:
       toggler_class: ->
         toggled: @nav_open
-      render_uploads_progress: -> @$store and @$store.uploads
+      render_uploads_progress: -> @$store and @$store.state.uploads
     methods:
       handle_navbar_click: -> @nav_open = !@nav_open
       handle_logout_click: ->
