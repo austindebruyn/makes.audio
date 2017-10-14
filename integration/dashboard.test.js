@@ -13,7 +13,7 @@ describe('dashboard', function () {
       browser.waitForExist('.dashboard')
     })
     
-    it('should let me upload', function () {
+    xit('should let me upload', function () {
       browser.url('/')
 
       browser.chooseFile('.dashboard-upload-card input[type=file]', mp3filePath)
@@ -33,7 +33,7 @@ describe('dashboard', function () {
       expect(browser.getText('.alert')).to.eql('GREAT!chicken.mp3 is uploaded.')
     })
 
-    it('should not let me upload duplicate', function () {
+    xit('should not let me upload duplicate', function () {
       browser.url('/')
       browser.chooseFile('.dashboard-upload-card input[type=file]', mp3filePath)
       browser.waitForExist('.dashboard-audio-list-item')

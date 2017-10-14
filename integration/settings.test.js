@@ -25,8 +25,6 @@ describe('settings', function () {
       usernameInputElement.setValue('brittney')
       expect(browser.click('.user-form form:first-child button'))
 
-      expect(usernameInputElement.getAttribute('disabled')).to.eql('true')
-
       browser.waitForEnabled(usernameInputSelector)
 
       expect(browser.getText('.alert')).to.eql('GREAT!You’ve been updated.')
@@ -49,8 +47,6 @@ describe('settings', function () {
 
       emailInputElement.setValue('naptime@zzz.com')
       expect(browser.click('.user-form form:first-child button'))
-
-      expect(emailInputElement.getAttribute('disabled')).to.eql('true')
 
       browser.waitForEnabled(emailInputSelector)
 
