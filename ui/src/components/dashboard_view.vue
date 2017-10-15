@@ -19,7 +19,7 @@
             :q='search && search.q'
             :audios='filtered_audios'
           )
-          zero-data-state(v-if='audios')
+          zero-data-state(v-else-if='audios')
           div(v-else=true)
             loading
 </template>

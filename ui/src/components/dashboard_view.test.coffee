@@ -43,6 +43,9 @@ describe 'dashboard_view', ->
         @store.state.audios = [( url: 'hey.mp3' ), ( url: 'no.mp3' )]
         @wrapper = mount dashboard_view, store: @store
 
+      it 'does not show a zero state', ->
+        expect(@wrapper.contains(dashboard_zds)).to.be.false
+
       it 'should show upload', ->
         expect(@wrapper.contains(dashboard_upload)).to.be.true
 
