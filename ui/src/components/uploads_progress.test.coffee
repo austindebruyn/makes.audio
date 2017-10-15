@@ -57,5 +57,5 @@ describe 'uploads_progress', ->
       expect(wrapper.text()).to.eql 'Uploading cool.mp3'
       @store.state.uploads = [(id: 0, name: 'cool.mp3', progress: 100)]
       nextTick()
-    .then =>
+    .then ->
       expect(wrapper.text()).to.eql ''

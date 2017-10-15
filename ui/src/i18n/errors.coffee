@@ -16,7 +16,8 @@ module.exports =
     PASSWORDS_DONT_MATCH: "Those passwords don’t match."
     CODE_ALREADY_USED: 'That password reset code has already been used.'
   verify_email:
-    NO_MODEL: "You don’t have email setup on your account. Please contact support."
+    NO_MODEL: "You don’t have email setup on your account. Please contact " +
+              "support."
     ALREADY_VERIFIED: "You’ve already verified your email!"
     MISSING_CODE: "You didn’t provide a verification code."
     BAD_CODE: "This link is invalid or has expired."

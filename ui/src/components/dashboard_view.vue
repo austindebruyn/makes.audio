@@ -16,11 +16,12 @@
         .col-12.col-md-7.col-lg-9
           dashboard-audio-list(
             v-if='audios && audios.length'
+            key='list'
             :q='search && search.q'
             :audios='filtered_audios'
           )
-          zero-data-state(v-else-if='audios')
-          div(v-else=true)
+          zero-data-state(v-else-if='audios', key='zds')
+          div(v-else=true, key='loading')
             loading
 </template>
 

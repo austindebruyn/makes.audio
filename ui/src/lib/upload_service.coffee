@@ -25,10 +25,12 @@ class UploadService
 
   @_handle_complete: (id, status, json) ->
     if json.errors?
-      Toaster.create 'danger', errors.create_upload[error.code], 'Oops!' for error in json.errors
+      for error in json.errors
+        Toaster.create 'danger', errors.create_upload[error.code], 'Oops!'
       @_handle_error id
     else if status >= 400
-      Toaster.create 'danger', 'Something went wrong. Please try again.', 'Oops!'
+      message = 'Something went wrong. Please try again.'
+      Toaster.create 'danger', message, 'Oops!'
       @_handle_error id
     else
       Toaster.create 'success', "#{json.audio.url} is uploaded.", 'Great!'

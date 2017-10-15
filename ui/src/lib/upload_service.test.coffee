@@ -66,8 +66,10 @@ describe 'UploadService', ->
         target:
           status: 200
           responseText: JSON.stringify response
-      expect(Toaster.create).to.have.been.calledWith 'success', 'cool.mp3 is uploaded.'
-      expect(store.commit).to.have.been.calledWith 'create_audio', response.audio
+      expect(Toaster.create).to.have.been
+        .calledWith 'success', 'cool.mp3 is uploaded.'
+      expect(store.commit).to.have.been
+        .calledWith 'create_audio', response.audio
       expect(store.commit).to.have.been.calledWith 'update_upload',
         id: sinon.match.string
         progress: 100
@@ -77,7 +79,8 @@ describe 'UploadService', ->
         target:
           status: 500
           responseText: JSON.stringify(ok: false)
-      expect(Toaster.create).to.have.been.calledWith 'danger', 'Something went wrong. Please try again.', 'Oops!'
+      expect(Toaster.create).to.have.been
+        .calledWith 'danger', 'Something went wrong. Please try again.', 'Oops!'
       expect(store.commit).to.have.been.calledWith 'update_upload',
         id: sinon.match.string
         error: true
@@ -86,8 +89,11 @@ describe 'UploadService', ->
       @xhr.onload
         target:
           status: 422
-          responseText: JSON.stringify(ok: false, errors: [( code: 'BAD_MIMETYPE' )])
-      expect(Toaster.create).to.have.been.calledWith 'danger', errors.create_upload.BAD_MIMETYPE, 'Oops!'
+          responseText: JSON.stringify
+            ok: false
+            errors: [( code: 'BAD_MIMETYPE' )]
+      expect(Toaster.create).to.have.been
+        .calledWith 'danger', errors.create_upload.BAD_MIMETYPE, 'Oops!'
       expect(store.commit).to.have.been.calledWith 'update_upload',
         id: sinon.match.string
         error: true

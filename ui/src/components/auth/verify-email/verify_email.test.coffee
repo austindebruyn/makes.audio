@@ -96,7 +96,7 @@ describe 'verify-email', ->
         it 'should redirect to dashboard', ->
           expect(@router.push).to.have.been.calledWith '/dashboard'
 
-      describe 'when not logged in', ->        
+      describe 'when not logged in', ->
         respond()
 
         it 'should turn off loading state', ->

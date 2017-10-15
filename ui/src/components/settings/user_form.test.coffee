@@ -21,7 +21,7 @@ describe 'user-form', ->
   afterEach ->
     Toaster.create.restore()
 
-  form_submission_on_success = =>
+  form_submission_on_success = ->
     describe 'on success', ->
       beforeEach (done) ->
         @new_user = Object.assign {}, users_fixture.austin, username: 'jeffrey'
@@ -42,7 +42,7 @@ describe 'user-form', ->
       it 'should clear loading state', ->
         expect(@wrapper.vm.loading).to.be.false
 
-  form_submission_on_server_error = =>
+  form_submission_on_server_error = ->
     describe 'on server error', ->
       beforeEach (done) ->
         @fetches.first.respond_with
@@ -60,7 +60,7 @@ describe 'user-form', ->
       it 'should clear loading state', ->
         expect(@wrapper.vm.loading).to.be.false
 
-  form_submission_on_client_error = =>
+  form_submission_on_client_error = ->
     describe 'on client error', ->
       beforeEach (done) ->
         @fetches.first.respond_with

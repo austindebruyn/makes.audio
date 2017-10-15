@@ -10,7 +10,9 @@ export default (opts) ->
   public_token = opts.public
 
   if public_token
-    raven = Raven.config "https://10f63196556e49539a4943f999704f15@sentry.io/213761"
+    dsn = "https://10f63196556e49539a4943f999704f15@sentry.io/213761"
+
+    raven = Raven.config dsn
     raven.addPlugin RavenVue, Vue
     raven.install()
 
