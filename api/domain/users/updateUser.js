@@ -80,6 +80,9 @@ module.exports.updateUser = function updateUser({ user, attributes = {} }) {
         }))
       })
       .then(function () {
+        return user.save()
+      })
+      .then(function () {
         if (attributeKeys.includes('email')) {
           var emailPreferences = null
 
@@ -96,7 +99,7 @@ module.exports.updateUser = function updateUser({ user, attributes = {} }) {
         return null
       })
       .then(function () {
-        return user.save()
+        return user
       })
       .then(resolve)
       .catch(reject)

@@ -91,6 +91,8 @@ describe('updateUser', function () {
         expect(emailPreferences.verifiedAt).to.be.null
         expect(sendVerificationEmail.sendVerificationEmail).to.have.been.called
         expect(sendVerificationEmail.sendVerificationEmail.args[0][0].id).to.eql(emailPreferences.id)
+
+        expect(sendVerificationEmail.sendVerificationEmail.args[0][0].user.email).to.eql('steve@jobs.com')
       })
     })
 
