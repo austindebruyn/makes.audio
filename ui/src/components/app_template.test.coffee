@@ -52,7 +52,7 @@ describe 'app_template', ->
 
       @wrapper = mount app_template, store: @store, globals:
         $router: @router
-      logout_link = @wrapper.first('nav ul li:last-child .nav-link')
+      logout_link = @wrapper.first('nav ul li:last-child a')
       logout_link.trigger 'click'
       setImmediate done
 

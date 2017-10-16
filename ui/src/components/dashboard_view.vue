@@ -70,7 +70,6 @@
   @import 'src/styles/colors';
 
   .dashboard {
-    font-family: 'arconregular';
     padding-top: 40px;
   }
 </style>

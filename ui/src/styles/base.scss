@@ -5,13 +5,20 @@
 @import './fonts';
 
 html {
-  color: $black;
   font-size: 18px;
 
   @include media-breakpoint-up(md) {
     font-size: 16px;
   }
+}
 
+body {
+  color: $black;
+  background-color: $gray-light;
+  font-family: 'tensoregular';
+}
+
+input {
   font-family: 'tensoregular';
 }
 

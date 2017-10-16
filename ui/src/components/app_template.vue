@@ -1,29 +1,38 @@
 <template lang="pug">
   div(:class='{ "nav-open": nav_open }')
     nav.navbar.navbar-toggleable-md
+      .container.container-md
+        a.navbar-brand(href='#') Makes.Audio
+        .collapse.navbar-collapse(:class='{ show: nav_open }')
+          ul.navbar-nav
+            li
+              router-link(to='/dashboard').nav-item.active
+                span.fa.fa-dashboard
+                .nav-link Dashboard
+            li
+              a(href='#').nav-item
+                span.fa.fa-cloud-upload
+                .nav-link Desktop App
+            li
+              router-link(to='/settings').nav-item
+                span.fa.fa-cog
+                .nav-link Account
+            li
+              a.nav-item(
+                @click='handle_logout_click'
+                href='javascript:;'
+              )
+                .nav-link Logout
       button.navbar-toggler.navbar-toggler-right(
         @click='handle_navbar_click'
         :class='toggler_class'
         type='button'
       )
         .fa.fa-bars
+    .bg-white.page-content
       .container
-        a.navbar-brand(href='#') Makes.Audio
-        .collapse.navbar-collapse(:class='{ show: nav_open }')
-          ul.navbar-nav
-            li.nav-item.active
-              router-link.nav-link(to='/dashboard') Dashboard
-            li.nav-item
-              a.nav-link(href='#') Desktop App
-            li.nav-item
-              router-link.nav-link(to='/settings') Account
-            li.nav-item
-              a.nav-link(
-                @click='handle_logout_click'
-                href='javascript:;'
-              ) Logout
-    .container
-      slot
+        slot
+    the-footer
     uploads-progress(v-if='render_uploads_progress')
 </template>
 
@@ -31,9 +40,14 @@
   import Vue from 'vue'
   import Toaster from 'lib/toaster'
   import remove from 'lodash.remove'
+  import the_footer from 'components/the_footer'
+  import uploads_progress from 'components/uploads_progress'
 
   export default {
     name: 'app-template'
+    components:
+      'the-footer': the_footer
+      'uploads-progress': uploads_progress
     data: ->
       open: false
       nav_open: false
@@ -60,19 +74,104 @@
 
 <style lang="scss">
   @import 'src/styles/colors';
+  @import 'src/styles/mixins';
+
+  .page-content {
+    background-color: $white;
+  }
+
+  .container.container-md {
+    margin-left: 0;
+    margin-right: 0;
+
+    @include media-breakpoint-up(md) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    .page-content {
+      min-height: 800px;
+    }
+  }
 
   nav.navbar {
     background-color: $pink;
-    font-family: 'arconregular';
-    margin-bottom: 20px;
+    font-family: 'tensoregular';
+
+    @include media-breakpoint-up(md) {
+      padding: 0;
+    }
 
     a, button {
-      color: $white;
+      color: $pink-light;
+      text-decoration: none;
+    }
+
+    .navbar-brand {
+      color: $pink-light;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .navbar-nav {
+      align-items: flex-start;
     }
   }
-  .navbar-brand {
-    color: $white;
-    text-transform: uppercase;
-    font-size: 0.85rem;
+
+  .navbar-brand,
+  .nav-item {
+    .fa {
+      margin-right: 0.5rem;
+    }
+
+    @include media-breakpoint-up(md) {
+      .fa {
+        margin-right: 0;
+      }
+    }
+
+    .nav-link {
+      margin-right: 1.6rem;
+    }
+
+    &:last-child {
+      .nav-link {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 12px 4px;
+
+    .fa {
+      font-size: 1.3rem;
+      
+    }
+
+    &.router-link-active,
+    &:not(.router-link-active):hover {
+      color: $white;
+    }
+
+    @include media-breakpoint-up(md) {
+      &.router-link-active {
+        border-bottom: 8px solid $pink-light;
+      }
+      &:not(.router-link-active):hover {
+        background-color: $pink-light;
+        border-bottom: 8px solid $pink-light;
+      }
+    }
+  }
+
+  .nav-link {
+    display: inline-block;
   }
 </style>

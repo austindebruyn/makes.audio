@@ -18,21 +18,6 @@ describe 'uploads_progress', ->
     nextTick().then ->
       expect(wrapper.hasClass('active')).to.be.true
 
-  it 'should animate progress bar if progress hasnt started', ->
-    wrapper = mount uploads_progress, store: @store
-    progress_bar = wrapper.first('.progress-bar')
-    expect(progress_bar.hasClass('progress-bar-striped')).to.be.false
-    expect(progress_bar.hasClass('progress-bar-animated')).to.be.false
-    @store.state.uploads = [(id: 0, name: 'cool.mp3', progress: null)]
-    nextTick().then =>
-      expect(progress_bar.hasClass('progress-bar-striped')).to.be.true
-      expect(progress_bar.hasClass('progress-bar-animated')).to.be.true
-      @store.state.uploads = [(id: 0, name: 'cool.mp3', progress: 50)]
-      nextTick()
-    .then ->
-      expect(progress_bar.hasClass('progress-bar-striped')).to.be.false
-      expect(progress_bar.hasClass('progress-bar-animated')).to.be.false
-
   it 'should set width to upload progress if active', ->
     wrapper = mount uploads_progress, store: @store
     progress_bar = wrapper.first('.progress-bar')
