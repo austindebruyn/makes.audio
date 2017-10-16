@@ -22,7 +22,7 @@
         @uploads and @uploads.filter((u) -> u.progress != 100).length
       progress_bar_styles: ->
         width = '0'
-        if @is_active and @uploads[0].progress
+        if @uploads and @uploads.length > 0 and @uploads[0].progress
           width = "#{@uploads[0].progress}%"
         width: width
       uploads: -> @$store.state.uploads

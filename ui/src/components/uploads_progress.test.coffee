@@ -21,10 +21,10 @@ describe 'uploads_progress', ->
   it 'should set width to upload progress if active', ->
     wrapper = mount uploads_progress, store: @store
     progress_bar = wrapper.first('.progress-bar')
-    expect(progress_bar.hasStyle('width', '100%')).to.be.true
+    expect(progress_bar.hasStyle('width', '0')).to.be.true
     @store.state.uploads = [(id: 0, name: 'cool.mp3', progress: null)]
     nextTick().then =>
-      expect(progress_bar.hasStyle('width', '100%')).to.be.true
+      expect(progress_bar.hasStyle('width', '0')).to.be.true
       @store.state.uploads = [(id: 0, name: 'cool.mp3', progress: 50)]
       nextTick()
     .then =>

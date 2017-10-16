@@ -1,6 +1,7 @@
 import audio_list_item from './audio_list_item'
 import { mount, shallow } from 'avoriaz'
 import audios_fixture from 'fixtures/audios'
+import sinon from 'sinon'
 
 describe 'audio-list-item', ->
   beforeEach ->
