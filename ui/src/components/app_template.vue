@@ -105,7 +105,7 @@
     }
 
     a, button {
-      color: $pink-light;
+      color: $white;
       text-decoration: none;
     }
 

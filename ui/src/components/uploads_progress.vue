@@ -38,9 +38,14 @@
     left: 0;
     right: 0;
     height: 80px;
+    bottom: -80px;
     background-color: $pink;
 
     transition: bottom 400ms ease-in-out;
+
+    &.active {
+      bottom: 0;
+    }
 
     .progress-bar {
       transition: width 50ms ease-out;
@@ -73,10 +78,6 @@
       @include media-breakpoint-up(md) {
         flex: 3;
       }
-    }
-
-    &.active {
-      bottom: 0;
     }
   }
 </style>
