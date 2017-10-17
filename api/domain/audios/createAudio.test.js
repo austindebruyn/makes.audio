@@ -8,6 +8,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const config = require('../../config')
 const sinon = require('sinon')
+const getUniqueUrl = require('./getUniqueUrl')
 
 describe('createAudio', function () {
   clock()
@@ -77,7 +78,7 @@ describe('createAudio', function () {
     })
   })
 
-  it('should return URL_NOT_UNIQUE', function () {
+  it('should build a unique url', function () {
     return Audio.create({
       userId: this.user.id,
       hash: '761592f7b8525f3bbdc7c9ee4f6ede66c2f3cad5080f65007f08e62621796038',
@@ -88,8 +89,9 @@ describe('createAudio', function () {
       size: 7971
     }).then(() => {
       return createAudio.createAudio({ user: this.user, file })
-    }).catch(function (err) {
-      expect(err.code).to.eql('URL_NOT_UNIQUE')
+    })
+    .then(function (audio) {
+      expect(audio.url).to.eql('chicken-1.mp3')
     })
   })
 

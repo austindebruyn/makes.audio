@@ -3,6 +3,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const config = require('../../config')
 const Audio = require('./Audio')
+const getUniqueUrl = require('./getUniqueUrl')
 
 class AudioCreationError extends Error {
   constructor(code, data = {}) {
@@ -65,7 +66,7 @@ exports.createAudio = function createAudio({ file, user }) {
       .then(() => exports.hashTemporaryFile(file.path))
       .then(function (hash) {
         state.hash = hash
-        const permanentFilename = path.resolve(__dirname, '../..', 'store', hash)
+        const permanentFilename = path.resolve(__dirname, '../../store', hash)
         return fs.rename(file.path, permanentFilename)
       })
       .then(function () {
@@ -74,18 +75,17 @@ exports.createAudio = function createAudio({ file, user }) {
           .slice(0, 128)
           .toLowerCase()
 
-        return Audio.count({ where: { userId: user.id, url: state.url } })
+        return getUniqueUrl.getUniqueUrl({
+          userId: user.id,
+          url: state.url
+        })
       })
-      .then(function (count) {
-        if (count !== 0) {
-          throw new AudioCreationError('URL_NOT_UNIQUE')
-        }
-
+      .then(function (url) {
         return Audio.create({
           userId: user.id,
           hash: state.hash,
           originalName: file.originalname,
-          url: state.url,
+          url,
           size: file.size,
           mimetype: file.mimetype
         })
