@@ -152,7 +152,7 @@ describe('audiosController', function () {
               return Audio.findOne({ where: { id: res.body.audio.id } })
             })
             .then(function (audio) {
-              return fs.stat(path.resolve(__dirname, '../..', 'store', audio.hash))
+              return fs.stat(path.resolve(__dirname, '../..', 'store', audio.filename))
             })
             .then(function (stat) {
               expect(stat.size).to.eql(7971)

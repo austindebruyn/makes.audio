@@ -18,7 +18,7 @@ const umzug = new Umzug({
     columnType: new Sequelize.STRING(255)
   },
   migrations: {
-    path: 'app/migrations',
+    path: 'api/migrations',
     params: [ sequelize.getQueryInterface(), sequelize.constructor ]
   }
 })

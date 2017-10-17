@@ -26,7 +26,7 @@ describe('#increment', function () {
   })
 })
 
-describe.only('#getUniqueUrl', function () {
+describe('#getUniqueUrl', function () {
   var user
 
   beforeEach(function () {

@@ -33,6 +33,7 @@ factory.define('emailPreferences', EmailPreferences, {
 factory.define('audio', Audio, {
   user: factory.assoc('user', 'userId'),
   hash: factory.chance('hash'),
+  filename: factory.chance('hash'),
   originalName: () => `${factory.chance('word')()}.mp3`,
   size: 10000,
   mimetype: 'audio/mpeg',

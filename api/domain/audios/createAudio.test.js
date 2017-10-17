@@ -61,7 +61,7 @@ describe('createAudio', function () {
   it('should return FILE_TOO_LARGE', function () {
     return createAudio.createAudio({
       user: this.user,
-      file: Object.assign({}, file, { size: 99999999 })
+      file: { ...file, size: 99999999 }
     }).catch(function (err) {
       expect(err.code).to.eql('FILE_TOO_LARGE')
       expect(err.maxSize).to.eql(20971520)
@@ -82,6 +82,7 @@ describe('createAudio', function () {
     return Audio.create({
       userId: this.user.id,
       hash: '761592f7b8525f3bbdc7c9ee4f6ede66c2f3cad5080f65007f08e62621796038',
+      filename: 'ce1ab481bae4da836acb6e902554f0ed378742dc6687f906f26bdc7bca76fab1',
       originalName: 'chicken.mp3',
       url: 'chicken.mp3',
       mimetype: 'audio/mpeg',
@@ -105,6 +106,7 @@ describe('createAudio', function () {
         createdAt: new Date('2017-08-31T00:00:00.000Z'),
         updatedAt: new Date('2017-08-31T00:00:00.001Z'),
         hash: '761592f7b8525f3bbdc7c9ee4f6ede66c2f3cad5080f65007f08e62621796038',
+        filename: 'c8e48cbcc8cca0332186e9742330114ddbd5aa892b9f9513bcf79e2a142461fa',
         originalName: 'chicken.mp3',
         url: 'chicken.mp3',
         mimetype: 'audio/mpeg',

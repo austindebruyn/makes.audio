@@ -5,6 +5,7 @@ const buildUrl = require('../../lib/buildUrl')
 const Audio = db.define('audio', {
   createdAt: { type: db.Sequelize.DATE, defaultValue: db.Sequelize.NOW },
   hash: { type: db.Sequelize.STRING, allowNull: false },
+  filename: { type: db.Sequelize.STRING, allowNull: false },
   originalName: { type: db.Sequelize.STRING, allowNull: false },
   size: { type: db.Sequelize.DOUBLE, allowNull: false },
   mimetype: { type: db.Sequelize.STRING, allowNull: false },

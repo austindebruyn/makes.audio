@@ -27,9 +27,6 @@ describe('dashboard', function () {
 
       browser.chooseFile('.dashboard-upload-card input[type=file]', mp3filePath)
 
-      const value = browser.getValue('.dashboard-upload-card input[type=file]')
-      expect(value).to.match(/chicken\.mp3$/)
-
       browser.waitForExist('.dashboard-audio-list-item')
 
       const expected = [
@@ -40,20 +37,32 @@ describe('dashboard', function () {
 
       expect(browser.getText('.dashboard-audio-list-item')).to.eql(expected)
       expect(browser.getText('.alert')).to.eql('GREAT!chicken.mp3 is uploaded.')
+      
+      const value = browser.getValue('.dashboard-upload-card input[type=file]')
+      expect(value).to.eql('')
     })
 
-    xit('should not let me upload duplicate', function () {
+    xit('should let me upload duplicate', function () {
       browser.url('/')
       browser.chooseFile('.dashboard-upload-card input[type=file]', mp3filePath)
       browser.waitForExist('.dashboard-audio-list-item')
       browser.chooseFile('.dashboard-upload-card input[type=file]', mp3filePath)
 
-      browser.waitForExist('.alert.alert-danger')
+      browser.waitForExist('.dashboard-audio-list-item:nth-child(2)')
 
-      expect(browser.getText('.alert.alert-danger')).to.eql(
-        'OOPS!You already have a file called that!')
-      expect(browser.elements('.dashboard-audio-list-item').value)
-        .to.have.length(1)
+      const expected = [
+        'chicken-1.mp3',
+        'no description',
+        'UPLOADED A FEW SECONDS AGO4MIN 50SEC'
+      ].join('\n')
+
+      expect(browser.getText('.dashboard-audio-list-item:nth-child(2)'))
+        .to.eql(expected)
+
+      expect(browser.getText('.alert')).to.eql([
+        'GREAT!chicken-1.mp3 is uploaded.',
+        'GREAT!chicken.mp3 is uploaded.'
+      ])
     })
   })
 })

@@ -4,6 +4,7 @@ const path = require('path')
 const config = require('../../config')
 const Audio = require('./Audio')
 const getUniqueUrl = require('./getUniqueUrl')
+const crypto = require('crypto')
 
 class AudioCreationError extends Error {
   constructor(code, data = {}) {
@@ -32,6 +33,13 @@ exports.hashTemporaryFile = function hashTemporaryFile(filename) {
       return resolve(hash)
     })
   })
+}
+
+exports.getFilename = function getFilename(hash) {
+  const sha256 = crypto.createHash('sha256')
+  sha256.update(`${hash}${+new Date()}`)
+
+  return sha256.digest('hex')
 }
 
 exports.verifyAudioFile = function verifyAudioFile(file) {
@@ -66,8 +74,14 @@ exports.createAudio = function createAudio({ file, user }) {
       .then(() => exports.hashTemporaryFile(file.path))
       .then(function (hash) {
         state.hash = hash
-        const permanentFilename = path.resolve(__dirname, '../../store', hash)
-        return fs.rename(file.path, permanentFilename)
+        state.permanentFilename = exports.getFilename(hash)
+        state.absPermanentFilename = path.resolve(
+          __dirname,
+          '../../store',
+          state.permanentFilename
+        )
+
+        return fs.rename(file.path, state.absPermanentFilename)
       })
       .then(function () {
         state.url = file.originalname
@@ -84,6 +98,7 @@ exports.createAudio = function createAudio({ file, user }) {
         return Audio.create({
           userId: user.id,
           hash: state.hash,
+          filename: state.permanentFilename,
           originalName: file.originalname,
           url,
           size: file.size,
@@ -93,6 +108,7 @@ exports.createAudio = function createAudio({ file, user }) {
       .then(resolve)
       .catch(function (err) {
         if (!file) return reject(err)
+
         return fs.exists(file.path)
           .then(exists => exists && fs.unlink(file.path))
           .then(() => reject(err))

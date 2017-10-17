@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = function (audio, res, isDownload = false) {
-  const filePath = path.join(__dirname, '..', 'store', audio.hash)
+  const filePath = path.join(__dirname, '..', 'store', audio.filename)
   const stat = fs.statSync(filePath)
 
   if (isDownload) {
