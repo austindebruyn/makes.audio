@@ -1,21 +1,37 @@
 <template lang="pug">
   app-template
-    div(v-if='!audios')
-      .content-center
-        p loading...
-    .row(v-if='audios')
+    loading.center-padding(v-if='!audios')
+    .row(v-else=true)
+      .col-12
+        nav.breadcrumb
+          router-link(to='/dashboard').breadcrumb-item Dashboard
+          span.breadcrumb-item.active {{ audio.url }}
       .col-md-12
-        router-link(to='/dashboard') Back to Dashboard
-        h2.title.title-up Edit {{ audio.url }}
+        h2.title.title-up Editing {{ audio.url }}
       .col-md-6
-        form(:action='audio.updateUrl', method='PUT', @submit='on_submit', ref='form')
+        form(
+          :action='audio.updateUrl'
+          method='PUT'
+          @submit='on_submit'
+          ref='form'
+        )
           input(hidden='true', type='submit', value='Submit')
-          input.form-control(type='text', name='url', :value='audio.url', autocomplete='off')
+          input-text(name='url', :value='audio.url')
           .checkbox
-            input(id='visible', type='checkbox', v-model='audio.visible', @change='handle_change')
+            input(
+              id='visible'
+              type='checkbox'
+              v-model='audio.visible'
+              @change='handle_change'
+            )
             label(for='visible') Visible
-        form(:action='audio.updateUrl', method='DELETE', @submit='on_submit_delete')
-          button(type='submit').btn.btn-primary Delete
+        form(
+          :action='audio.updateUrl'
+          method='DELETE'
+          @submit='on_submit_delete'
+        )
+          button(type='submit').btn.btn-link
+            | Delete {{ audio.url }}
       .col-md-6
         edit-audio-stats-card(:audio='audio')
 </template>
@@ -26,8 +42,18 @@
   import find from 'lodash/find'
   import Toaster from 'lib/toaster'
   import moment from 'moment'
+  import app_template from 'components/app_template'
+  import card from 'components/controls/card'
+  import input_text from 'components/controls/input_text'
+  import loading from 'components/loading'
 
-  export default Vue.component 'edit_audio',
+  export default {
+    name: 'edit-audio'
+    components:
+      'app-template': app_template
+      card: card
+      loading: loading
+      'input-text': input_text
     computed:
       audios: -> @$store.state.audios
       audio: -> if @audios then find(@audios, id: parseInt(@$route.params.id)) else null
@@ -65,7 +91,11 @@
             # store.commit 'set_
             store.dispatch audio_actions.update_audio json
             Toaster.create.create 'success', "#{json.url} has been saved.", 'Great!'
+  }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  .center-padding {
+    padding: 180px 0;
+  }
 </style>

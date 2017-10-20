@@ -11,7 +11,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/styles/colors';
 
   .card {
@@ -23,8 +23,9 @@
     margin-bottom: 20px;
 
     border-radius: 0;
-    background-color: $pink;
-    color: white;
+    background-color: $white;
+    border: 1px solid $pink-light;
+    box-shadow: 0 4px 8px $gray-light;
 
     .card-content {
       padding: 3rem 2rem;

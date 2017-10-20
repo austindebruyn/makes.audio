@@ -152,8 +152,9 @@
 
     .fa {
       font-size: 1.3rem;
-      
     }
+
+    border-bottom: 8px solid transparent;
 
     &.router-link-active,
     &:not(.router-link-active):hover {
@@ -162,11 +163,11 @@
 
     @include media-breakpoint-up(md) {
       &.router-link-active {
-        border-bottom: 8px solid $pink-light;
+        border-color: $pink-light;
       }
       &:not(.router-link-active):hover {
         background-color: $pink-light;
-        border-bottom: 8px solid $pink-light;
+        border-color: $pink-light;
       }
     }
   }

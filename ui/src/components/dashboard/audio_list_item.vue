@@ -1,5 +1,10 @@
 <template lang="pug">
   li.dashboard-audio-list-item
+    .controls.pull-right
+      a(:href='audio.downloadUrl', title='Download').icon-link
+        span.fa.fa-download
+      router-link(:to='audio.editUrl').icon-link
+        span.fa.fa-pencil
     a.public-link(
       :title='public_link_title'
       :href='audio.publicUrl'
@@ -13,10 +18,6 @@
     ul.meta
       li {{ uploaded_at }}
       li {{ length }}
-    a(:href='audio.downloadUrl', title='Download').icon-link
-      span.now-ui-icons.arrows-1_cloud-download-93
-    router-link(:to='audio.editUrl').icon-link
-      span.now-ui-icons.design-2_ruler-pencil
 </template>
 
 <script lang="coffee">
@@ -49,6 +50,7 @@
 
 <style lang="scss">
   @import 'src/styles/colors';
+  @import 'src/styles/mixins';
 
   .dashboard-audio-list-item {
     border-left: 4px solid $blue;
@@ -92,6 +94,32 @@
     }
     .uploaded-at {
       text-transform: uppercase;
+    }
+
+    &:hover {
+      .controls {
+        display: block;
+      }
+    }
+
+    .controls {
+      display: none;
+
+      a {
+        font-size: 1.4rem;
+        color: $gray-dark;
+        margin-left: 20px;
+
+        &:hover {
+          color: $pink;
+        }
+      }
+    }
+
+    @include media-breakpoint-up(md) {
+      .controls {
+
+      }
     }
   }
 </style>

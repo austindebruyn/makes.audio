@@ -2,13 +2,16 @@
   .input-group(:class='classes')
     span.input-group-addon(v-if='icon')
       i.fa(:class='icon_class')
-    input.form-control(:type='type || "text"',
-                       @focus='handle_focus',
-                       @blur='handle_blur',
-                       autocomplete="off",
-                       :name='name',
-                       :placeholder='placeholder',
-                       :disabled='disabled')
+    input.form-control(
+      :type='type || "text"'
+      @focus='handle_focus'
+      @blur='handle_blur'
+      autocomplete='off'
+      :name='name'
+      :placeholder='placeholder'
+      :disabled='disabled'
+      :value='value'
+    )
 </template>
 
 <script lang="coffee">
@@ -20,6 +23,7 @@
       disabled: Boolean
       type: String
       icon: String
+      value: String
     data: ->
       focus: false
     computed:
