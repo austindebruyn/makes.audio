@@ -37,6 +37,7 @@
     background: none;
     border: none;
     color: black;
+    box-shadow: none;
 
     .header {
       margin-left: 0;

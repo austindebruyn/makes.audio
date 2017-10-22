@@ -27,11 +27,11 @@ factory.define('user', User, {
 
 factory.define('emailPreferences', EmailPreferences, {
   verificationCode: () => uid(24),
-  user: factory.assoc('user', 'userId')
+  userId: factory.assoc('user', 'id')
 })
 
 factory.define('audio', Audio, {
-  user: factory.assoc('user', 'userId'),
+  userId: factory.assoc('user', 'id'),
   hash: factory.chance('hash'),
   filename: factory.chance('hash'),
   originalName: () => `${factory.chance('word')()}.mp3`,

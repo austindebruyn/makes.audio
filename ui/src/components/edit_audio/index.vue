@@ -25,6 +25,7 @@
               @change='handle_change'
             )
             label(for='visible') Visible
+          button(type='submit') Save
         form(
           :action='audio.updateUrl'
           method='DELETE'

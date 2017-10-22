@@ -7,8 +7,10 @@ const fs = require('fs-extra')
 const sinon = require('sinon')
 const factory = require('../../tests/factory')
 const createAudio = require('./createAudio')
+const updateAudio = require('./updateAudio')
 const path = require('path')
 const Audio = require('./Audio')
+const User = require('../users/User')
 
 describe('audiosController', function () {
   var sandbox
@@ -212,6 +214,80 @@ describe('audiosController', function () {
             })
             .then(function (exists) {
               expect(exists).to.be.false
+            })
+        })
+      })
+    })
+  })
+
+  describe('PATCH /api/audios/:id', function () {
+    beforeEach(function () {
+      return factory.create('audio')
+        .then(audio => this.audio = audio)
+    })
+
+    it('when signed out should 403', function () {
+      return agent()
+        .patch(`/api/audios/${this.audio.id}`, {})
+        .accept('application/json')
+        .expect(403)
+    })
+
+    describe('when signed in', function () {
+      beforeEach(function () {
+        return this.audio.getUser().then(signIn)
+      })
+
+      describe('when updateAudio succeeds', function () {
+        beforeEach(function () {
+          sandbox.spy(updateAudio, 'updateAudio')
+        })
+        
+        it('should invoke updateAudio', function () {
+          return agent()
+            .patch(`/api/audios/${this.audio.id}`)
+            .accept('application/json')
+            .cookiejar()
+            .send({ url: 'bones.wav' })
+            .expect(202)
+            .then(() => {
+              expect(updateAudio.updateAudio).to.have.been.calledWith(
+                sinon.match(actual => actual.id === signIn.user.id),
+                sinon.match(actual => actual.id === this.audio.id),
+                { url: 'bones.wav' }
+              )
+            })
+        })
+                
+        it('should return user errors', function () {
+          return factory.create('audio', { url: 'bones.wav' })
+            .then(() => {
+              return agent()
+                .patch(`/api/audios/${this.audio.id}`)
+                .accept('application/json')
+                .cookiejar()
+                .send({ url: 'bones.wav' })
+                .expect(422, {
+                  ok: false,
+                  errors: [{ code: 'URL_NOT_UNIQUE' }]
+                })
+            })
+        })
+      })
+
+      describe('when updateAudio errors', function () {
+        beforeEach(function () {
+          sandbox.stub(updateAudio, 'updateAudio').rejects()
+        })
+
+        it('should 500', function () {
+          return agent()
+            .patch(`/api/audios/${this.audio.id}`)
+            .accept('application/json')
+            .cookiejar()
+            .send({ url: 'bones.wav' })
+            .expect(500, {
+              ok: false
             })
         })
       })

@@ -44,7 +44,7 @@ module.exports = function (app) {
   app.post('/api/users/me/emailPreferences/sendVerificationEmail', ensureAuthenticated, emailPreferencesController.sendVerificationEmail)
   app.get('/api/audios', ensureAuthenticated, audiosController.index)
   app.post('/api/audios', ensureAuthenticated, upload.single('file'), audiosController.create)
-  // app.put('/api/audios/:id', ensureAuthenticated, audiosController.update)
+  app.patch('/api/audios/:id', ensureAuthenticated, audiosController.update)
   app.get('*', homeController.index)
 
   app.use(errorHandler)
