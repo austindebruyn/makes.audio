@@ -82,7 +82,6 @@ module.exports.create = function (req, res, next) {
 }
 
 module.exports.update = function (req, res, next) {
-  let audio
   const id = parseInt(req.params.id, 10)
 
   Audio.findOne({ where: { id: id } })

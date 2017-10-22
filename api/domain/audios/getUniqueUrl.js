@@ -10,7 +10,7 @@ function increment(url) {
   const ext = path.extname(url)
   const basename = path.basename(url, ext)
 
-  const numberMatcher = basename.match(/(.+)\-(\d+)$/)
+  const numberMatcher = basename.match(/(.+)-(\d+)$/)
 
   const number = numberMatcher === null
     ? 1
