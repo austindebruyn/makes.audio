@@ -6,13 +6,13 @@
         .collapse.navbar-collapse(:class='{ show: nav_open }')
           ul.navbar-nav
             li
-              router-link(to='/dashboard').nav-item.active
+              router-link(to='/dashboard').nav-item
                 span.fa.fa-dashboard
                 .nav-link Dashboard
             li
-              a(href='#').nav-item
+              router-link(to='/nimbus').nav-item
                 span.fa.fa-cloud-upload
-                .nav-link Desktop App
+                .nav-link Nimbus
             li
               router-link(to='/settings').nav-item
                 span.fa.fa-cog

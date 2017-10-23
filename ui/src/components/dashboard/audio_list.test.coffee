@@ -9,15 +9,15 @@ describe 'audio-list', ->
       q: 'c'
       audios: [
         audios_fixture.chicken
-        audios_fixture.crunch
+        audios_fixture.invisible
       ]
 
   it 'should render list items', ->
-    items = @wrapper.find(audio_list_item)
+    items = @wrapper.find audio_list_item
     expect(items).to.have.length 2
     expect(items[0].vm.$props).to.eql
       q: 'c'
       audio: audios_fixture.chicken
     expect(items[1].vm.$props).to.eql
       q: 'c'
-      audio: audios_fixture.crunch
+      audio: audios_fixture.invisible

@@ -10,6 +10,7 @@ import DashboardView from 'components/dashboard_view'
 import EditAudio from 'components/edit_audio'
 import NotFound from 'components/not_found'
 import Settings from 'components/settings'
+import TheNimbusPage from 'components/nimbus/the-nimbus-page'
 import store from 'state/store'
 
 Vue.use VueRouter
@@ -50,4 +51,5 @@ export default new VueRouter
     )
     ( path: '/settings', component: Settings, beforeEnter: ensureAuthenticated )
     ( path: '*', component: NotFound )
+    ( path: '/nimbus', component: TheNimbusPage )
   ]

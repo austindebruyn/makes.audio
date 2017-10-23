@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import pick from 'lodash.pick'
 import find from 'lodash.find'
-import remove from 'lodash.remove'
+import without from 'lodash.without'
 
 import Vuex from 'vuex'
 
@@ -36,6 +36,14 @@ store = new Vuex.Store
       new_audios.push audio
       state.audios = new_audios
 
+    update_audio: (state, audio) ->
+      target_audio = find state.audios, id: audio.id
+      throw new Error("cannot update audio #{id}") unless target_audio
+      new_audio = Object.assign {}, target_audio, audio
+      new_audios = without state.audios, target_audio
+      new_audios.push new_audio
+      state.audios = new_audios
+
     create_upload: (state, payload) ->
       upload =
         id:       payload.id
@@ -51,8 +59,7 @@ store = new Vuex.Store
       target_upload = find state.uploads, id: id
       throw new Error("cannot update upload #{id}") unless target_upload
       new_upload = Object.assign {}, target_upload, upload
-      new_uploads = state.uploads.slice 0
-      remove new_uploads, target_upload
+      new_uploads = without state.uploads, target_upload
       new_uploads.push new_upload
       state.uploads = new_uploads
 

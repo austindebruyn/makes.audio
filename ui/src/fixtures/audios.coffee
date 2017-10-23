@@ -7,12 +7,14 @@ export default {
     publicUrl: '/chicken.mp3'
     downloadUrl: '/chicken.mp3/download'
     editUrl: '/audios/1/edit'
-  crunch:
+    visible: true
+  invisible:
     id: 2
-    url: 'crunch.mp3'
+    url: 'invisible.mp3'
     createdAt: new Date('2017-07-31T00:00:00.001Z')
-    description: 'Big rock crunch'
-    publicUrl: '/crunch.mp3'
-    downloadUrl: '/crunch.mp3/download'
+    description: 'Need lemon juice to see this'
+    publicUrl: '/invisible.mp3'
+    downloadUrl: '/invisible.mp3/download'
     editUrl: '/audios/2/edit'
+    visible: false
 }

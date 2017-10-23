@@ -22,6 +22,7 @@ module.exports.get = function (req, res, next) {
   }
   const pathComponents = req.path.split('/')
 
+  // TODO this is bad, means two audios with the same url cant be loaded
   if (req.subdomains.length === 1) {
     const url = pathComponents[1]
     const isDownload = pathComponents[2] && pathComponents[2] === 'download'
@@ -86,6 +87,7 @@ module.exports.update = function (req, res, next) {
 
   Audio.findOne({ where: { id: id } })
     .then(record => updateAudio.updateAudio(req.user, record, req.body))
+    .then(audio => audio.toJSON())
     .then(function (audio) {
       return res.status(202).json({ ok: true, audio })
     })

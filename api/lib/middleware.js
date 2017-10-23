@@ -9,6 +9,7 @@ const session = require('express-session')
 const sessionStore = require('./sessionStore')
 const winston = require('winston')
 const Raven = require('raven')
+const cors = require('cors')
 
 module.exports = function (app) {
   app.root = path.resolve(__dirname, '..', '..')
@@ -23,6 +24,12 @@ module.exports = function (app) {
 
   app.set('views', path.resolve(app.root, 'api', 'views'))
   app.set('view engine', 'pug')
+
+  app.use(cors({
+    origin: function (origin, next) {
+      return next(null, true)
+    }
+  }))
 
   app.use(require('body-parser').urlencoded({ extended: true }))
   app.use(bodyParser.json())

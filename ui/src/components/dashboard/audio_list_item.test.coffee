@@ -29,3 +29,15 @@ describe 'audio-list-item', ->
   it 'should have an edit link', ->
     edit_link = @wrapper.first(router_link)
     expect(edit_link.vm.to).to.eql '/audios/1/edit'
+
+  it 'should not have an invisible icon', ->
+    expect(@wrapper.find('.fa.fa-eye-slash')).to.have.length 0
+
+  describe 'when the audio is invisible', ->
+    beforeEach ->
+      @wrapper = mount audio_list_item, propsData:
+        audio: audios_fixture.invisible
+        q: null
+
+    it 'should have an invisible icon', ->
+      expect(@wrapper.find('.fa.fa-eye-slash')).to.have.length 1

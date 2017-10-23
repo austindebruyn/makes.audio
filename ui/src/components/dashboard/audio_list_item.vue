@@ -14,6 +14,7 @@
         text-with-search-highlight(:text='basename', :q='q')
       .extension
         text-with-search-highlight(:text='extension', :q='q')
+      span.fa.fa-eye-slash.visibility-icon(v-if='!audio.visible')
     .description {{ display_description }}
     ul.meta
       li {{ uploaded_at }}
@@ -100,6 +101,11 @@
       .controls {
         display: block;
       }
+    }
+
+    .visibility-icon {
+      color: $gray;
+      margin-left: 20px;
     }
 
     .controls {
