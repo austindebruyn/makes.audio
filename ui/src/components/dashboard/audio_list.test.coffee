@@ -21,3 +21,20 @@ describe 'audio-list', ->
     expect(items[1].vm.$props).to.eql
       q: 'c'
       audio: audios_fixture.invisible
+
+  it 'should sort by newest', ->
+    create_audio_with = (id, createdAt) ->
+      Object.assign {}, audios_fixture.chicken,
+        id: id
+        createdAt: createdAt.toUTCString()
+
+    oldest = create_audio_with 1, new Date('Feb 24 2005')
+    newest = create_audio_with 2, new Date('May 10 2009')
+    middle = create_audio_with 3, new Date('Oct 03 2007')
+
+    @wrapper = mount audio_list, propsData:
+      audios: [ oldest, newest, middle ]
+
+    items = @wrapper.find audio_list_item
+    expect(items).to.have.length 3
+    expect(items.map((i) -> i.vm.audio.id)).to.eql [ 2, 3, 1]

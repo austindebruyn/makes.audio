@@ -224,8 +224,18 @@
 
     &.open {
       .details-section {
-        height: 100px;
+        height: 300px;
+      }
+
+      @include media-breakpoint-up(md) {
+        transform: scale(1.04, 1);
+
+        .details-section {
+          height: 100px;
+        }
       }
     }
+
+    transition: transform 200ms;
   }
 </style>
