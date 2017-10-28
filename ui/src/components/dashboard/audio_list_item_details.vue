@@ -1,9 +1,8 @@
 <template lang="pug">
-  card
-    .card-block
-      p(v-for='line_item in line_items')
-        strong {{ line_item.label }}&nbsp;
-        span.text-muted {{ line_item.value }}
+  .audio-list-item-details
+    p(v-for='line_item in line_items')
+      em {{ line_item.label }}&nbsp;
+      span.text-muted {{ line_item.value }}
 </template>
 
 <script lang="coffee">
@@ -12,8 +11,6 @@
   import card from 'components/controls/card'
 
   export default Vue.component 'edit-audio-stats-card',
-    components:
-      card: card
     props: [ 'audio' ]
     computed:
       line_items: ->
@@ -24,5 +21,12 @@
         ]
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  .audio-list-item-details {
+    padding: 1rem;
+
+    // color: white;
+
+    // .text-muted 
+  }
 </style>

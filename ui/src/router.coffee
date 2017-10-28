@@ -7,7 +7,6 @@ import NewPasswordReset from 'components/auth/password-resets/new'
 import CompletePasswordReset from 'components/auth/password-resets/complete'
 import VerifyEmail from 'components/auth/verify-email'
 import DashboardView from 'components/dashboard_view'
-import EditAudio from 'components/edit_audio'
 import NotFound from 'components/not_found'
 import Settings from 'components/settings'
 import TheNimbusPage from 'components/nimbus/the-nimbus-page'
@@ -42,11 +41,6 @@ export default new VueRouter
     (
       path: '/dashboard'
       component: DashboardView
-      beforeEnter: ensureAuthenticated
-    )
-    (
-      path: '/audios/:id/edit'
-      component: EditAudio
       beforeEnter: ensureAuthenticated
     )
     ( path: '/settings', component: Settings, beforeEnter: ensureAuthenticated )

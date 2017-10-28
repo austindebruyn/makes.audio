@@ -1,6 +1,7 @@
 import pick from 'lodash.pick'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueTween from 'lib/vue_tween'
 
 import build_raven from 'lib/build_raven'
 
@@ -19,7 +20,6 @@ import 'components/settings/user_form'
 import 'components/dashboard/audio_list'
 import 'components/dashboard/audio_list_item'
 import 'components/dashboard/upload'
-import 'components/edit_audio/stats_card'
 import 'components/dashboard/text_with_search_highlight'
 
 import 'components/controls/input_text'
@@ -36,6 +36,8 @@ export default (opts) ->
   #   if raven
   #     raven.set_raven_user pick(store.state.user, 'id', 'username', 'email')
   store.commit 'set_user', user
+
+  Vue.use VueTween
 
   new Vue
     store: store

@@ -7,6 +7,7 @@ export default {
     publicUrl: '/chicken.mp3'
     downloadUrl: '/chicken.mp3/download'
     editUrl: '/audios/1/edit'
+    updateUrl: '/api/audios/1'
     visible: true
   invisible:
     id: 2
@@ -16,5 +17,6 @@ export default {
     publicUrl: '/invisible.mp3'
     downloadUrl: '/invisible.mp3/download'
     editUrl: '/audios/2/edit'
+    updateUrl: '/api/audios/2'
     visible: false
 }

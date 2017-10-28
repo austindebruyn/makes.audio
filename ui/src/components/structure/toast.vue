@@ -79,7 +79,8 @@
 
     strong{
       text-transform: uppercase;
-      font-size: 12px;
+      font-size: 1rem;
+      margin-right: 1rem;
     }
 
     i.fa,

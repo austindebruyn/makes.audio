@@ -5,12 +5,14 @@ import stub_vue_router from './support/stub_vue_router'
 import fill_in from './support/fill_in'
 import stub_fetch_mixin from './support/stub_fetch_mixin'
 import stub_date_mixin from './support/stub_date_mixin'
+import stub_tween from './support/stub_tween'
 
 es6promise.polyfill()
 chai.use sinon_chai
 global.expect = expect
 
 stub_vue_router()
+stub_tween()
 
 before ->
   Object.assign @, stub_fetch_mixin

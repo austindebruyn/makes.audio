@@ -10,7 +10,7 @@
         hr.my-3
         p
           | You can help speed things along by contributing to the GitHub repo
-          | 
+          |
           a(href='https://github.com/austindebruyn/makes.audio') here
           | .
 </template>
