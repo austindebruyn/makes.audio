@@ -1,5 +1,7 @@
 const { expect } = require('chai')
 const path = require('path')
+const factory = require('../api/tests/factory')
+const Audio = require('../api/domain/audios/Audio')
 
 const FIXTURES_FILE_PATH = path.join(__dirname, '../api/tests/fixtures/files')
 const mp3filePath = path.join(FIXTURES_FILE_PATH, 'chicken.mp3')
@@ -63,6 +65,47 @@ describe('dashboard', function () {
         'GREAT!chicken-1.mp3 is uploaded.',
         'GREAT!chicken.mp3 is uploaded.'
       ])
+    })
+
+    describe('when already have audios', function () {
+      beforeEach(function () {
+        return factory.create('audio', {
+          userId: login.user.id,
+          url: 'elephant.mp3'
+        })
+      })
+
+      it('should let me edit', function () {
+        browser.url('/')
+        browser.waitForExist('.dashboard')
+
+        const audioTextSelector = '.dashboard-audio-list .title'
+        expect(browser.getText(audioTextSelector)).to.include('elephant.mp3')
+
+        const editPencilSelector = '.dashboard-audio-list-item a .fa-pencil'
+        expect(browser.isVisible(editPencilSelector)).to.be.false
+
+        browser.moveToObject(audioTextSelector)
+
+        expect(browser.isVisible(editPencilSelector)).to.be.true
+
+        browser.click(editPencilSelector)
+        browser.waitForExist('.title input')
+
+        browser.setValue('.title input', 'bigelephant.mp3')
+        browser.submitForm('.title form')
+
+        browser.waitForVisible('.alert')
+
+        const expected = 'GREAT!bigelephant.mp3 has been updated.'
+        expect(browser.getText('.alert')).to.eql(expected)
+        expect(browser.isExisting('.title input')).to.be.false
+
+        return Audio.findOne({ where: { userId: login.user.id } })
+          .then(record => {
+            expect(record.url).to.eql('bigelephant.mp3')
+          })
+      })
     })
   })
 })
