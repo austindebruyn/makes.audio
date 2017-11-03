@@ -10,6 +10,7 @@ const Audio = db.define('audio', {
   size: { type: db.Sequelize.DOUBLE, allowNull: false },
   mimetype: { type: db.Sequelize.STRING, allowNull: false },
   visible: { type: db.Sequelize.BOOLEAN, defaultValue: true },
+  duration: { type: db.Sequelize.INTEGER, allowNull: true },
   url: {
     type: db.Sequelize.STRING,
     allowNull: false,
