@@ -9,6 +9,7 @@ const fs = require('fs-extra')
 const config = require('../../config')
 const sinon = require('sinon')
 const getUniqueUrl = require('./getUniqueUrl')
+const queue = require('kue').createQueue()
 
 describe('createAudio', function () {
   clock()
@@ -112,8 +113,18 @@ describe('createAudio', function () {
         mimetype: 'audio/mpeg',
         visible: true,
         size: 7971,
-        userId: this.user.id
+        userId: this.user.id,
+        duration: void 0
       })
+    })
+  })
+
+  it('should queue job to fetch duration', function () {
+    return createAudio.createAudio({ file, user: this.user }).then(audio => {
+      const job = queue.testMode.jobs[0]
+
+      expect(job).to.have.property('type', 'ffprobe')
+      expect(job.data).to.eql({ audioId: audio.id })
     })
   })
 

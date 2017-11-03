@@ -38,7 +38,11 @@ Audio.prototype.ensureUserLoaded = function () {
 Audio.prototype.toJSON = function () {
   return this.ensureUserLoaded().then(() => {
     const url = buildUrl(this.url, this.user.username)
-    const formattedSize = (this.size / 1024 / 1024).toLocaleString('en-US', { maximumFractionDigits: 2 }) + 'MB'
+    const formattedSize = (this.size / 1024 / 1024).toLocaleString('en-US', {
+      maximumFractionDigits: 2
+    }) + 'MB'
+
+    const duration = typeof this.duration !== 'undefined' ? this.duration : null
 
     return new Promise((resolve, reject) => {
       return resolve({
@@ -53,7 +57,8 @@ Audio.prototype.toJSON = function () {
         originalName: this.originalName,
         mimetype: this.mimetype,
         createdAt: this.createdAt.toUTCString(),
-        visible: this.visible
+        visible: this.visible,
+        duration
       })
     })
   })

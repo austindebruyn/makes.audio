@@ -5,6 +5,7 @@ const config = require('../../config')
 const Audio = require('./Audio')
 const getUniqueUrl = require('./getUniqueUrl')
 const crypto = require('crypto')
+const getAudioLength = require('../../jobs/getAudioLength')
 
 class AudioCreationError extends Error {
   constructor(code, data = {}) {
@@ -105,7 +106,13 @@ exports.createAudio = function createAudio({ file, user }) {
           mimetype: file.mimetype
         })
       })
-      .then(resolve)
+      .then(function (record) {
+        state.audio = record
+        return getAudioLength({ audioId: state.audio.id })
+      })
+      .then(function () {
+        return resolve(state.audio)
+      })
       .catch(function (err) {
         if (!file) return reject(err)
 

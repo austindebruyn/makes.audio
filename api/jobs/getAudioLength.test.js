@@ -5,7 +5,7 @@ const queue = require('kue').createQueue()
 const ffprobe = require('../domain/audios/ffprobe')
 const factory = require('../tests/factory')
 
-describe.only('getAudioLength', function () {
+describe('getAudioLength', function () {
   beforeEach(function () {
     this.sandbox = sinon.sandbox.create()
   })
