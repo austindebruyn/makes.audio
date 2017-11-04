@@ -1,9 +1,8 @@
 const Audio = require('./Audio')
-const User = require('../users/User')
 const serve = require('../../services/serve')
-// const compact = require('lodash.compact')
 const createAudio = require('./createAudio')
 const updateAudio = require('./updateAudio')
+const findAudio = require('./findAudio')
 
 module.exports.index = function (req, res, next) {
   Audio.findAll({ where: { userId: req.user.id } })
@@ -22,28 +21,21 @@ module.exports.get = function (req, res, next) {
   }
   const pathComponents = req.path.split('/')
 
-  // TODO this is bad, means two audios with the same url cant be loaded
   if (req.subdomains.length === 1) {
     const url = pathComponents[1]
     const isDownload = pathComponents[2] && pathComponents[2] === 'download'
     const username = req.subdomains[0]
-    let audio = null
 
-    Audio.findOne({ where: { url: url, visible: true }, includes: [ User ] })
-      .then(function (model) {
-        audio = model
-        if (!audio) throw new Error('none')
-        return audio.getUser()
-      })
-      .then(function (user) {
-        if (username === user.username) {
-          serve(audio, res, isDownload)
-        } else {
-          throw new Error('none')
-        }
+    return findAudio({
+      url,
+      username,
+      user: req.user
+    })
+      .then(function (audio) {
+        return serve(audio, res, isDownload)
       })
       .catch(function (err) {
-        if (err.message !== 'none') {
+        if (err.name !== 'AudioNotFoundError') {
           throw err
         }
         return next()
