@@ -8,6 +8,7 @@ export default {
     downloadUrl: '/chicken.mp3/download'
     editUrl: '/audios/1/edit'
     updateUrl: '/api/audios/1'
+    duration: 3
     visible: true
   invisible:
     id: 2
@@ -18,5 +19,6 @@ export default {
     downloadUrl: '/invisible.mp3/download'
     editUrl: '/audios/2/edit'
     updateUrl: '/api/audios/2'
+    duration: 3
     visible: false
 }

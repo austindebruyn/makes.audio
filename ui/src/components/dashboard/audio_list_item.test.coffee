@@ -30,7 +30,7 @@ describe 'audio-list-item', ->
 
   it 'should render details', ->
     expect(@wrapper.first('.description').text()).to.eql 'A chick bok-bok'
-    meta = 'Uploaded a month ago' + '4min 50sec'
+    meta = 'Uploaded a month ago' + '3 sec'
     expect(@wrapper.first('.meta').text()).to.eql meta
 
   it 'should have download link', ->

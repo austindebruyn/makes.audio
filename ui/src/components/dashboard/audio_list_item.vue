@@ -48,6 +48,7 @@
   import toggle_chevron from './toggle-chevron'
   import input_text from 'components/controls/input_text'
   import Toaster from 'lib/toaster'
+  import DurationFormatter from 'lib/duration_formatter'
 
   export default {
     name: 'dashboard-audio-list-item'
@@ -74,7 +75,10 @@
       display_description: ->
         @audio.description || 'no description'
       length: ->
-        '4min 50sec'
+        if @audio.duration
+          DurationFormatter.format @audio.duration
+        else
+          'Processing...'
       basename: ->
         @audio.url.split('.')[0]
       extension: ->
