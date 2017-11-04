@@ -13,7 +13,7 @@ supports URL shortening, sharing tools, and a slick, personalized domain.
 
 _At the moment, an invite code is required to join the production app._
 
-[[ https://github.com/austindebruyn/makes.audio/blob/master/demo-gif.gif ]]
+![Demo](https://github.com/austindebruyn/makes.audio/blob/master/demo-gif.gif)
 
 ## Goals
 
