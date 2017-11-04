@@ -26,7 +26,7 @@ module.exports.get = function (req, res, next) {
     const isDownload = pathComponents[2] && pathComponents[2] === 'download'
     const username = req.subdomains[0]
 
-    return findAudio({
+    return findAudio.findAudio({
       url,
       username,
       user: req.user
