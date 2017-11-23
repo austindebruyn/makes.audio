@@ -13,6 +13,8 @@ supports URL shortening, sharing tools, and a slick, personalized domain.
 
 _At the moment, an invite code is required to join the production app._
 
+![Demo](https://github.com/austindebruyn/makes.audio/blob/master/demo-gif.gif)
+
 ## Goals
 
 In the wake of Dropbox removing support for public folders, it's tricky to find
