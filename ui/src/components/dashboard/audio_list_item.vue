@@ -82,7 +82,10 @@
       basename: ->
         @audio.url.split('.')[0]
       extension: ->
-        '.' + @audio.url.split('.')[1]
+        if @audio.url.split('.')[1]
+          '.' + @audio.url.split('.')[1]
+        else
+          '&nbsp;(no extension)'
     methods:
       handle_edit_clicked: (e) ->
         e.stopPropagation()
