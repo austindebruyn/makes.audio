@@ -27,6 +27,20 @@ describe 'audio-list-item', ->
 
     hover_title = 'Open up chicken.mp3 in a new tab'
     expect(title_link.element.getAttribute('title')).to.eql hover_title
+  
+  describe 'when no extension is provided', ->
+    beforeEach ->
+      @wrapper = mount audio_list_item, globals: ($store: @store), propsData:
+        audio: audios_fixture.extensionless
+        q: null
+    
+    it 'should not have an extension displayed', ->
+      expect(@wrapper.find('.extension')).to.have.length 0
+    
+    it 'should have a "no extension" message displayed', ->
+      no_extension = @wrapper.first '.no-extension'
+      expect(@wrapper.find('.no-extension')).to.have.length 1
+      expect(no_extension.text()).to.eql '[no extension]'
 
   it 'should render details', ->
     expect(@wrapper.first('.description').text()).to.eql 'A chick bok-bok'

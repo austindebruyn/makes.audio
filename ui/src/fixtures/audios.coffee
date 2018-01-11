@@ -21,4 +21,15 @@ export default {
     updateUrl: '/api/audios/2'
     duration: 3
     visible: false
+  extensionless:
+    id: 3
+    url: 'extensionless'
+    createdAt: new Date('2017-07-31T00:00:00.001Z')
+    description: 'What am I in this big big world...'
+    publicUrl: '/extensionless'
+    downloadUrl: '/extensionless/download'
+    editUrl: '/audios/3/edit'
+    updateUrl: '/api/audios/3'
+    duration: 3
+    visible: true
 }
