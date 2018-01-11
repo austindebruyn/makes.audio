@@ -26,8 +26,9 @@
         )
           .basename
             text-with-search-highlight(:text='basename', :q='q')
-          .extension
+          .extension(v-if='extension')
             text-with-search-highlight(:text='extension', :q='q')
+          .no-extension(v-if='!extension') [no extension]
         span.fa.fa-eye-slash(v-if='!audio.visible')
       .description {{ display_description }}
       ul.meta
@@ -84,8 +85,6 @@
       extension: ->
         if @audio.url.split('.')[1]
           '.' + @audio.url.split('.')[1]
-        else
-          '&nbsp;(no extension)'
     methods:
       handle_edit_clicked: (e) ->
         e.stopPropagation()
@@ -163,11 +162,19 @@
         font-size: 1.5rem;
       }
       .basename,
-      .extension {
+      .extension,
+      .no-extension {
         display: inline-block;
       }
       .extension {
         color: $blue;
+      }
+      .no-extension {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: $gray-dark;
+        margin-left: 1em;
       }
       .description {
         font-style: italic;
