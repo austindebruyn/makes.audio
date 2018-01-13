@@ -32,7 +32,7 @@ everyday streaming, or personal expression.
 ## Tech
 
 **makes.audio** is an API-driven Node/Express application. The frontend is
-a Vue/Vuex application written in Coffescript. The goal is to ship objects to
+a Vue/Vuex application written in CoffeeScript. The goal is to ship objects to
 S3.
 
 ## Development
