@@ -14,11 +14,11 @@
       q: (type: String)
     computed:
       before_q: ->
-        if @q and @q.length and @text.includes @q then @text.split(@q)[0] else @text
+        if @q and @q.length and @text.includes @q then @text.substr(0, @text.indexOf(@q)) else @text
       display_q: ->
         if @q and @q.length and @text.includes @q then @q else null
       after_q: ->
-        if @q and @q.length and @text.includes @q then @text.split(@q)[1] else null
+        if @q and @q.length and @text.includes @q then @text.substr(@text.indexOf(@q) + @q.length) else null
 </script>
 
 <style lang="scss">
