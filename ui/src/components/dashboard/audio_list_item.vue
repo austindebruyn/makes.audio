@@ -26,7 +26,7 @@
         )
           .basename
             text-with-search-highlight(:text='basename', :q='q')
-          .extension(v-if='extension', :class='extension_class')
+          .extension(v-if='extension')
             text-with-search-highlight(:text='extension', :q='q')
           .no-extension(v-if='!extension') [no extension]
         span.fa.fa-eye-slash(v-if='!audio.visible')

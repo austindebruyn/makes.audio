@@ -1,44 +1,29 @@
+@mixin extension_styling($color) {
+  border-left-color: $color;
+  .extension {
+    color: $color;
+  }
+}
+
 .dashboard-audio-list-item {
   border-left: 6px solid $gray-dark;
 
   &.mp3 {
-    border-left-color: $blue;
+    @include extension_styling($blue);
   }
   &.wav {
-    border-left-color: $red;
+    @include extension_styling($red);
   }
   &.flac {
-    border-left-color: $pink;
+    @include extension_styling($pink);
   }
   &.aif {
-    border-left-color: $green;
+    @include extension_styling($green);
   }
   &.wma {
-    border-left-color: $yellow;
+    @include extension_styling($yellow);
   }
   &.mid, &.midi {
-    border-left-color: $purple;
-  }
-  .extension {
-    color: $gray-dark;
-
-    &.mp3 {
-      color: $blue;
-    }
-    &.wav {
-      color: $red;
-    }
-    &.flac {
-      color: $pink;
-    }
-    &.aif {
-      color: $green;
-    }
-    &.wma {
-      color: $yellow;
-    }
-    &.mid, &.midi {
-      color: $purple;
-    }
+    @include extension_styling($purple);
   }
 }

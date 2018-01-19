@@ -54,6 +54,25 @@ describe 'audio-list-item', ->
   it 'should not have an invisible icon', ->
     expect(@wrapper.find('.fa.fa-eye-slash')).to.have.length 0
 
+  describe 'list item accent color', ->
+    extension_check = (ext, color) =>
+      it 'should be '+color+' on '+ext, ->
+        new_fixture = Object.assign {}, audios_fixture.chicken, url: 'chicken.' + ext
+        propsData = 
+          audio: new_fixture
+        @wrapper = mount audio_list_item, globals: ($store: @store), propsData:
+          audio: new_fixture
+        expect(@wrapper.first('.dashboard-audio-list-item').hasClass(ext)).to.be.true
+
+    extension_check 'mp3', 'blue'
+    extension_check 'wav', 'red'
+    extension_check 'flac', 'pink'
+    extension_check 'aif', 'green'
+    extension_check 'wma', 'yellow'
+    extension_check 'mid', 'purple'
+    extension_check 'midi', 'purple'
+    extension_check 'unknown', 'gray'
+
   describe 'when the audio is invisible', ->
     beforeEach ->
       @wrapper = mount audio_list_item, globals: ($store: @store), propsData:
