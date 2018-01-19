@@ -13,7 +13,19 @@ $blue-dark: darken($blue, 30%);
 
 $red: rgb(232, 64, 0);
 $red-light: lighten($red, 10%);
-$red-dark: lighten($red, 30%);
+$red-dark: darken($red, 30%);
+
+$green: rgb(53, 219, 20);
+$green-light: lighten($green, 10%);
+$green-dark: darken($green, 30%);
+
+$yellow: rgb(216, 194, 0);
+$yellow-light: lighten($yellow, 10%);
+$yellow-dark: darken($yellow, 30%);
+
+$purple: rgb(94, 0, 216);
+$purple-light: lighten($purple, 10%);
+$purple-dark: darken($purple, 30%);
 
 $black: #111;
 

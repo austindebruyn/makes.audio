@@ -1,5 +1,5 @@
 <template lang="pug">
-  li.dashboard-audio-list-item(:class='{ open: open }')
+  li.dashboard-audio-list-item(:class='[{ open: open }, extension_class]')
     .top-section(@click='handle_click')
       .controls.pull-right
         a(:href='audio.downloadUrl', title='Download').icon-link
@@ -26,7 +26,7 @@
         )
           .basename
             text-with-search-highlight(:text='basename', :q='q')
-          .extension(v-if='extension')
+          .extension(v-if='extension', :class='extension_class')
             text-with-search-highlight(:text='extension', :q='q')
           .no-extension(v-if='!extension') [no extension]
         span.fa.fa-eye-slash(v-if='!audio.visible')
@@ -85,6 +85,8 @@
       extension: ->
         if @audio.url.split('.')[1]
           '.' + @audio.url.split('.')[1]
+      extension_class: ->
+        @audio.url.split('.')[1] || null
     methods:
       handle_edit_clicked: (e) ->
         e.stopPropagation()
@@ -126,10 +128,9 @@
 <style lang="scss">
   @import 'src/styles/colors';
   @import 'src/styles/mixins';
+  @import 'src/styles/extensions';
 
   .dashboard-audio-list-item {
-    border-left: 6px solid $blue;
-
     .edit-url-input {
       display: inline-block;
       border: none;
@@ -165,9 +166,6 @@
       .extension,
       .no-extension {
         display: inline-block;
-      }
-      .extension {
-        color: $blue;
       }
       .no-extension {
         font-size: 0.75rem;

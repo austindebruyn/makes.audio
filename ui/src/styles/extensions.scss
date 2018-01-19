@@ -1,0 +1,44 @@
+.dashboard-audio-list-item {
+  border-left: 6px solid $gray-dark;
+
+  &.mp3 {
+    border-left-color: $blue;
+  }
+  &.wav {
+    border-left-color: $red;
+  }
+  &.flac {
+    border-left-color: $pink;
+  }
+  &.aif {
+    border-left-color: $green;
+  }
+  &.wma {
+    border-left-color: $yellow;
+  }
+  &.mid, &.midi {
+    border-left-color: $purple;
+  }
+  .extension {
+    color: $gray-dark;
+
+    &.mp3 {
+      color: $blue;
+    }
+    &.wav {
+      color: $red;
+    }
+    &.flac {
+      color: $pink;
+    }
+    &.aif {
+      color: $green;
+    }
+    &.wma {
+      color: $yellow;
+    }
+    &.mid, &.midi {
+      color: $purple;
+    }
+  }
+}
