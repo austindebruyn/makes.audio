@@ -57,8 +57,8 @@ describe 'audio-list-item', ->
   describe 'list item accent color', ->
     extension_check = (ext, color) =>
       it 'should be '+color+' on '+ext, ->
-        new_fixture = Object.assign {}, audios_fixture.chicken, url: 'chicken.' + ext
-        propsData = 
+        new_fixt = Object.assign {}, audios_fixture.chicken, url: 'chicken.'+ext
+        propsData =
           audio: new_fixture
         @wrapper = mount audio_list_item, globals: ($store: @store), propsData:
           audio: new_fixture
