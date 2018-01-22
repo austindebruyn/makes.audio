@@ -60,6 +60,7 @@ describe 'dashboard_view', ->
         expect(list.vm.$props).to.eql
           q: null
           audios: [( url: 'hey.mp3' ), ( url: 'no.mp3' )]
+          sort: @wrapper.vm.sort
 
       describe 'searching', ->
         beforeEach ->
