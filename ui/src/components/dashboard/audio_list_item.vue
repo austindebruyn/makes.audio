@@ -86,7 +86,9 @@
         if @audio.url.split('.')[1]
           '.' + @audio.url.split('.')[1]
       extension_class: ->
-        @audio.url.split('.')[1] || null
+        if @audio.url.split('.')[1]
+          'extension-' + @audio.url.split('.')[1]
+        else null
     methods:
       handle_edit_clicked: (e) ->
         e.stopPropagation()
