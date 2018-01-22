@@ -1,3 +1,6 @@
+# coffeelint: disable=max_line_length
+# coffeelint: disable=no_unnecessary_fat_arrows
+
 import audio_list_item from './audio_list_item'
 import { mount, shallow } from 'avoriaz'
 import audios_fixture from 'fixtures/audios'
@@ -53,6 +56,18 @@ describe 'audio-list-item', ->
 
   it 'should not have an invisible icon', ->
     expect(@wrapper.find('.fa.fa-eye-slash')).to.have.length 0
+
+  describe 'list item accent color', ->
+    extension_check = (ext) =>
+      it "for #{ext}", ->
+        new_fixt = Object.assign {}, audios_fixture.chicken, url: "chicken.#{ext}"
+        @wrapper = mount audio_list_item, globals: ($store: @store), propsData:
+          audio: new_fixt
+        expect(@wrapper.first('.dashboard-audio-list-item').hasClass("extension-#{ext}")).to.be.true
+
+    extensions = ['mp3', 'wav', 'flac', 'aif', 'wma', 'mid', 'midi', 'unknown']
+    for ext in extensions
+      extension_check ext
 
   describe 'when the audio is invisible', ->
     beforeEach ->

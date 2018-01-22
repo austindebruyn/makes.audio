@@ -1,0 +1,28 @@
+@mixin extension_styling($color) {
+  border-left-color: $color;
+  .extension {
+    color: $color;
+  }
+}
+
+@mixin extension_colors($exts...) {
+  @each $i in $exts {
+    &.extension-#{nth($i, 1)} {
+      @include extension_styling(nth($i, 2));
+    }
+  }
+}
+
+.dashboard-audio-list-item {
+  border-left: 6px solid $gray-dark;
+
+  @include extension_colors(
+    'mp3'  $blue,
+    'wav'  $red,
+    'flac' $pink,
+    'aif'  $green,
+    'wma'  $yellow,
+    'mid'  $purple,
+    'midi' $purple
+  );
+}
