@@ -229,7 +229,7 @@
     }
 
     .details-section {
-      background-color: $gray-lighter;
+      background-color: $gray-faint;
       height: 0;
       overflow: hidden;
 
