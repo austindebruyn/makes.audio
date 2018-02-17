@@ -33,7 +33,8 @@
       .description {{ display_description }}
       ul.meta
         li {{ uploaded_at }}
-        li {{ length }}
+        li(v-if='is_audio') {{ length }}
+        li.not-audio(v-else) [not an audio file]
         toggle-chevron(:open='open').pull-right
     .details-section
       audio-list-item-details(:audio='audio')
@@ -80,6 +81,8 @@
           DurationFormatter.format @audio.duration
         else
           'Processing...'
+      is_audio: ->
+        if @audio.mimetype.split('/')[0] == 'audio' then true else false
       basename: ->
         @audio.url.split('.')[0]
       extension: ->
@@ -87,7 +90,7 @@
           '.' + @audio.url.split('.')[1]
       extension_class: ->
         if @audio.url.split('.')[1]
-          'extension-' + @audio.url.split('.')[1]
+          'extension-' + @audio.mimetype.split('/')[1]
         else null
     methods:
       handle_edit_clicked: (e) ->
@@ -190,6 +193,10 @@
         li {
           width: 250px;
           display: inline-block;
+
+          &.not-audio {
+            color: $gray-dark;
+          }
         }
       }
       .uploaded-at {
