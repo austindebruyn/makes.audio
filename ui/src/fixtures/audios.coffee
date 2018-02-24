@@ -2,6 +2,7 @@ export default {
   chicken:
     id: 1
     url: 'chicken.mp3'
+    mimetype: 'audio/mpeg'
     createdAt: new Date('2017-07-31T00:00:00.001Z')
     description: 'A chick bok-bok'
     publicUrl: '/chicken.mp3'
@@ -13,6 +14,7 @@ export default {
   invisible:
     id: 2
     url: 'invisible.mp3'
+    mimetype: 'audio/mpeg'
     createdAt: new Date('2017-07-31T00:00:00.001Z')
     description: 'Need lemon juice to see this'
     publicUrl: '/invisible.mp3'
@@ -24,6 +26,7 @@ export default {
   extensionless:
     id: 3
     url: 'extensionless'
+    mimetype: 'audio/mpeg'
     createdAt: new Date('2017-07-31T00:00:00.001Z')
     description: 'What am I in this big big world...'
     publicUrl: '/extensionless'
