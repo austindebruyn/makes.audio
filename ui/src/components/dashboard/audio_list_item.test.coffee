@@ -59,13 +59,13 @@ describe 'audio-list-item', ->
 
   describe 'list item accent color', ->
     extension_check = (ext) =>
-      it "for #{ext}", ->
-        new_fixt = Object.assign {}, audios_fixture.chicken, url: "chicken.#{ext}"
+      it "for audio/#{ext}", ->
+        new_fixt = Object.assign {}, audios_fixture.chicken, mimetype: "audio/#{ext}"
         @wrapper = mount audio_list_item, globals: ($store: @store), propsData:
           audio: new_fixt
         expect(@wrapper.first('.dashboard-audio-list-item').hasClass("extension-#{ext}")).to.be.true
 
-    extensions = ['mp3', 'wav', 'flac', 'aif', 'wma', 'mid', 'midi', 'unknown']
+    extensions = ['mpeg', 'wav', 'flac', 'aiff', 'x-ms-wma', 'midi', 'unknown']
     for ext in extensions
       extension_check ext
 

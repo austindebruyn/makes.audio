@@ -17,12 +17,15 @@
   border-left: 6px solid $gray-dark;
 
   @include extension_colors(
-    'mp3'  $blue,
-    'wav'  $red,
-    'flac' $pink,
-    'aif'  $green,
-    'wma'  $yellow,
-    'mid'  $purple,
-    'midi' $purple
+    'mp3'      $blue,
+    'mpeg'     $blue,
+    'wav'      $red,
+    'flac'     $pink,
+    'aiff'     $green,
+    'x-aiff'   $green, 
+    'x-ms-wma' $yellow,
+    'x-midi'   $purple,
+    'midi'     $purple,
+    'mid'      $purple
   );
 }

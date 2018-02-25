@@ -40,7 +40,10 @@ describe 'dashboard_view', ->
 
     describe 'and there are audios', ->
       beforeEach ->
-        @store.state.audios = [( url: 'hey.mp3' ), ( url: 'no.mp3' )]
+        @store.state.audios = [
+          ( url: 'hey.mp3', mimetype: 'audio/mpeg' )
+          ( url: 'no.mp3', mimetype: 'audio/mpeg' )
+        ]
         @wrapper = mount dashboard_view, store: @store
 
       it 'does not show a zero state', ->
@@ -59,7 +62,10 @@ describe 'dashboard_view', ->
         list = @wrapper.first dashboard_audio_list
         expect(list.vm.$props).to.eql
           q: null
-          audios: [( url: 'hey.mp3' ), ( url: 'no.mp3' )]
+          audios: [
+            ( url: 'hey.mp3', mimetype: 'audio/mpeg' )
+            ( url: 'no.mp3', mimetype: 'audio/mpeg' )
+          ]
           sort: @wrapper.vm.sort
 
       describe 'searching', ->
@@ -73,4 +79,6 @@ describe 'dashboard_view', ->
           expect(@wrapper.vm.search.q).to.eql 'hey'
 
         it 'filters list', ->
-          expect(@wrapper.vm.filtered_audios).to.eql [( url: 'hey.mp3' )]
+          expect(@wrapper.vm.filtered_audios).to.eql [
+            ( url: 'hey.mp3', mimetype: 'audio/mpeg' )
+          ]
