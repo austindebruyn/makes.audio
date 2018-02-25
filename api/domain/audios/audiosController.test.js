@@ -186,7 +186,7 @@ describe('audiosController', function () {
 
         beforeEach(function () {
           sandbox.spy(AudioCreator.prototype, 'perform')
-          sandbox.stub(AudioCreator.prototype, 'hashTemporaryFile').rejects()
+          sandbox.stub(AudioCreator.prototype, 'getHash').rejects()
         })
 
         it('should 500', function () {

@@ -146,11 +146,11 @@ describe('AudioCreator', function () {
 
   describe('when errors during processing the file', function () {
     beforeEach(function () {
-      sinon.stub(AudioCreator.prototype, 'hashTemporaryFile').rejects()
+      sinon.stub(AudioCreator.prototype, 'getHash').rejects()
     })
 
     afterEach(function () {
-      AudioCreator.prototype.hashTemporaryFile.restore()
+      AudioCreator.prototype.getHash.restore()
     })
 
     it('should remove temporary file', function () {

@@ -17,5 +17,11 @@
   "mailgun": {
     "key": null,
     "domain": "mg.makes.audio"
+  },
+  "aws": {
+    "s3": {
+      "key": null,
+      "secret": null
+    }
   }
 }

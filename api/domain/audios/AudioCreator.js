@@ -1,12 +1,12 @@
-const hashFiles = require('hash-files')
 const fs = require('fs-extra')
 const path = require('path')
-const config = require('../../config')
-const Audio = require('./Audio')
-const getUniqueUrl = require('./getUniqueUrl')
-const crypto = require('crypto')
-const getAudioLength = require('../../jobs/getAudioLength')
 const pify = require('pify')
+const crypto = require('crypto')
+const hashFiles = require('hash-files')
+const config = require('../../config')
+const getUniqueUrl = require('./getUniqueUrl')
+const getAudioLength = require('../../jobs/getAudioLength')
+const Audio = require('./Audio')
 
 class AudioCreationError extends Error {
   constructor(code, data = {}) {
@@ -25,16 +25,16 @@ class AudioCreationError extends Error {
 }
 
 /**
- * An AudioCreator is responsible for turning a temporary upload file into an
- * S3 stored object.
-*/
+ * An AudioCreator is responsible for turning a temporary upload file into a
+ * persisted object
+ */
 class AudioCreator {
   /**
    * Promises to retrieve the sha256 hash of the given temporary file.
    * @param {String} filename
    * @returns {Promise<String>}
    */
-  async hashTemporaryFile(filename) {
+  async getHash(filename) {
     return pify(hashFiles)({
       files: [filename],
       noGlob: true,
@@ -47,7 +47,7 @@ class AudioCreator {
    * @param {String} hash
    * @returns {String}
    */
-  getFilename(hash) {
+  buildFilename(hash) {
     const sha256 = crypto.createHash('sha256')
     sha256.update(`${hash}${+new Date()}`)
 
@@ -92,8 +92,8 @@ class AudioCreator {
   async perform({ file, user }) {
     try {
       await this.verifyAudioFile(file)
-      const hash = await this.hashTemporaryFile(file.path)
-      const permanentFilename = await this.getFilename(hash)
+      const hash = await this.getHash(file.path)
+      const permanentFilename = await this.buildFilename(hash)
 
       const absPermanentFilename = path.resolve(
         __dirname,

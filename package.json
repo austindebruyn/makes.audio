@@ -6,6 +6,7 @@
   "dependencies": {
     "@tweenjs/tween.js": "^17.1.1",
     "avoriaz": "^6.0.0",
+    "aws-sdk": "^2.202.0",
     "basic-auth-connect": "^1.0.0",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
@@ -22,6 +23,7 @@
     "cors": "^2.8.4",
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.4",
+    "dot-prop": "^4.2.0",
     "es6-promise": "^4.1.1",
     "eslint": "^4.5.0",
     "eslint-config-standard": "^10.2.1",
