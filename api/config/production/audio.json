@@ -9,5 +9,6 @@
     "audio/x-ms-wma",
     "audio/midi",
     "audio/x-midi"
-  ]
+  ],
+  "storageStrategy": "LocalStorageStrategy"
 }

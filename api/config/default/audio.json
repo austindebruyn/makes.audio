@@ -11,5 +11,6 @@
     "audio/midi",
     "audio/x-midi",
     "image/jpeg"
-  ]
+  ],
+  "storageStrategy": "LocalStorageStrategy"
 }

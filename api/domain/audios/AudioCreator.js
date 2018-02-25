@@ -1,5 +1,4 @@
 const fs = require('fs-extra')
-const path = require('path')
 const pify = require('pify')
 const crypto = require('crypto')
 const hashFiles = require('hash-files')
@@ -7,6 +6,7 @@ const config = require('../../config')
 const getUniqueUrl = require('./getUniqueUrl')
 const getAudioLength = require('../../jobs/getAudioLength')
 const Audio = require('./Audio')
+const { getStorageStrategy } = require('./storageStrategies')
 
 class AudioCreationError extends Error {
   constructor(code, data = {}) {
@@ -29,6 +29,13 @@ class AudioCreationError extends Error {
  * persisted object
  */
 class AudioCreator {
+  /**
+   * @api
+   */
+  constructor() {
+    this.storageStrategy = new (getStorageStrategy())()
+  }
+
   /**
    * Promises to retrieve the sha256 hash of the given temporary file.
    * @param {String} filename
@@ -80,6 +87,15 @@ class AudioCreator {
   }
 
   /**
+   * Promises to remove the temporary file.
+   */
+  async cleanup(file) {
+    if (file && await fs.exists(file.path)) {
+      await fs.unlink(file.path)
+    }
+  }
+
+  /**
    * @typedef CreateAudioParams
    * @property {Object} file
    * @property {User} user
@@ -95,18 +111,14 @@ class AudioCreator {
       const hash = await this.getHash(file.path)
       const permanentFilename = await this.buildFilename(hash)
 
-      const absPermanentFilename = path.resolve(
-        __dirname,
-        '../../store',
-        permanentFilename
-      )
-
-      await fs.rename(file.path, absPermanentFilename)
+      await this.storageStrategy.store({
+        source: file.path,
+        destination: permanentFilename
+      })
       const desiredUrl = file.originalname
         .replace(/[^.\w]/g, '-')
         .slice(0, 128)
         .toLowerCase()
-
       const url = await getUniqueUrl.getUniqueUrl({
         userId: user.id,
         url: desiredUrl
@@ -121,18 +133,11 @@ class AudioCreator {
         mimetype: file.mimetype
       })
       await getAudioLength({ audioId: record.id })
-
       return record
     } catch (err) {
-      if (!file) throw err
-
-      const exists = await fs.exists(file.path)
-
-      if (exists) {
-        await fs.unlink(file.path)
-      }
-
       throw err
+    } finally {
+      await this.cleanup(file)
     }
   }
 }
