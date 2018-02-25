@@ -6,7 +6,7 @@ const expect = require('chai').expect
 const fs = require('fs-extra')
 const sinon = require('sinon')
 const factory = require('../../tests/factory')
-const createAudio = require('./createAudio')
+const AudioCreator = require('./AudioCreator')
 const updateAudio = require('./updateAudio')
 const path = require('path')
 const Audio = require('./Audio')
@@ -83,8 +83,8 @@ describe('audiosController', function () {
         return signIn()
       })
 
-      it('should invoke createAudio', function () {
-        sandbox.spy(createAudio, 'createAudio')
+      it('should invoke AudioCreator', function () {
+        sandbox.stub(AudioCreator.prototype, 'perform')
 
         const filename = path.resolve(__dirname, '../..', 'tests/fixtures/files/chicken.mp3')
 
@@ -94,7 +94,7 @@ describe('audiosController', function () {
           .cookiejar()
           .attach('file', filename)
           .then(function () {
-            expect(createAudio.createAudio).to.have.been.calledWith({
+            expect(AudioCreator.prototype.perform).to.have.been.calledWith({
               user: sinon.match(actual => actual.id === signIn.user.id),
               file: {
                 fieldname: 'file',
@@ -121,9 +121,9 @@ describe('audiosController', function () {
           })
       })
 
-      describe('when createAudio succeeds', function () {
+      describe('when AudioCreator succeeds', function () {
         beforeEach(function () {
-          sandbox.spy(createAudio, 'createAudio')
+          sandbox.spy(AudioCreator.prototype, 'perform')
         })
 
         it('should create', function () {
@@ -171,7 +171,7 @@ describe('audiosController', function () {
             .attach('file', filename)
             .expect(201)
             .then(function () {
-              const filepath = createAudio.createAudio.args[0][0].file.path
+              const filepath = AudioCreator.prototype.perform.args[0][0].file.path
               const temporaryFilename = path.resolve(__dirname, '../../..', filepath)
               return fs.stat(temporaryFilename)
             })
@@ -181,12 +181,12 @@ describe('audiosController', function () {
         })
       })
 
-      describe('when createAudio errors', function () {
+      describe('when AudioCreator errors', function () {
         const filename = path.resolve(__dirname, '../..', 'tests/fixtures/files/chicken.mp3')
 
         beforeEach(function () {
-          sandbox.spy(createAudio, 'createAudio')
-          sandbox.stub(createAudio, 'hashTemporaryFile').rejects()
+          sandbox.spy(AudioCreator.prototype, 'perform')
+          sandbox.stub(AudioCreator.prototype, 'hashTemporaryFile').rejects()
         })
 
         it('should 500', function () {
@@ -208,7 +208,7 @@ describe('audiosController', function () {
             .attach('file', filename)
             .expect(500)
             .then(function () {
-              const filepath = createAudio.createAudio.args[0][0].file.path
+              const filepath = AudioCreator.prototype.perform.args[0][0].file.path
               const temporaryFilename = path.resolve(__dirname, '../../..', filepath)
               return fs.exists(temporaryFilename)
             })

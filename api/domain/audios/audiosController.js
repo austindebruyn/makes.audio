@@ -1,6 +1,6 @@
 const Audio = require('./Audio')
 const serve = require('../../services/serve')
-const createAudio = require('./createAudio')
+const AudioCreator = require('./AudioCreator')
 const updateAudio = require('./updateAudio')
 const findAudio = require('./findAudio')
 
@@ -60,8 +60,8 @@ module.exports.get = function (req, res, next) {
 // }
 
 module.exports.create = function (req, res, next) {
-  return createAudio
-    .createAudio({ file: req.file, user: req.user })
+  return new AudioCreator()
+    .perform({ file: req.file, user: req.user })
     .then(audio => audio.toJSON())
     .then(function (audio) {
       return res.status(201).json({ ok: true, audio })

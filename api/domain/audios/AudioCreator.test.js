@@ -2,7 +2,7 @@ const _ = require('lodash')
 const expect = require('chai').expect
 const Audio = require('./Audio')
 const clock = require('../../tests/clock')
-const createAudio = require('./createAudio')
+const AudioCreator = require('./AudioCreator')
 const factory = require('../../tests/factory')
 const path = require('path')
 const fs = require('fs-extra')
@@ -11,7 +11,7 @@ const sinon = require('sinon')
 const getUniqueUrl = require('./getUniqueUrl')
 const queue = require('kue').createQueue()
 
-describe('createAudio', function () {
+describe('AudioCreator', function () {
   clock()
 
   const temporaryFilename = 'tmp/uploads/tempfile'
@@ -52,7 +52,7 @@ describe('createAudio', function () {
   })
 
   it('should return NO_FILE', function () {
-    return createAudio.createAudio({
+    return new AudioCreator().perform({
       user: this.user
     }).catch(function (err) {
       expect(err.code).to.eql('NO_FILE')
@@ -60,7 +60,7 @@ describe('createAudio', function () {
   })
 
   it('should return FILE_TOO_LARGE', function () {
-    return createAudio.createAudio({
+    return new AudioCreator().perform({
       user: this.user,
       file: { ...file, size: 99999999 }
     }).catch(function (err) {
@@ -70,7 +70,7 @@ describe('createAudio', function () {
   })
 
   it('should return BAD_MIMETYPE', function () {
-    return createAudio.createAudio({
+    return new AudioCreator().perform({
       user: this.user,
       file: Object.assign({}, file, { mimetype: 'text/html' })
     }).catch(function (err) {
@@ -90,7 +90,7 @@ describe('createAudio', function () {
       visible: true,
       size: 7971
     }).then(() => {
-      return createAudio.createAudio({ user: this.user, file })
+      return new AudioCreator().perform({ user: this.user, file })
     })
     .then(function (audio) {
       expect(audio.url).to.eql('chicken-1.mp3')
@@ -98,7 +98,7 @@ describe('createAudio', function () {
   })
 
   it('should create a model', function () {
-    return createAudio.createAudio({
+    return new AudioCreator().perform({
       file,
       user: this.user
     }).then(audio => {
@@ -120,7 +120,7 @@ describe('createAudio', function () {
   })
 
   it('should queue job to fetch duration', function () {
-    return createAudio.createAudio({ file, user: this.user }).then(audio => {
+    return new AudioCreator().perform({ file, user: this.user }).then(audio => {
       const job = queue.testMode.jobs[0]
 
       expect(job).to.have.property('type', 'ffprobe')
@@ -130,7 +130,7 @@ describe('createAudio', function () {
 
   describe('when errors before processing the file', function () {
     it('should remove temporary file', function () {
-      return createAudio.createAudio({
+      return new AudioCreator().perform({
         file: Object.assign({}, file, { size: 99999999 }),
         user: this.user
       })
@@ -146,15 +146,15 @@ describe('createAudio', function () {
 
   describe('when errors during processing the file', function () {
     beforeEach(function () {
-      sinon.stub(createAudio, 'hashTemporaryFile').rejects()
+      sinon.stub(AudioCreator.prototype, 'hashTemporaryFile').rejects()
     })
 
     afterEach(function () {
-      createAudio.hashTemporaryFile.restore()
+      AudioCreator.prototype.hashTemporaryFile.restore()
     })
 
     it('should remove temporary file', function () {
-      return createAudio.createAudio({
+      return new AudioCreator().perform({
         file, user: this.user
       })
       .catch(_.noop)
