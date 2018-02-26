@@ -33,7 +33,7 @@ class AudioCreator {
    * @api
    */
   constructor() {
-    this.storageStrategy = new (getStorageStrategy())()
+    this.storageStrategy = getStorageStrategy()
   }
 
   /**

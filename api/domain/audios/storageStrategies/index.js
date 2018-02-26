@@ -15,6 +15,7 @@ module.exports = {
    * @returns {IStorageStrategy}
    */
   getStorageStrategy: function () {
-    return module.exports[config.audio.storageStrategy]
+    const Class = module.exports[config.audio.storageStrategy]
+    return new Class()
   }
 }

@@ -1,7 +1,9 @@
 const fs = require('fs-extra')
+const path = require('path')
 const LocalStorageStrategy = require('./LocalStorageStrategy')
 const { expect } = require('chai')
 const sinon = require('sinon')
+const factory = require('../../../tests/factory')
 
 describe('LocalStorageStrategy', function () {
   beforeEach(function () {
@@ -41,6 +43,29 @@ describe('LocalStorageStrategy', function () {
           '/var/some/other/file'
         )
       })
+    })
+  })
+
+  describe('#getStream', function () {
+    beforeEach(async function () {
+      this.stream = {}
+      this.sandbox.stub(fs, 'createReadStream').returns(this.stream)
+      this.audio = await factory.create('audio', {
+        filename: '2b39716a3ad19a8f84c5ec70353de4535bfa0'
+      })
+    })
+
+    it('should build the right file path', async function () {
+      const stream = await this.subject.getStream(this.audio)
+
+      const expected = path.join(
+        __dirname,
+        '../../../../api/store',
+        '2b39716a3ad19a8f84c5ec70353de4535bfa0'
+      )
+      expect(fs.createReadStream).to.have.been.calledWith(expected)
+
+      expect(stream).to.eql(this.stream)
     })
   })
 })

@@ -8,7 +8,7 @@ class LocalStorageStrategy {
   /**
    * @typedef StoreParams
    * @property {String} source
-   * @property {String} destination
+   * @property {String} destination the objectName
    */
   /**
    * Moves the file to api/store.
@@ -22,6 +22,25 @@ class LocalStorageStrategy {
     )
 
     await fs.rename(params.source, absPermanentFilename)
+  }
+
+  /**
+   * Returns a Node stream.
+   * @param {Audio} audio
+   * @param {Boolean} isDownload
+   * @returns {Stream}
+  */
+  async getStream(audio, isDownload = false) {
+    const filePath = path.join(__dirname, '../../..', 'store', audio.filename)
+
+    if (isDownload) {
+      throw new Error('not implemented')
+      // return res.download(filePath, audio.url, function (err) {
+      //   if (err) throw err
+      // })
+    }
+
+    return fs.createReadStream(filePath)
   }
 }
 

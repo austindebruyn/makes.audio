@@ -1,8 +1,8 @@
 const Audio = require('./Audio')
-const serve = require('../../services/serve')
 const AudioCreator = require('./AudioCreator')
 const updateAudio = require('./updateAudio')
 const findAudio = require('./findAudio')
+const { getStorageStrategy } = require('./storageStrategies')
 
 module.exports.index = function (req, res, next) {
   Audio.findAll({ where: { userId: req.user.id } })
@@ -32,11 +32,26 @@ module.exports.get = function (req, res, next) {
       user: req.user
     })
       .then(function (audio) {
-        return serve(audio, res, isDownload)
+        const strategy = getStorageStrategy()
+
+        res.writeHead(200, {
+          'Content-Type': audio.mimetype,
+          'Content-Length': audio.size
+        })
+
+        return strategy.getStream(audio, isDownload)
+      })
+      .then(function (stream) {
+        stream.on('data', function (chunk) {
+          res.write(chunk)
+        })
+        stream.on('end', function () {
+          res.end()
+        })
       })
       .catch(function (err) {
         if (err.name !== 'AudioNotFoundError') {
-          throw err
+          return next(err)
         }
         return next()
       })
