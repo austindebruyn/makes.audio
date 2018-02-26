@@ -41,14 +41,7 @@ module.exports.get = function (req, res, next) {
 
         return strategy.getStream(audio, isDownload)
       })
-      .then(function (stream) {
-        stream.on('data', function (chunk) {
-          res.write(chunk)
-        })
-        stream.on('end', function () {
-          res.end()
-        })
-      })
+      .then(stream => stream.on('error', next).pipe(res))
       .catch(function (err) {
         if (err.name !== 'AudioNotFoundError') {
           return next(err)

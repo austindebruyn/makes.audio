@@ -54,15 +54,20 @@ describe('S3', function () {
       })
 
       it('should call AWS SDK', async function () {
-        await new S3().upload('/var/some/file.txt')
+        await new S3().upload('/var/some/file.txt', 'new-file-name.txt')
         expect(AWS.S3.prototype.makeRequest)
           .to.have.been.calledWith('putObject', {
             ACL: 'public-read',
             Body: new Buffer('some text file'),
             Bucket: 'makesaudiocontent01',
             ContentType: 'text/plain',
-            Key: 'file.txt'
+            Key: 'new-file-name.txt'
           })
+      })
+
+      it('should use the source filename as the default for the object key', async function () {
+        await new S3().upload('/var/some/file.txt')
+        expect(AWS.S3.prototype.makeRequest.args[0][1].Key).to.eql('file.txt')
       })
 
       it('should return AWS response data', async function () {

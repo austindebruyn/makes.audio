@@ -10,5 +10,5 @@
     "audio/midi",
     "audio/x-midi"
   ],
-  "storageStrategy": "LocalStorageStrategy"
+  "storageStrategy": "S3StorageStrategy"
 }

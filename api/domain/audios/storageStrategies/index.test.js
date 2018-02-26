@@ -7,14 +7,16 @@ const { getStorageStrategy } = index
 describe('storageStrategies', function () {
   describe('#getStorageStrategy', function () {
     it('should return local by default', function () {
-      expect(getStorageStrategy().name).to.eql('LocalStorageStrategy')
+      const Class = getStorageStrategy().__proto__.constructor
+      expect(Class.name).to.eql('LocalStorageStrategy')
     })
 
     describe('in production', function () {
       stubConfig('audio.storageStrategy', 'S3StorageStrategy')
 
       it('should return s3', function () {
-        expect(getStorageStrategy().name).to.eql('S3StorageStrategy')
+        const Class = getStorageStrategy().__proto__.constructor
+        expect(Class.name).to.eql('S3StorageStrategy')
       })
     })
   })
