@@ -7,30 +7,40 @@
         a(href='javascript:;', @click='handle_edit_clicked').icon-link
           span.fa.fa-times(v-if='edit_mode')
           span.fa.fa-pencil(v-else=true)
-      .title
-        form.my-0.d-inline-block(
-          v-if='edit_mode'
-          @submit='handle_edit_url_submit'
-        )
+      .title(v-if='edit_mode')
+        form.my-0.d-block(@submit='handle_edit_submit')
+          input(
+            type='submit'
+            @click='handle_hidden_submit_click'
+            hidden='true'
+          )
           input.edit-url-input(
             v-model='edit_url_input_value'
             type='text'
             :disabled='loading'
             @click='handle_edit_url_input_click'
           )
-        a.public-link(
-          v-else=true
-          :title='public_link_title'
-          :href='audio.publicUrl'
-          target='_blank'
-        )
-          .basename
-            text-with-search-highlight(:text='basename', :q='q')
-          .extension(v-if='extension')
-            text-with-search-highlight(:text='extension', :q='q')
-          .no-extension(v-if='!extension') [no extension]
-        span.fa.fa-eye-slash(v-if='!audio.visible')
-      .description {{ display_description }}
+          input.edit-description-input(
+            v-model='edit_description_input_value'
+            type='text'
+            placeholder='Description'
+            :disabled='loading'
+            @click='handle_edit_description_input_click'
+          )
+      .audio-info(v-else=true)
+        .title
+          a.public-link(
+            :title='public_link_title'
+            :href='audio.publicUrl'
+            target='_blank'
+          )
+            .basename
+              text-with-search-highlight(:text='basename', :q='q')
+            .extension(v-if='extension')
+              text-with-search-highlight(:text='extension', :q='q')
+            .no-extension(v-if='!extension') [no extension]
+          span.fa.fa-eye-slash(v-if='!audio.visible')
+        .description {{ display_description }}
       ul.meta
         li {{ uploaded_at }}
         li(v-if='is_audio') {{ length }}
@@ -59,6 +69,7 @@
       open: false
       edit_mode: false
       edit_url_input_value: ''
+      edit_description_input_value: ''
     components:
       'text-with-search-highlight': highlight
       'audio-list-item-details': audio_list_item_details
@@ -96,8 +107,11 @@
       handle_edit_clicked: (e) ->
         e.stopPropagation()
         @edit_url_input_value = @audio.url
+        @edit_description_input_value = @audio.description || null
         @edit_mode = !@edit_mode
       handle_edit_url_input_click: (e) -> e.stopPropagation()
+      handle_edit_description_input_click: (e) -> e.stopPropagation()
+      handle_hidden_submit_click: (e) -> e.stopPropagation()
       handle_click: (e) ->
         @open = !@open
       handle_visible_changed: ->
@@ -124,9 +138,11 @@
               Toaster.create 'danger', errors.create_upload[error.code]
           else
             Toaster.create 'danger', 'Something went wrong!'
-      handle_edit_url_submit: (e) ->
+      handle_edit_submit: (e) ->
         e.preventDefault()
-        @save url: @edit_url_input_value
+        @save 
+          url: @edit_url_input_value
+          description: @edit_description_input_value
   }
 </script>
 
@@ -136,11 +152,24 @@
   @import 'src/styles/extensions';
 
   .dashboard-audio-list-item {
-    .edit-url-input {
+    .edit-url-input, .edit-description-input {
       display: inline-block;
       border: none;
-      border-bottom: 2px dashed $pink;
       font-family: 'arconregular', sans-serif;
+      outline: none;
+
+      &:focus {
+        border-bottom: 2px dashed $pink;
+      }
+    }
+    .edit-description-input {
+      display: block;
+      width: 100%;
+      font-style: italic;
+      font-size: 16px;
+      border-width: 1px;
+      margin-top: 5px;
+      margin-bottom: 1.2rem;
     }
 
     .fa.fa-eye-slash {

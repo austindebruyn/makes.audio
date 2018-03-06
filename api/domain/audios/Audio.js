@@ -11,6 +11,7 @@ const Audio = db.define('audio', {
   mimetype: { type: db.Sequelize.STRING, allowNull: false },
   visible: { type: db.Sequelize.BOOLEAN, defaultValue: true },
   duration: { type: db.Sequelize.INTEGER, allowNull: true },
+  description: { type: db.Sequelize.STRING },
   url: {
     type: db.Sequelize.STRING,
     allowNull: false,
@@ -55,6 +56,7 @@ Audio.prototype.toJSON = function () {
         formattedSize: formattedSize,
         size: this.size,
         originalName: this.originalName,
+        description: this.description,
         mimetype: this.mimetype,
         createdAt: this.createdAt.toUTCString(),
         visible: this.visible,

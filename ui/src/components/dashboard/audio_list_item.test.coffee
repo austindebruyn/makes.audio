@@ -87,14 +87,18 @@ describe 'audio-list-item', ->
   it 'should enable editing when click pencil', ->
     expect(@wrapper.vm.edit_mode).to.be.false
     expect(@wrapper.contains('form input.edit-url-input')).to.be.false
+    expect(@wrapper.contains('form input.edit-description-input')).to.be.false
     @wrapper.find('.controls a')[1].trigger 'click'
     expect(@wrapper.vm.edit_mode).to.be.true
     expect(@wrapper.contains('form input.edit-url-input')).to.be.true
+    expect(@wrapper.contains('form input.edit-description-input')).to.be.true
 
-  describe 'editing url', ->
+  describe 'editing url and description', ->
     beforeEach ->
       @wrapper.find('.controls a')[1].trigger 'click'
       @fill_in(@wrapper.first('form input.edit-url-input')).with 'apple.mp3'
+      description = 'An apple a day keeps the doctor away'
+      @fill_in(@wrapper.first('form input.edit-description-input')).with description
       @wrapper.first('form').trigger 'submit'
 
     it 'should set loading state', ->
@@ -109,7 +113,8 @@ describe 'audio-list-item', ->
         'Accept': 'application/json'
         'Content-Type': 'application/json'
       expect(@fetches.first.body).to.eql
-        url: 'apple.mp3'
+        url: 'apple.mp3',
+        description: 'An apple a day keeps the doctor away'
 
     describe 'on success', ->
       beforeEach (done) ->

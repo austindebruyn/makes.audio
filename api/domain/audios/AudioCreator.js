@@ -129,6 +129,7 @@ class AudioCreator {
         filename: permanentFilename,
         originalName: file.originalname,
         url,
+        description: null,
         size: file.size,
         mimetype: file.mimetype
       })

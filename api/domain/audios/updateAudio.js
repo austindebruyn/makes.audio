@@ -32,6 +32,7 @@ function updateAudio(user, audio, body) {
 
     const allowedAttributes = [
       'url',
+      'description',
       'visible'
     ]
 

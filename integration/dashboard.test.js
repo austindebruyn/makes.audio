@@ -92,7 +92,7 @@ describe('dashboard', function () {
         browser.click(editPencilSelector)
         browser.waitForExist('.title input')
 
-        browser.setValue('.title input', 'bigelephant.mp3')
+        browser.setValue('.title .edit-url-input', 'bigelephant.mp3')
         browser.submitForm('.title form')
 
         browser.waitForVisible('.alert')
