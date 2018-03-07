@@ -27,7 +27,7 @@
             :disabled='loading'
             @click='handle_edit_description_input_click'
           )
-      .audio-info(v-else=true)
+      div(v-else=true)
         .title
           a.public-link(
             :title='public_link_title'
