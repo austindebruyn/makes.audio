@@ -30,7 +30,21 @@ describe 'audio-list-item', ->
 
     hover_title = 'Open up chicken.mp3 in a new tab'
     expect(title_link.element.getAttribute('title')).to.eql hover_title
-  
+
+  it 'should render extension', ->
+    extension_text = @wrapper.first 'a .extension'
+    expect(extension_text.text()).to.eql '.mp3'
+
+  describe 'when audio name has a dot in it', ->
+    beforeEach ->
+      @wrapper = mount audio_list_item, globals: ($store: @store), propsData:
+        audio: Object.assign {}, audios_fixture.chicken, (url: 'super.cool.mp3')
+        q: null
+
+    it 'should split extension correctly', ->
+      expect(@wrapper.first('a .basename').text()).to.eql 'super.cool'
+      expect(@wrapper.first('a .extension').text()).to.eql '.mp3'
+
   describe 'when no extension is provided', ->
     beforeEach ->
       @wrapper = mount audio_list_item, globals: ($store: @store), propsData:

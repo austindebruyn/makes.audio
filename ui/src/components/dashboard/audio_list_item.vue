@@ -95,10 +95,11 @@
       is_audio: ->
         if @audio.mimetype.split('/')[0] == 'audio' then true else false
       basename: ->
-        @audio.url.split('.')[0]
+        matches = @audio.url.match(/(.+)\.(.+)/)
+        if matches then matches[1] else @audio.url
       extension: ->
-        if @audio.url.split('.')[1]
-          '.' + @audio.url.split('.')[1]
+        matches = @audio.url.match(/(.+)\.(.+)/)
+        if matches then ".#{matches[2]}" else null
       extension_class: ->
         if @audio.url.split('.')[1]
           'extension-' + @audio.mimetype.split('/')[1]
