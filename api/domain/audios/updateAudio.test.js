@@ -54,13 +54,14 @@ describe('updateAudio', function () {
     const subject = updateAudio.updateAudio(
       this.user,
       this.audio,
-      { url: 'bananas.mp3', visible: false }
+      { url: 'bananas.mp3', description: 'A banana contains 358 mg of potassium', visible: false }
     )
 
     return subject.then(() => {
       return expect(Audio.find({ where: { id: this.audio.id } }))
         .to.eventually.include({
           url: 'bananas.mp3',
+          description: 'A banana contains 358 mg of potassium',
           visible: false
         })
     })

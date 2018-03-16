@@ -37,7 +37,8 @@ factory.define('audio', Audio, {
   originalName: () => `${factory.chance('word')()}.mp3`,
   size: 10000,
   mimetype: 'audio/mpeg',
-  url: factory.seq('Audio.url', n => `${factory.chance('word')()}${n}`)
+  url: factory.seq('Audio.url', n => `${factory.chance('word')()}${n}`),
+  description: factory.chance('sentence')
 })
 
 afterEach(function () {

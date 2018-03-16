@@ -25,6 +25,7 @@ describe('AudioCreator', function () {
     mimetype: 'audio/mpeg',
     destination: 'tmp/uploads/',
     filename: 'tempfile',
+    description: 'A chick bok-bok',
     path: temporaryFilename,
     size: 7971
   }
@@ -165,6 +166,7 @@ describe('AudioCreator', function () {
           filename: 'c8e48cbcc8cca0332186e9742330114ddbd5aa892b9f9513bcf79e2a142461fa',
           originalName: 'chicken.mp3',
           url: 'chicken.mp3',
+          description: null,
           mimetype: 'audio/mpeg',
           visible: true,
           size: 7971,
