@@ -4,10 +4,22 @@ const sinon = require('sinon')
 const queue = require('kue').createQueue()
 const ffprobe = require('../domain/audios/ffprobe')
 const factory = require('../tests/factory')
+const fs = require('fs-extra')
+const LocalStorageStrategy = require('../domain/audios/storageStrategies/LocalStorageStrategy')
+const MockWriteableStream = require('../tests/MockWriteableStream')
+const MockReadableStream = require('../tests/MockReadableStream')
 
 describe('getAudioLength', function () {
   beforeEach(function () {
     this.sandbox = sinon.sandbox.create()
+
+    this.sandbox.stub(fs, 'createWriteStream')
+      .returns(new MockWriteableStream())
+
+    this.sandbox.stub(LocalStorageStrategy.prototype, 'getStream')
+      .returns(new MockReadableStream())
+
+    this.sandbox.stub(fs, 'unlink').resolves()
   })
 
   afterEach(function () {
@@ -59,6 +71,14 @@ describe('getAudioLength', function () {
         describe('with wrong data', function () {
           beforeEach(function () {
             this.sandbox.stub(ffprobe, 'ffprobe').resolves({})
+          })
+
+          it('should open a temporary file', function () {
+            return getAudioLength.process(this.job, err => {
+              expect(fs.createWriteStream).to.have.been.calledOnce;
+              const temporaryFilename = fs.createWriteStream.args[0][0];
+              expect(temporaryFilename).to.match(/\/tmp\/downloads\/\w+$/)
+            })
           })
 
           it('should log', function () {

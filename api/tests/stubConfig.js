@@ -6,7 +6,7 @@ function stubConfig(key, val) {
   var oldValue
 
   beforeEach(function () {
-    oldValue = config.app[key]
+    oldValue = dotProp.get(config, key)
     dotProp.set(config, key, val)
   })
 

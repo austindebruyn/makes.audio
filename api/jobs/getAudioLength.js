@@ -1,7 +1,10 @@
 const defineJob = require('./defineJob')
 const path = require('path')
+const fs = require('fs-extra')
 const Audio = require('../domain/audios/Audio')
 const ffprobe = require('../domain/audios/ffprobe')
+const randomstring = require('randomstring')
+const { getStorageStrategy } = require('../domain/audios/storageStrategies')
 
 module.exports = defineJob({
   queueName: 'ffprobe',
@@ -18,6 +21,7 @@ module.exports = defineJob({
    */
   perform: function perform(data, job) {
     var audio
+    var temporaryFilename
     const { audioId } = data
 
     return Audio.findOne({ where: { id: audioId } })
@@ -28,13 +32,28 @@ module.exports = defineJob({
           throw new Error(`no such audio ${audioId}`)
         }
 
-        const filename = path.resolve(
+        const garbage = randomstring.generate({
+          length: 24,
+          charset: 'alphabetic'
+        })
+
+        temporaryFilename = path.resolve(
           __dirname,
-          '../store',
-          audio.filename
+          '../../tmp/downloads',
+          garbage
         )
 
-        return ffprobe.ffprobe(filename)
+        return getStorageStrategy().getStream(audio)
+      })
+      .then(function (inn) {
+        const out = fs.createWriteStream(temporaryFilename)
+
+        return new Promise(function (resolve, reject) {
+          inn.on('end', resolve).on('err', reject).pipe(out)
+        })
+      })
+      .then(function () {
+        return ffprobe.ffprobe(temporaryFilename)
       })
       .then(function (ffData) {
         if (!ffData.format || typeof ffData.format.duration !== 'number') {
@@ -50,6 +69,9 @@ module.exports = defineJob({
         audio.duration = duration
 
         return audio.save()
+      })
+      .then(function () {
+        return fs.unlink(temporaryFilename)
       })
   }
 })
