@@ -2,7 +2,7 @@ const stream = require('stream')
 const util = require('util')
 
 function MockWriteableStream() {
-  stream.Writable.call(this);
+  stream.Writable.call(this)
 }
 
 util.inherits(MockWriteableStream, stream.Writable)
