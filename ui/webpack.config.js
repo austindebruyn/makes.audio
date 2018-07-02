@@ -18,6 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const devtool = process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map'
+const vuealias = process.env.NODE_ENV === 'production' ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js'
 
 module.exports = {
   entry: './src/index.coffee',
@@ -64,7 +65,7 @@ module.exports = {
   plugins,
   resolve: {
     alias: {
-      vue: 'vue/dist/vue.js'
+      vue: vuealias
     },
     extensions: [ '.js', '.json', '.vue', '.coffee' ],
     modules: [ 'node_modules', path.resolve(__dirname, 'src') ]
