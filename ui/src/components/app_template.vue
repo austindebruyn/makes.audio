@@ -1,5 +1,10 @@
 <template lang="pug">
-  div(:class='{ "nav-open": nav_open }')
+  div(
+    :class='{ "nav-open": nav_open }'
+    @dragenter='handle_dragging'
+    @dragover='handle_dragover'
+    @dragleave='handle_dragging'
+  )
     nav.navbar.navbar-toggleable-md
       .container.container-md
         a.navbar-brand(href='#') Makes.Audio
@@ -34,23 +39,30 @@
         slot
     the-footer
     uploads-progress(v-if='render_uploads_progress')
+    drop-container(v-if='dragging.started', @dropfinished='reset_dragging_state')
 </template>
 
 <script lang="coffee">
   import Vue from 'vue'
   import Toaster from 'lib/toaster'
+  import drop_container from 'components/structure/drop_container'
   import remove from 'lodash.remove'
   import the_footer from 'components/the_footer'
+  import UploadService from 'lib/upload_service'
   import uploads_progress from 'components/uploads_progress'
 
   export default {
     name: 'app-template'
     components:
+      'drop-container': drop_container
       'the-footer': the_footer
       'uploads-progress': uploads_progress
     data: ->
       open: false
       nav_open: false
+      dragging:
+        started: false
+        counter: 0
     computed:
       toggler_class: ->
         toggled: @nav_open
@@ -69,6 +81,18 @@
             @$router.push '/'
           else
             Toaster.create 'danger', "You weren't signed out.", 'Error!'
+      handle_dragging: (e) ->
+        e.preventDefault()
+        e.stopPropagation()
+        if e.type == 'dragenter' then @dragging.counter++ else @dragging.counter--
+        @dragging.started = if @dragging.counter then true else false
+      handle_dragover: (e) ->
+        e.preventDefault()
+        e.stopPropagation()
+      reset_dragging_state: (e) ->
+        @dragging =
+          started: false
+          counter: 0
   }
 </script>
 
