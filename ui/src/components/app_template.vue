@@ -48,7 +48,6 @@
   import drop_container from 'components/structure/drop_container'
   import remove from 'lodash.remove'
   import the_footer from 'components/the_footer'
-  import UploadService from 'lib/upload_service'
   import uploads_progress from 'components/uploads_progress'
 
   export default {
