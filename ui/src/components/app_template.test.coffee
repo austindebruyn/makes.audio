@@ -1,4 +1,5 @@
 import app_template from './app_template'
+import drop_container from 'components/structure/drop_container'
 import { mount, shallow } from 'avoriaz'
 import Toaster from 'lib/toaster'
 import sinon from 'sinon'
@@ -98,3 +99,30 @@ describe 'app_template', ->
 
       it 'should not redirect', ->
         expect(@router.push).to.not.have.been.called
+
+  describe 'dragging files over the component', ->
+    beforeEach ->
+      @wrapper = mount app_template
+
+    it 'should increase counter on dragenter and dragover', ->
+      expect(@wrapper.vm.dragging).to.eql(
+        counter: 0
+        started: false
+      )
+      expected_result =
+        counter: 1
+        started: true
+      @wrapper.first('div').trigger 'dragenter'
+      expect(@wrapper.vm.dragging).to.eql(expected_result)
+      @wrapper.first('div').trigger 'dragover'
+      expect(@wrapper.vm.dragging).to.eql(expected_result)
+    
+    it 'should decrease counter on dragleave', ->
+      @wrapper.vm.dragging =
+        counter: 1
+        started: true
+      @wrapper.first('div').trigger 'dragleave'
+      expect(@wrapper.vm.dragging).to.eql(
+        counter: 0
+        started: false
+      )
