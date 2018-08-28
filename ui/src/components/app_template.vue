@@ -49,12 +49,9 @@
   import remove from 'lodash.remove'
   import the_footer from 'components/the_footer'
   import uploads_progress from 'components/uploads_progress'
+  import some from 'lodash.some'
 
-  has_files = (evt) ->
-    if evt.dataTransfer.types
-      for type in evt.dataTransfer.types
-        if type == 'Files' then return true
-    return false
+  has_files = (evt) -> some evt.dataTransfer.types, (t) -> t is 'Files'
 
   export default {
     name: 'app-template'
