@@ -100,29 +100,40 @@ describe 'app_template', ->
       it 'should not redirect', ->
         expect(@router.push).to.not.have.been.called
 
-  describe 'dragging files over the component', ->
+  describe 'dragging over the component', ->
     beforeEach ->
       @wrapper = mount app_template
+      @initial_state =
+        counter: 0
+        started: false
 
-    it 'should increase counter on dragenter and dragover', ->
-      expect(@wrapper.vm.dragging).to.eql(
-        counter: 0
-        started: false
-      )
-      expected_result =
-        counter: 1
-        started: true
-      @wrapper.first('div').trigger 'dragenter'
-      expect(@wrapper.vm.dragging).to.eql(expected_result)
-      @wrapper.first('div').trigger 'dragover'
-      expect(@wrapper.vm.dragging).to.eql(expected_result)
-    
-    it 'should decrease counter on dragleave', ->
-      @wrapper.vm.dragging =
-        counter: 1
-        started: true
-      @wrapper.first('div').trigger 'dragleave'
-      expect(@wrapper.vm.dragging).to.eql(
-        counter: 0
-        started: false
-      )
+    describe 'when dragging files', ->
+      event_props =
+        dataTransfer: types: [ 'Files' ]
+        preventDefault: ->
+        stopPropagation: ->
+
+      it 'should increase counter on dragenter', ->
+        expect(@wrapper.vm.dragging).to.eql @initial_state
+        dragenter_props = Object.assign {}, event_props, (type: 'dragenter')
+        @wrapper.vm.handle_dragging dragenter_props
+        expect(@wrapper.vm.dragging).to.eql(
+          counter: 1
+          started: true
+        )
+      
+      it 'should decrease counter on dragleave', ->
+        @wrapper.vm.dragging =
+          counter: 1
+          started: true
+        dragleave_props = Object.assign {}, event_props, (type: 'dragleave')
+        @wrapper.vm.handle_dragging dragleave_props
+        expect(@wrapper.vm.dragging).to.eql(
+          counter: 0
+          started: false
+        )
+
+    describe 'when dragging other elements', ->
+      it 'should not do anything', ->
+        @wrapper.first('div').trigger 'dragstart'
+        expect(@wrapper.vm.dragging).to.eql @initial_state

@@ -50,6 +50,12 @@
   import the_footer from 'components/the_footer'
   import uploads_progress from 'components/uploads_progress'
 
+  has_files = (evt) ->
+    if evt.dataTransfer.types
+      for type in evt.dataTransfer.types
+        if type == 'Files' then return true
+    return false
+
   export default {
     name: 'app-template'
     components:
@@ -83,8 +89,9 @@
       handle_dragging: (e) ->
         e.preventDefault()
         e.stopPropagation()
-        if e.type == 'dragenter' then @dragging.counter++ else @dragging.counter--
-        @dragging.started = if @dragging.counter then true else false
+        if has_files e
+          if e.type == 'dragenter' then @dragging.counter++ else @dragging.counter--
+          @dragging.started = if @dragging.counter then true else false
       handle_dragover: (e) ->
         e.preventDefault()
         e.stopPropagation()
