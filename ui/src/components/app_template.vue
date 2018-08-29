@@ -49,6 +49,9 @@
   import remove from 'lodash.remove'
   import the_footer from 'components/the_footer'
   import uploads_progress from 'components/uploads_progress'
+  import some from 'lodash.some'
+
+  has_files = (evt) -> some evt.dataTransfer.types, (t) -> t is 'Files'
 
   export default {
     name: 'app-template'
@@ -83,8 +86,9 @@
       handle_dragging: (e) ->
         e.preventDefault()
         e.stopPropagation()
-        if e.type == 'dragenter' then @dragging.counter++ else @dragging.counter--
-        @dragging.started = if @dragging.counter then true else false
+        if has_files e
+          if e.type == 'dragenter' then @dragging.counter++ else @dragging.counter--
+          @dragging.started = if @dragging.counter then true else false
       handle_dragover: (e) ->
         e.preventDefault()
         e.stopPropagation()
