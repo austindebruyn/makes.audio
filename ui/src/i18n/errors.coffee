@@ -7,6 +7,7 @@ module.exports =
   WRONG_USERNAME_OR_PASSWORD: "Wrong username or password."
   update_user:
     WRONG_PASSWORD: 'The current password wasn’t correct.'
+    MISSING_PASSWORD: 'You didn’t enter a password.'
   password_resets:
     MISSING_EMAIL: "You didn’t enter an email."
     INVALID_EMAIL: "There’s no user associated with that email!"

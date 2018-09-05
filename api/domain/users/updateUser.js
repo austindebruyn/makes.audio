@@ -35,6 +35,10 @@ module.exports.updateAttribute = function updateAttribute(user, key, value, opts
         throw new UserUpdateError('WRONG_PASSWORD')
       }
 
+      if (!value) {
+        throw new UserUpdateError('MISSING_PASSWORD')
+      }
+
       return passwordUtils.hash(value)
         .then(function (hash) {
           user[key] = hash

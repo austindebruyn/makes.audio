@@ -85,7 +85,7 @@
             Toaster.create 'success', "You’ve been updated.", 'Great!'
           else if json.errors and json.errors.length
             for error in json.errors
-              Toaster.create 'warn', errors.update_user[error.code]
+              Toaster.create 'warning', errors.update_user[error.code]
           else
             Toaster.create 'danger', 'Please try again later.', 'Server Error!'
         @loading = true
@@ -109,7 +109,7 @@
             @currentPassword = ''
           else if json.errors and json.errors.length
             for error in json.errors
-              Toaster.create 'warn', errors.update_user[error.code]
+              Toaster.create 'warning', errors.update_user[error.code]
           else
             Toaster.create 'danger', 'Please try again later.', 'Server Error!'
         @loading = true
