@@ -47,7 +47,7 @@ function updateAudio(user, audio, body) {
 
     _.assign(audio, body)
 
-    return Audio.findOne({ where: { url: audio.url } })
+    return Audio.findOne({ where: { url: audio.url, userId: audio.userId } })
       .then(function (record) {
         if (record && record.id !== audio.id) {
           throw new AudioUpdateError('URL_NOT_UNIQUE')
