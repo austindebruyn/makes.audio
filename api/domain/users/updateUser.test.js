@@ -43,6 +43,15 @@ describe('updateUser', function () {
     })
   })
 
+  it('should throw MISSING_PASSWORD', function () {
+    return expect(updateUser.updateUser({
+      user,
+      attributes: { password: null, currentPassword: 'bananas' }
+    })).to.eventually.be.rejected.and.deep.include({
+      code: 'MISSING_PASSWORD'
+    })
+  })
+
   it('should update the username', function () {
     return updateUser.updateUser({
       user,

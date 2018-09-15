@@ -37,7 +37,7 @@ describe('updateAudio', function () {
   })
   
   it('should validate unique', function () {
-    return factory.create('audio', { url: 'chicken.mp3' })
+    return factory.create('audio', { url: 'chicken.mp3', userId: this.user.id })
       .then(() => {
         const subject = updateAudio.updateAudio(
           this.user,

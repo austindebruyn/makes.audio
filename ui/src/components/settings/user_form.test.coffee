@@ -74,7 +74,7 @@ describe 'user-form', ->
 
       it 'should create toast', ->
         expect(Toaster.create).to.have.been
-          .calledWith 'warn', 'The current password wasn’t correct.'
+          .calledWith 'warning', 'The current password wasn’t correct.'
 
       it 'should clear loading state', ->
         expect(@wrapper.vm.loading).to.be.false

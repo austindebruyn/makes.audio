@@ -208,7 +208,7 @@ describe('audiosController', function () {
         })
                 
         it('should return user errors', function () {
-          return factory.create('audio', { url: 'bones.wav' })
+          return factory.create('audio', { url: 'bones.wav', userId: signIn.user.id })
             .then(() => {
               return agent()
                 .patch(`/api/audios/${this.audio.id}`)
