@@ -45,6 +45,7 @@ module.exports = function (app) {
   app.get('/api/audios', ensureAuthenticated, audiosController.index)
   app.post('/api/audios', ensureAuthenticated, upload.single('file'), audiosController.create)
   app.patch('/api/audios/:id', ensureAuthenticated, audiosController.update)
+  app.delete('/api/audios/:id', ensureAuthenticated, audiosController.delete)
   app.get('*', homeController.index)
 
   app.use(errorHandler)

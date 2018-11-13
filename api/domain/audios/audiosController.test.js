@@ -8,6 +8,7 @@ const sinon = require('sinon')
 const factory = require('../../tests/factory')
 const AudioCreator = require('./AudioCreator')
 const updateAudio = require('./updateAudio')
+const deleteAudio = require('./deleteAudio')
 const path = require('path')
 const Audio = require('./Audio')
 const User = require('../users/User')
@@ -66,6 +67,22 @@ describe('audiosController', function () {
                 expect(res.body.records).to.have.deep.members(records)
               })
         })
+      })
+
+      it('should not return deleted audios', function () {
+        return factory
+          .create('audio', { userId: signIn.user.id, deletedAt: new Date() })
+          .then(function () {
+            return agent()
+              .get('/api/audios')
+              .accept('application/json')
+              .cookiejar()
+              .expect(200)
+              .then(function (res) {
+                expect(res.body.ok).to.be.true;
+                expect(res.body.records).to.be.empty
+              })
+          })
       })
     })
   })
@@ -234,6 +251,62 @@ describe('audiosController', function () {
             .accept('application/json')
             .cookiejar()
             .send({ url: 'bones.wav' })
+            .expect(500, {
+              ok: false
+            })
+        })
+      })
+    })
+  })
+
+  describe('DELETE /api/audios/:id', function () {
+    beforeEach(function () {
+      return factory.create('audio')
+        .then(audio => this.audio = audio)
+    })
+
+    it('when signed out should 403', function () {
+      return agent()
+        .delete(`/api/audios/${this.audio.id}`)
+        .accept('application/json')
+        .expect(403)
+    })
+
+    describe('when signed in', function () {
+      beforeEach(function () {
+        return this.audio.getUser().then(signIn)
+      })
+
+      describe('when deleteAudio succeeds', function () {
+        beforeEach(function () {
+          sandbox.spy(deleteAudio, 'deleteAudio')
+        })
+        
+        it('should invoke deleteAudio', function () {
+          return agent()
+            .delete(`/api/audios/${this.audio.id}`)
+            .accept('application/json')
+            .cookiejar()
+            .expect(202)
+            .then(() => {
+              expect(deleteAudio.deleteAudio).to.have.been.calledWith(
+                sinon.match(actual => actual.id === signIn.user.id),
+                sinon.match(actual => actual.id === this.audio.id)
+              )
+            })
+        })
+      })
+
+      describe('when deleteAudio errors', function () {
+        beforeEach(function () {
+          sandbox.stub(deleteAudio, 'deleteAudio').rejects()
+        })
+
+        it('should 500', function () {
+          return agent()
+            .delete(`/api/audios/${this.audio.id}`)
+            .accept('application/json')
+            .cookiejar()
             .expect(500, {
               ok: false
             })

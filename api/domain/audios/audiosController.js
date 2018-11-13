@@ -1,11 +1,12 @@
 const Audio = require('./Audio')
 const AudioCreator = require('./AudioCreator')
 const updateAudio = require('./updateAudio')
+const deleteAudio = require('./deleteAudio')
 const findAudio = require('./findAudio')
 const { getStorageStrategy } = require('./storageStrategies')
 
 module.exports.index = function (req, res, next) {
-  Audio.findAll({ where: { userId: req.user.id } })
+  Audio.findAll({ where: { userId: req.user.id, deletedAt: null } })
     .then(function (records) {
       return Promise.all(records.map(r => r.toJSON()))
     })
@@ -53,19 +54,21 @@ module.exports.get = function (req, res, next) {
   }
 }
 
-// module.exports.delete = function (req, res, next) {
-//   let audio
-//   const id = parseInt(req.params.id, 10)
+module.exports.delete = function (req, res, next) {
+  const id = parseInt(req.params.id, 10)
 
-//   Audio.findOne({ where: { id: id } }, { include: [ Audio.User ] })
-//     .then(function (record) {
-//       audio = record
-//       return audio
-//     })
-//     .then(function () {
-//       console.log(audio)
-//     })
-// }
+  Audio.findOne({ where: { id } })
+    .then(record => deleteAudio.deleteAudio(req.user, record))
+    .then(function (audio) {
+      return res.status(202).json({ ok: true })
+    })
+    .catch(function (err) {
+      if (err.name === 'AudioDeleteError') {
+        return res.status(422).json({ ok: false, errors: [err.toJSON()] })
+      }
+      return next(err)
+    })
+}
 
 module.exports.create = function (req, res, next) {
   return new AudioCreator()
@@ -85,7 +88,7 @@ module.exports.create = function (req, res, next) {
 module.exports.update = function (req, res, next) {
   const id = parseInt(req.params.id, 10)
 
-  Audio.findOne({ where: { id: id } })
+  Audio.findOne({ where: { id } })
     .then(record => updateAudio.updateAudio(req.user, record, req.body))
     .then(audio => audio.toJSON())
     .then(function (audio) {

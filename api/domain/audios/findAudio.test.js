@@ -65,6 +65,15 @@ describe('findAudio', function () {
     })).to.eventually.rejected.and.include({ name: 'AudioNotFoundError' })
   })
 
+  it('should not find deleted audio', function () {
+    this.hello.update({ deletedAt: new Date() })
+    return expect(findAudio.findAudio({
+      username: 'adele',
+      url: 'hello',
+      user: null
+    })).to.eventually.rejected.and.include({ name: 'AudioNotFoundError' })
+  })
+
   describe('when signed in as owner', function () {
     it('should find invisible audio', function () {
       return expect(findAudio.findAudio({

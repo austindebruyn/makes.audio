@@ -24,7 +24,7 @@ class AudioNotFoundError extends Error {
  */
 function findAudio(opts) {
   const { url, username, user } = opts
-  const query = { url }
+  const query = { url, deletedAt: null }
 
   if (!(user && user.username === username)) {
     query.visible = true
