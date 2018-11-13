@@ -162,6 +162,7 @@ describe('AudioCreator', function () {
           id: 1,
           createdAt: new Date('2017-08-31T00:00:00.000Z'),
           updatedAt: new Date('2017-08-31T00:00:00.001Z'),
+          deletedAt: void 0,
           hash: '761592f7b8525f3bbdc7c9ee4f6ede66c2f3cad5080f65007f08e62621796038',
           filename: 'c8e48cbcc8cca0332186e9742330114ddbd5aa892b9f9513bcf79e2a142461fa',
           originalName: 'chicken.mp3',

@@ -4,6 +4,7 @@ const buildUrl = require('../../lib/buildUrl')
 
 const Audio = db.define('audio', {
   createdAt: { type: db.Sequelize.DATE, defaultValue: db.Sequelize.NOW },
+  deletedAt: { type: db.Sequelize.DATE },
   hash: { type: db.Sequelize.STRING, allowNull: false },
   filename: { type: db.Sequelize.STRING, allowNull: false },
   originalName: { type: db.Sequelize.STRING, allowNull: false },
@@ -24,7 +25,7 @@ const Audio = db.define('audio', {
   indexes: [{
     unique: true,
     fields: [ 'userId', 'url' ]
-  } ]
+  }]
 })
 
 Audio.prototype.ensureUserLoaded = function () {
