@@ -1,7 +1,15 @@
 <template lang="pug">
   li.dashboard-audio-list-item(:class='[{ open: open }, extension_class]')
+    confirm-delete-popup(
+      v-if='delete_modal_open'
+      :audio_name='audio.name'
+      @close='handle_delete_modal_cancel'
+      @confirm='handle_delete_modal_confirm'
+    )
     .top-section(@click='handle_click')
       .controls.pull-right
+        a(href='javascript:;', title='Delete', @click='handle_delete_icon_click').icon-link
+          span.fa.fa-trash
         a(:href='audio.downloadUrl', title='Download').icon-link
           span.fa.fa-download
         a(href='javascript:;', @click='handle_edit_clicked').icon-link
@@ -61,6 +69,7 @@
   import input_text from 'components/controls/input_text'
   import Toaster from 'lib/toaster'
   import DurationFormatter from 'lib/duration_formatter'
+  import confirm_delete_popup from './confirm_delete_popup'
 
   export default {
     name: 'dashboard-audio-list-item'
@@ -70,11 +79,13 @@
       edit_mode: false
       edit_url_input_value: ''
       edit_description_input_value: ''
+      delete_modal_open: false
     components:
       'text-with-search-highlight': highlight
       'audio-list-item-details': audio_list_item_details
       'toggle-chevron': toggle_chevron
       'input-text': input_text
+      'confirm-delete-popup': confirm_delete_popup
     props:
       audio: Object
       q: String
@@ -144,6 +155,31 @@
         @save 
           url: @edit_url_input_value
           description: @edit_description_input_value
+      handle_delete_icon_click: (e) ->
+        e.stopPropagation()
+        @delete_modal_open = true
+      handle_delete_modal_cancel: ->
+        @delete_modal_open = false
+      handle_delete_modal_confirm: ->
+        @delete_modal_open = false
+        @loading = true
+        fetch @audio.updateUrl,
+          method: 'DELETE'
+          headers:
+            'Accept': 'application/json'
+            'Content-Type': 'application/json'
+          credentials: 'same-origin'
+        .then (data) -> data.json()
+        .then (json) =>
+          @loading = false
+          if json.ok
+            @$store.commit 'delete_audio', @audio.id
+            Toaster.create 'success', "#{@audio.url} has been deleted.", "R.I.P."
+          else if json.errors
+            for error in json.errors
+              Toaster.create 'danger', errors.delete_upload[error.code]
+          else
+            Toaster.create 'danger', 'Something went wrong!'
   }
 </script>
 
@@ -279,14 +315,10 @@
       }
 
       @include media-breakpoint-up(md) {
-        transform: scale(1.04, 1);
-
         .details-section {
           height: 100px;
         }
       }
     }
-
-    transition: transform 200ms;
   }
 </style>
