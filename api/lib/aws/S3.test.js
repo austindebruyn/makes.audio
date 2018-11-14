@@ -76,4 +76,16 @@ describe('S3', function () {
       })
     })
   })
+
+  describe('#delete', function () {
+    it('should return on success', async function () {
+      this.sandbox.stub(AWS.S3.prototype, 'makeRequest').yields(null)
+      await new S3().delete('file.txt')
+      expect(AWS.S3.prototype.makeRequest)
+        .to.have.been.calledWith('deleteObject', {
+          Bucket: 'makesaudiocontent01',
+          Key: 'file.txt'
+        })
+    })
+  })
 })

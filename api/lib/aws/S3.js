@@ -63,6 +63,24 @@ class S3 {
 
     return this.s3.getObject(params).createReadStream()
   }
+
+  /**
+   * @param {String} objectKey
+   * @returns {Stream}
+   */
+  async delete(objectKey) {
+    const params = {
+      Bucket: 'makesaudiocontent01',
+      Key: objectKey
+    }
+
+    await new Promise((resolve, reject) => {
+      this.s3.deleteObject(params, function (err) {
+        if (err) return reject(err)
+        resolve()
+      })
+    })
+  }
 }
 
 module.exports = S3
