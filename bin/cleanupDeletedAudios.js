@@ -11,6 +11,7 @@ Audio.findAll({ where: { deletedAt: { $ne: null } }, limit: 10 }).then(async fun
     for (const audio of audios) {
       console.log(`Deleting #${audio.id}/${audio.filename}`)
       await s3.delete(audio.filename)
+      await audio.delete()
     }
   }
 
