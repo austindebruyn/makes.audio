@@ -26,7 +26,7 @@ module.exports =
     BAD_MIMETYPE: "That doesn’t look like an audio file."
     URL_NOT_UNIQUE: "You already have a file called that!"
     FILE_TOO_LARGE: "That file is too large!"
-    UNAUTHORIZED: "You don't own that audio file."
+    UNAUTHORIZED: "You don’t own that audio file."
   delete_upload:
     DOESNT_EXIST: "That file was already deleted."
-    UNAUTHORIZED: "You don't own that audio file."
+    UNAUTHORIZED: "You don’t own that audio file."

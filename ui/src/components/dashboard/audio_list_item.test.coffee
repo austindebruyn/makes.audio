@@ -2,6 +2,7 @@
 # coffeelint: disable=no_unnecessary_fat_arrows
 
 import audio_list_item from './audio_list_item'
+import confirm_delete_popup from './confirm_delete_popup'
 import { mount, shallow } from 'avoriaz'
 import audios_fixture from 'fixtures/audios'
 import sinon from 'sinon'
@@ -13,6 +14,7 @@ describe 'audio-list-item', ->
     sinon.stub Toaster, 'create'
     @mutations =
       update_audio: sinon.spy()
+      delete_audio: sinon.spy()
     @store = new Vuex.Store
       state: {}
       mutations: @mutations
@@ -102,14 +104,21 @@ describe 'audio-list-item', ->
     expect(@wrapper.vm.edit_mode).to.be.false
     expect(@wrapper.contains('form input.edit-url-input')).to.be.false
     expect(@wrapper.contains('form input.edit-description-input')).to.be.false
-    @wrapper.find('.controls a')[1].trigger 'click'
+    @wrapper.find('.controls a')[2].trigger 'click'
     expect(@wrapper.vm.edit_mode).to.be.true
     expect(@wrapper.contains('form input.edit-url-input')).to.be.true
     expect(@wrapper.contains('form input.edit-description-input')).to.be.true
+    
+  it 'should open popup to delete when click trash', ->
+    expect(@wrapper.vm.delete_modal_open).to.be.false
+    expect(@wrapper.contains(confirm_delete_popup)).to.be.false
+    @wrapper.find('.controls a')[0].trigger 'click'
+    expect(@wrapper.vm.delete_modal_open).to.be.true
+    expect(@wrapper.contains(confirm_delete_popup)).to.be.true
 
   describe 'editing url and description', ->
     beforeEach ->
-      @wrapper.find('.controls a')[1].trigger 'click'
+      @wrapper.find('.controls a')[2].trigger 'click'
       @fill_in(@wrapper.first('form input.edit-url-input')).with 'apple.mp3'
       description = 'An apple a day keeps the doctor away'
       @fill_in(@wrapper.first('form input.edit-description-input')).with description
@@ -186,3 +195,73 @@ describe 'audio-list-item', ->
         expect(Toaster.create).to.have.been
           .calledWith 'danger', 'You already have a file called that!'
 
+  describe 'deleting audio', ->
+    beforeEach ->
+      @wrapper.vm.handle_delete_modal_confirm()
+      return
+
+    it 'should set loading state', ->
+      expect(@wrapper.vm.loading).to.be.true
+
+    it 'should fetch', ->
+      expect(@fetches.first).to.include
+        method: 'DELETE'
+        url: '/api/audios/1'
+        credentials: 'same-origin'
+      expect(@fetches.first.headers).to.eql
+        'Accept': 'application/json'
+        'Content-Type': 'application/json'
+
+    describe 'on success', ->
+      beforeEach (done) ->
+        @fetches.first.respond_with
+          status: 202
+          body:
+            ok: true
+        setImmediate done
+
+      it 'should clear loading state', ->
+        expect(@wrapper.vm.loading).to.be.false
+
+      it 'should close modal', ->
+        expect(@wrapper.vm.delete_modal_open).to.be.false
+      
+      it 'should commit', ->
+        expect(@mutations.delete_audio).to.have.been
+          .calledWith sinon.match.object, 1
+
+      it 'should create toast', ->
+        expect(Toaster.create).to.have.been
+          .calledWith 'success', 'chicken.mp3 has been deleted.', 'R.I.P.'
+
+    describe 'on server error', ->
+      beforeEach (done) ->
+        @fetches.first.respond_with
+          body:
+            ok: false
+        setImmediate done
+
+      it 'should clear loading state', ->
+        expect(@wrapper.vm.loading).to.be.false
+
+      it 'should close modal', ->
+        expect(@wrapper.vm.delete_modal_open).to.be.false
+
+      it 'should create toast', ->
+        expect(Toaster.create).to.have.been
+          .calledWith 'danger', 'Something went wrong!'
+
+    describe 'on client error', ->
+      beforeEach (done) ->
+        @fetches.first.respond_with
+          body:
+            ok: false
+            errors: [( code: 'UNAUTHORIZED' )]
+        setImmediate done
+
+      it 'should turn off loading state', ->
+        expect(@wrapper.vm.loading).to.be.false
+
+      it 'should create toast', ->
+        expect(Toaster.create).to.have.been
+          .calledWith 'danger', 'You don’t own that audio file.'

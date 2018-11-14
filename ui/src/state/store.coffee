@@ -44,8 +44,9 @@ store = new Vuex.Store
       new_audios.push new_audio
       state.audios = new_audios
 
-    delete_audio: (state, payload) ->
-      state.audios = state.audios.filter (audio) -> not audio.id is payload.id
+    delete_audio: (state, target_audio_id) ->
+      state.audios = state.audios.filter (audio) ->
+        audio.id isnt target_audio_id
 
     create_upload: (state, payload) ->
       upload =

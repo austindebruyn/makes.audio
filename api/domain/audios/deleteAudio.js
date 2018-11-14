@@ -1,6 +1,3 @@
-const _ = require('lodash')
-const Audio = require('./Audio')
-
 class AudioDeleteError extends Error {
   constructor(code, data = {}) {
     super()
