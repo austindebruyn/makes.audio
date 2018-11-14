@@ -73,6 +73,14 @@ yarn build
 For everyday development, `yarn watch` and `nodemon` in separate tabs are
 recommended.
 
+## Production
+
+In production, these jobs should be run on a tidy schedule:
+
+```
+NODE_ENV=production bin/cleanupDeletedAudios
+```
+
 ## Tests
 
 For backend unit tests:
