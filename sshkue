@@ -1,0 +1,2 @@
+ssh -L 30123:localhost:30123 makes.audio -o PermitLocalCommand=yes -o 'LocalCommand=xdg-open "http://localhost:30123"'
+

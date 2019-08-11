@@ -1,4 +1,9 @@
 const ffmpeg = require('fluent-ffmpeg')
+const config = require('../../config')
+
+if (config.audio.ffprobePath) {
+  ffmpeg.setFfprobePath(config.audio.ffprobePath)
+}
 
 function ffprobe(filename) {
   return new Promise(function (resolve, reject) {

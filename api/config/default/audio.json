@@ -12,5 +12,6 @@
     "audio/x-midi",
     "image/jpeg"
   ],
-  "storageStrategy": "LocalStorageStrategy"
+  "storageStrategy": "LocalStorageStrategy",
+  "ffprobePath": null
 }

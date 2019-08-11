@@ -10,5 +10,6 @@
     "audio/midi",
     "audio/x-midi"
   ],
-  "storageStrategy": "S3StorageStrategy"
+  "storageStrategy": "S3StorageStrategy",
+  "ffprobePath": "/usr/bin/ffprobe"
 }
